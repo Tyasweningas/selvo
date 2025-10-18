@@ -1,4 +1,4 @@
-'use client'
+
 import Image from 'next/image'
 import LogoPolibatam from '@/assets/logo/Logo-Polibatam.png'
 import LogoTRPL from '@/assets/logo/Logo-TRPL.png'
