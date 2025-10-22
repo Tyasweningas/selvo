@@ -8,7 +8,7 @@ import SellerNavbar from "@/features/seller/components/SellerNavbar";
 export default function Home() {
   return (
  <>
-   <SellerNavbar/>
+   
        
  </>
   );
