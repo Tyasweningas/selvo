@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import LoginForm from "@/features/seller/components/LoginForm";
 import RegisterForm from "@/features/seller/components/RegisterForm";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 
 export default function AuthPage() {
@@ -20,6 +21,7 @@ export default function AuthPage() {
         )}
       </div>
     </div>
+    <Footer />
     </>
   );
 }

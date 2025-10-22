@@ -78,7 +78,7 @@ export default function Navbar() {
       </div>
 
       
-      <div className="flex h-[50px] w-full items-center bg-white px-10 text-sm font-medium text-[#1D1B20]">
+      <div className="flex gap-x-4 bg-white text-sm font-medium text-[#1D1B20] px-10">
         <select
             className="cursor-pointer bg-transparent pr-3 font-semibold text-black outline-none"
             defaultValue="all"

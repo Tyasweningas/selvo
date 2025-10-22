@@ -1,10 +1,10 @@
-
 import Image from 'next/image'
 import LogoPolibatam from '@/assets/logo/Logo-Polibatam.png'
 import LogoTRPL from '@/assets/logo/Logo-TRPL.png'
 import LogoInstagram from '@/assets/logo/Logo-Instagram.png'
 import LogoTiktok from '@/assets/logo/Logo-Tiktok.png'
 import LogoTwitter from '@/assets/logo/Logo-Twitter.png'
+
 export default function Footer() {
     return (
         <>
