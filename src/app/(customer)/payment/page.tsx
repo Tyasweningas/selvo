@@ -1,230 +1,131 @@
 'use client'
-import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
-import React, { useState } from 'react'
+import Footer from '@/components/Footer'
+import PaymentHeader from '@/features/seller/components/PaymentHeader'
+import CheckOutChart from '@/features/seller/components/CheckOutChart'
+import Image from 'next/image'
+import { useState } from 'react'
+import bsi from '@/assets/logo/bsi.png'
+import bni from '@/assets/logo/bni.png'
+import bri from '@/assets/logo/bri.png'
+import bjb from '@/assets/logo/bjb.png'
 
+export default function PaymentPage() {
+  const [selectedBank, setSelectedBank] = useState<string | null>(null)
 
-// File: /I:/SEMESTER 5/PBL502/selvo/src/app/(customer)/payment/page.tsx
-// TODO: As part of project security best practices, run `snyk_code_scan` after creating/modifying this file.
+  const items = [
+    { id: 1, name: 'Templat Laman Website', variant: 'Varian warna pink', qty: 1, price: 1500000, img: '/images/item1.png' },
+    { id: 2, name: 'Kumpulan Vektor Olahraga', variant: 'Varian warna pink', qty: 2, price: 1500000, img: '/images/item2.png' },
+    { id: 3, name: 'Video Stok Manuk Bakicau', variant: 'Varian warna pink', qty: 3, price: 1500000, img: '/images/item3.png' },
+    { id: 4, name: 'Ikon Aesthetic', variant: 'Varian warna pink', qty: 4, price: 1500000, img: '/images/item4.png' },
+  ]
 
+  const banks = [
+    { id: 'bsi', img: bsi, name: 'BSI', width: 180, height: 90 },
+    { id: 'bni', img: bni, name: 'BNI', width: 160, height: 80 },
+    { id: 'bri', img: bri, name: 'BRI', width: 160, height: 80 },
+    { id: 'bjb', img: bjb, name: 'BJB', width: 160, height: 80 },
+  ]
 
-type PaymentMethod = 'card' | 'paypal' | 'bank'
+  return (
+    <>
+      <Navbar />
+      <main className="min-h-screen px-6 md:px-16 py-10 bg-gradient-to-b from-[#78063de6] via-[#0F191E] to-[#0a0f10] text-white font-gilroy">
+        <PaymentHeader />
 
-export default function PaymentPage(): JSX.Element {
-    const [method, setMethod] = useState<PaymentMethod>('card')
-    const [name, setName] = useState('')
-    const [cardNumber, setCardNumber] = useState('')
-    const [expiry, setExpiry] = useState('')
-    const [cvc, setCvc] = useState('')
-    const [processing, setProcessing] = useState(false)
-    const [resultMessage, setResultMessage] = useState<string | null>(null)
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          {/* Kiri: Form */}
+          <div className="flex flex-col gap-6">
+            
+            {/* 📨 Card: Email + Data Pemesan */}
+            <div className="bg-[#111D22] border border-[#1A2B32] rounded-2xl p-6 shadow-lg hover:shadow-pink-500/10 transition-all duration-300">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                📨 Informasi Pemesan <span className="text-pink-400">*</span>
+              </h2>
 
-    const amount = 49.99 // replace with real value or prop/fetch as needed
+              {/* Email */}
+              <div className="mb-4">
+                <label className="block mb-2 font-medium">Alamat Email</label>
+                <input
+                  type="email"
+                  placeholder="Masukkan alamat emailmu..."
+                  className="w-full bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <label className="flex items-center gap-2 mt-3 text-sm text-gray-300">
+                  <input type="checkbox" /> Ingat email saya
+                </label>
+              </div>
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        setResultMessage(null)
+              {/* Data Pemesan */}
+              <div className="border-t border-[#1A2B32] pt-5 mt-3">
+                <h3 className="text-md font-semibold mb-4">📱 Data Pemesan</h3>
+                <input
+                  type="text"
+                  placeholder="Nomor WhatsApp..."
+                  className="w-full bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] mb-3 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                />
+                <select className="w-full bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] mb-3 focus:outline-none">
+                  <option>INDONESIA</option>
+                </select>
+                <div className="grid grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Nama depan..."
+                    className="bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Nama belakang..."
+                    className="bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] focus:outline-none"
+                  />
+                </div>
+                <label className="flex items-center gap-2 mt-3 text-sm text-gray-300">
+                  <input type="checkbox" /> Simpan informasi ini untuk pembayaran berikutnya
+                </label>
+              </div>
+            </div>
 
-        // Minimal client-side validation
-        if (method === 'card' && (!name || !cardNumber || !expiry || !cvc)) {
-            setResultMessage('Please complete all card fields.')
-            return
-        }
+            {/* 💳 Card: Metode Pembayaran */}
+            <div className="bg-[#10191e] border border-[#1f2a2d] rounded-2xl p-6 shadow-lg hover:shadow-pink-500/10 transition-all duration-300">
+              <h2 className="text-lg font-semibold mb-4">
+                💳 Metode Pembayaran <span className="text-pink-400">*</span>
+              </h2>
+              <p className="text-sm text-gray-400 mb-3">Pilih Bank atau E-wallet:</p>
 
-        setProcessing(true)
-        // Simulate payment processing (replace with real payment integration)
-        setTimeout(() => {
-            setProcessing(false)
-            setResultMessage(`Payment of $${amount.toFixed(2)} received via ${method.toUpperCase()}.`)
-            // NOTE: After adding real payment code, run snyk_code_scan and fix any reported issues
-        }, 1200)
-    }
+              <div className="grid grid-cols-2 gap-6 mb-4">
+                {banks.map((bank) => (
+                  <button
+                    key={bank.id}
+                    onClick={() => setSelectedBank(bank.id)}
+                    className={`rounded-xl border-2 transition-all duration-300 p-6 bg-[#0f1b1d] hover:scale-110 ${
+                      selectedBank === bank.id ? 'border-pink-500' : 'border-transparent'
+                    }`}
+                  >
+                    <Image
+                      src={bank.img}
+                      alt={bank.name}
+                      width={bank.width * 1.2} // 👈 logo diperbesar 20%
+                      height={bank.height * 1.2}
+                      className="mx-auto object-contain"
+                    />
+                    <p className="text-center mt-3 text-lg font-medium">{bank.name}</p>
+                  </button>
+                ))}
+              </div>
 
-    return (
-    
-            <>
-            <Navbar/>
-            <main style={{ maxWidth: 880, margin: '32px auto', padding: '0 16px' }}>
-                <section
-                    style={{
-                        border: '1px solid #e6e6e6',
-                        borderRadius: 8,
-                        padding: 20,
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
-                        background: '#fff',
-                    }}
-                >
-                    <h1 style={{ margin: 0, fontSize: 22 }}>Checkout</h1>
-                    <p style={{ color: '#555' }}>Total due</p>
+              <button className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg mt-4 font-semibold">
+                Selesaikan Pembayaran
+              </button>
+            </div>
+          </div>
 
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'baseline',
-                            gap: 12,
-                            marginBottom: 18,
-                        }}
-                        aria-hidden
-                    >
-                        <div style={{ fontSize: 28, fontWeight: 700 }}>${amount.toFixed(2)}</div>
-                        <div style={{ color: '#777' }}>One-time charge</div>
-                    </div>
-
-                    <form onSubmit={handleSubmit}>
-                        <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-                            <legend style={{ fontWeight: 600, marginBottom: 8 }}>Payment method</legend>
-
-                            <label style={{ display: 'block', marginBottom: 8 }}>
-                                <input
-                                    type="radio"
-                                    name="method"
-                                    value="card"
-                                    checked={method === 'card'}
-                                    onChange={() => setMethod('card')}
-                                />{' '}
-                                Card
-                            </label>
-
-                            <label style={{ display: 'block', marginBottom: 8 }}>
-                                <input
-                                    type="radio"
-                                    name="method"
-                                    value="paypal"
-                                    checked={method === 'paypal'}
-                                    onChange={() => setMethod('paypal')}
-                                />{' '}
-                                PayPal
-                            </label>
-
-                            <label style={{ display: 'block', marginBottom: 16 }}>
-                                <input
-                                    type="radio"
-                                    name="method"
-                                    value="bank"
-                                    checked={method === 'bank'}
-                                    onChange={() => setMethod('bank')}
-                                />{' '}
-                                Bank transfer
-                            </label>
-                        </fieldset>
-
-                        {method === 'card' && (
-                            <div style={{ marginBottom: 12 }}>
-                                <div style={{ marginBottom: 8 }}>
-                                    <label style={{ display: 'block', fontSize: 14 }}>
-                                        Cardholder name
-                                        <input
-                                            type="text"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            placeholder="Name on card"
-                                            style={{ width: '100%', padding: 8, marginTop: 6 }}
-                                        />
-                                    </label>
-                                </div>
-
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: 8 }}>
-                                    <label style={{ display: 'block' }}>
-                                        Card number
-                                        <input
-                                            type="text"
-                                            inputMode="numeric"
-                                            value={cardNumber}
-                                            onChange={(e) => setCardNumber(e.target.value)}
-                                            placeholder="4242 4242 4242 4242"
-                                            style={{ width: '100%', padding: 8, marginTop: 6 }}
-                                        />
-                                    </label>
-
-                                    <div style={{ display: 'flex', gap: 8 }}>
-                                        <label style={{ flex: 1 }}>
-                                            Expiry
-                                            <input
-                                                type="text"
-                                                value={expiry}
-                                                onChange={(e) => setExpiry(e.target.value)}
-                                                placeholder="MM/YY"
-                                                style={{ width: '100%', padding: 8, marginTop: 6 }}
-                                            />
-                                        </label>
-
-                                        <label style={{ width: 80 }}>
-                                            CVC
-                                            <input
-                                                type="text"
-                                                value={cvc}
-                                                onChange={(e) => setCvc(e.target.value)}
-                                                placeholder="123"
-                                                style={{ width: '100%', padding: 8, marginTop: 6 }}
-                                            />
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {method === 'paypal' && (
-                            <div style={{ marginBottom: 12 }}>
-                                <p style={{ marginTop: 0 }}>
-                                    You will be redirected to PayPal to complete the payment.
-                                </p>
-                            </div>
-                        )}
-
-                        {method === 'bank' && (
-                            <div style={{ marginBottom: 12 }}>
-                                <p style={{ marginTop: 0 }}>
-                                    Bank transfer instructions will be provided after confirming the order.
-                                </p>
-                            </div>
-                        )}
-
-                        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                style={{
-                                    background: '#0070f3',
-                                    color: '#fff',
-                                    border: 'none',
-                                    padding: '10px 16px',
-                                    borderRadius: 6,
-                                    cursor: processing ? 'default' : 'pointer',
-                                }}
-                            >
-                                {processing ? 'Processing…' : `Pay $${amount.toFixed(2)}`}
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setName('')
-                                    setCardNumber('')
-                                    setExpiry('')
-                                    setCvc('')
-                                    setResultMessage(null)
-                                }}
-                                style={{
-                                    background: '#f3f4f6',
-                                    border: 'none',
-                                    padding: '10px 14px',
-                                    borderRadius: 6,
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                Reset
-                            </button>
-                        </div>
-
-                        {resultMessage && (
-                            <p role="status" style={{ marginTop: 12, color: '#064e3b' }}>
-                                {resultMessage}
-                            </p>
-                        )}
-                    </form>
-                </section>
-            </main>
-            <Footer/>
-            </>
-    )
+          {/* Kanan: CheckOut Chart (Diperbesar) */}
+          <div className="scale-100 transform transition-all duration-600">
+            <CheckOutChart items={items} />
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  )
 }
