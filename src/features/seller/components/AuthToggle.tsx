@@ -9,7 +9,7 @@ export default function AuthToggle({
   setForm: (val: string) => void;
 }) {
   return (
-    <div className="relative flex items-center bg-gray-100 border border-gray-200 rounded-full p-1 w-[220px] shadow-sm">
+    <div className="relative flex items-center bg-[#29373D] border border-gray-200 rounded-full p-1 w-[220px] shadow-sm">
       {/* Sliding background */}
       <div
         className={`absolute top-1 bottom-1 w-[105px] bg-black rounded-full transition-transform duration-300 ease-in-out ${
@@ -26,7 +26,7 @@ export default function AuthToggle({
             : "text-gray-600 hover:text-black"
         }`}
       >
-        Sign In
+        Masuk
       </button>
 
       <button
@@ -37,7 +37,7 @@ export default function AuthToggle({
             : "text-gray-600 hover:text-black"
         }`}
       >
-        Sign Up
+        Daftar
       </button>
     </div>
   );
