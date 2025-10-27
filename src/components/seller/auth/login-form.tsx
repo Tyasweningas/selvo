@@ -1,5 +1,5 @@
 "use client";
-import AuthToggle from "./AuthToggle";
+import AuthToggle from "./auth-toggle";
 export default function LoginForm({ curform, setForm }) {
     return (
         <>

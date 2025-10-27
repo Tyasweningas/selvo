@@ -45,7 +45,7 @@ const items: Item[] = [
   },
 ];
 
-export default function CheckOutChart() {
+export default function CheckOutCart() {
   const subtotal = items.reduce((acc, item) => acc + item.price, 0);
   const biayaPlatform = 8000;
   const pajakDaerah = 9500;

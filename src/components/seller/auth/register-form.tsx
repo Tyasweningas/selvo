@@ -1,6 +1,6 @@
 "use client";
 
-import AuthToggle from "./AuthToggle";
+import AuthToggle from "./auth-toggle";
 export default function RegisterForm({ curform, setForm }) {
     return (
         <>

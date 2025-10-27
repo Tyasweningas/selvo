@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import LogoPolibatam from '@/assets/logo/Logo-Polibatam.png'
-import LogoTRPL from '@/assets/logo/Logo-TRPL.png'
-import LogoInstagram from '@/assets/logo/Logo-Instagram.png'
-import LogoTiktok from '@/assets/logo/Logo-Tiktok.png'
-import LogoTwitter from '@/assets/logo/Logo-Twitter.png'
+import LogoPolibatam from '@/assets/logo/logo-polibatam.png'
+import LogoTRPL from '@/assets/logo/logo-trpl.png'
+import LogoInstagram from '@/assets/logo/logo-instagram.png'
+import LogoTiktok from '@/assets/logo/logo-tiktok.png'
+import LogoTwitter from '@/assets/logo/logo-twitter.png'
 
 export default function Footer() {
     return (

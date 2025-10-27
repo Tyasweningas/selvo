@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import LoginForm from "@/features/seller/components/LoginForm";
-import RegisterForm from "@/features/seller/components/RegisterForm";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import LoginForm from "@/components/seller/auth/login-form";
+import RegisterForm from "@/components/seller/auth/register-form";
+import Navbar from "@/components/global/navbar";
+import Footer from "@/components/global/footer";
 
 
 export default function AuthPage() {
