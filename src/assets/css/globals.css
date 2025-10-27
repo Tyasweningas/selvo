@@ -1,23 +1,65 @@
 @import "tailwindcss";
 
+@theme {
+  --color-bg-body: #0f191e;
+  --color-bg-nav: #111d22;
+  --color-bg-div: #1a2b32;
+  --color-bg-light: #29373d;
+  --color-primary-blue: #37a2ea;
+  --color-secondary-blue: #1086d5;
+  --color-bg-blue: #17547d;
+  --color-primary-green: #4ebd77;
+  --color-secondary-green: #3a9c5e;
+  --color-bg-green: #204e31;
+
+  --color-tertier-netral: #82949d;
+}
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy-Bold.ttf') format('truetype');
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy-Medium.ttf') format('truetype');
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
 
 body {
-  font-family: 'Gilroy', sans-serif;
+  font-family: "Gilroy", sans-serif;
 }
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f191e;
+  border-radius: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4ebd77 0%, #3a9c5e 100%);
+  border-radius: 5px;
+  border: 2px solid #0f191e;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5ed88a 0%, #4ebd77 100%);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #4ebd77 #0f191e;
+}
+
 .input {
-  @apply w-full bg-[#0f1b1d] rounded-lg px-4 py-3 border border-[#1f2a2d] focus:outline-none focus:border-pink-500 transition;
+  @apply w-full rounded-lg border border-[#1f2a2d] bg-[#0f1b1d] px-4 py-3 transition focus:border-pink-500 focus:outline-none;
 }
