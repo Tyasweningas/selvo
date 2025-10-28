@@ -5,12 +5,18 @@
   --color-bg-nav: #111d22;
   --color-bg-div: #1a2b32;
   --color-bg-light: #29373d;
+
   --color-primary-blue: #37a2ea;
   --color-secondary-blue: #1086d5;
   --color-bg-blue: #17547d;
+
   --color-primary-green: #4ebd77;
   --color-secondary-green: #3a9c5e;
   --color-bg-green: #204e31;
+
+  --color-primary-yellow: #f8dc61;
+  --color-secondary-yellow: #bca319;
+  --color-bg-yellow: #6d5d14;
 
   --color-tertier-netral: #82949d;
 }
