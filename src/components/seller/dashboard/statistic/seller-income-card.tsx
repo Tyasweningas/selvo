@@ -3,7 +3,7 @@ import { MdAccountBalance } from "react-icons/md";
 
 const SellerIncomeCard = () => {
   return (
-    <div className="border-bg-green from-primary-green/35 to-bg-nav/70 grow space-y-5 rounded-xl border-2 bg-linear-to-b p-10">
+    <div className="border-bg-blue from-primary-blue/35 to-bg-nav/70 grow space-y-5 rounded-xl border-2 bg-linear-to-b p-10">
       <div className="flex items-center gap-3">
         <div className="bg-bg-nav rounded-xl p-3">
           <MdAccountBalance className="text-primary-yellow" size={28} />

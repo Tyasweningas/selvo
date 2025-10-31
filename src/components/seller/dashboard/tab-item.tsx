@@ -21,7 +21,7 @@ const TabItem = ({ tab, currentPath }: props) => {
       </Link>
       <div
         className={clsx(
-          "bg-primary-green mx-1 h-1 rounded-full transition duration-200",
+          "bg-primary-blue mx-1 h-1 rounded-full transition duration-200",
           tab.path !== currentPath && "opacity-0 group-hover:opacity-100",
         )}
       ></div>

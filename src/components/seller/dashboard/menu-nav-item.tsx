@@ -45,7 +45,7 @@ const MenuNavItem = ({
     <button
       className={clsx(
         "flex w-full cursor-pointer items-center justify-between border-l-4 px-5 py-2 transition-colors duration-200",
-        isButtonNavActive && "border-primary-green bg-bg-green",
+        isButtonNavActive && "border-primary-blue bg-bg-blue",
         !isButtonNavActive && "border-transparent",
       )}
       onClick={toggleOpen}
@@ -53,12 +53,12 @@ const MenuNavItem = ({
       <div
         className={clsx(
           "flex items-center gap-3",
-          isButtonNavActive && "text-primary-green",
+          isButtonNavActive && "text-primary-blue",
         )}
       >
         <div
           className={clsx(
-            isButtonNavActive ? "text-primary-green" : "text-white",
+            isButtonNavActive ? "text-primary-blue" : "text-white",
           )}
         >
           {icon}
@@ -66,7 +66,7 @@ const MenuNavItem = ({
         <p
           className={clsx(
             "font-semibold",
-            isButtonNavActive ? "text-primary-green" : "text-white",
+            isButtonNavActive ? "text-primary-blue" : "text-white",
           )}
         >
           {name}
@@ -76,7 +76,7 @@ const MenuNavItem = ({
         <MdArrowDropUp
           className={clsx(
             "size-6 transition-transform duration-200",
-            isButtonNavActive ? "text-primary-green" : "text-white",
+            isButtonNavActive ? "text-primary-blue" : "text-white",
             isOpen ? "rotate-0" : "rotate-180",
           )}
         />
@@ -88,29 +88,29 @@ const MenuNavItem = ({
     <Link
       href={path}
       className={clsx(
-        "hover:bg-bg-green group hover:border-primary-green block w-full cursor-pointer items-center justify-between border-l-4 px-5 py-2 transition-colors duration-200",
-        currentPath === path && "border-primary-green bg-bg-green",
+        "hover:bg-bg-blue group hover:border-primary-blue block w-full cursor-pointer items-center justify-between border-l-4 px-5 py-2 transition-colors duration-200",
+        currentPath === path && "border-primary-blue bg-bg-blue",
         currentPath !== path && "border-transparent",
       )}
     >
       <div
         className={clsx(
           "flex items-center gap-3",
-          currentPath === path && "text-primary-green",
+          currentPath === path && "text-primary-blue",
         )}
       >
         <div
           className={clsx(
-            "group-hover:text-primary-green",
-            currentPath === path ? "text-primary-green" : "text-white",
+            "group-hover:text-primary-blue",
+            currentPath === path ? "text-primary-blue" : "text-white",
           )}
         >
           {icon}
         </div>
         <p
           className={clsx(
-            "group-hover:text-primary-green font-semibold",
-            currentPath === path ? "text-primary-green" : "text-white",
+            "group-hover:text-primary-blue font-semibold",
+            currentPath === path ? "text-primary-blue" : "text-white",
           )}
         >
           {name}
@@ -132,18 +132,18 @@ const MenuNavItem = ({
         >
           {dropdownItems.map((item, index) => (
             <div key={item.path} className="flex items-center gap-3 pl-3">
-              <div className="bg-primary-green relative size-1.5 rounded-full">
+              <div className="bg-primary-blue relative size-1.5 rounded-full">
                 {index < dropdownItems.length - 1 && (
-                  <div className="bg-bg-green absolute bottom-0 left-1/2 h-8 w-0.5 -translate-x-1/2 translate-y-full"></div>
+                  <div className="bg-bg-blue absolute bottom-0 left-1/2 h-8 w-0.5 -translate-x-1/2 translate-y-full"></div>
                 )}
               </div>
               <Link href={item.path}>
                 <p
                   className={clsx(
-                    "hover:text-primary-green py-2 text-sm transition-colors duration-200",
+                    "hover:text-primary-blue py-2 text-sm transition-colors duration-200",
                     currentPath === item.path
-                      ? "text-primary-green"
-                      : "text-bg-green",
+                      ? "text-primary-blue"
+                      : "text-bg-blue",
                   )}
                 >
                   {item.name}

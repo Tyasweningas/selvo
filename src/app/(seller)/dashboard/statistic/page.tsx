@@ -17,7 +17,7 @@ const DashboardStatisticPage = () => {
       </div>
       <div className="mt-5 grid grid-cols-4 gap-5">
         <SellerMetricCard
-          icon={<MdCreditCard className="text-primary-green size-6" />}
+          icon={<MdCreditCard className="text-primary-blue size-6" />}
           title="Total Penjualan"
           footerText="04 September - 04 Oktober 2025"
         >
@@ -26,9 +26,7 @@ const DashboardStatisticPage = () => {
           </p>
         </SellerMetricCard>
         <SellerMetricCard
-          icon={
-            <MdShoppingCartCheckout className="text-primary-green size-6" />
-          }
+          icon={<MdShoppingCartCheckout className="text-primary-blue size-6" />}
           title="Pendapatan Harian"
           footerText="Rata-rata pendapatan harian"
         >
@@ -37,7 +35,7 @@ const DashboardStatisticPage = () => {
           </p>
         </SellerMetricCard>
         <SellerMetricCard
-          icon={<MdReceiptLong className="text-primary-green size-6" />}
+          icon={<MdReceiptLong className="text-primary-blue size-6" />}
           title="Total Transaksi"
           footerText="Total produk terjual"
         >
@@ -46,7 +44,7 @@ const DashboardStatisticPage = () => {
           </p>
         </SellerMetricCard>
         <SellerMetricCard
-          icon={<MdGroups2 className="text-primary-green size-6" />}
+          icon={<MdGroups2 className="text-primary-blue size-6" />}
           title="Pengunjung bulanan"
           footerText="Interaksi Pengunjung"
         >

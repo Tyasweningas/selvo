@@ -13,7 +13,7 @@ const TopBanner = ({ variant = "blue", className }: props) => {
     <div
       className={clsx({
         "bg-primary-blue": variant === "blue",
-        "bg-primary-green": variant === "green",
+        "bg-primary-blue": variant === "green",
         [className || ""]: Boolean(className),
       })}
     >

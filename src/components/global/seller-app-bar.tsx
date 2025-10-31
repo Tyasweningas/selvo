@@ -6,11 +6,11 @@ const SellerAppBar = () => {
     <>
       <TopBanner variant="green" />
       <nav className="bg-[linear-gradient(to_bottom,_#111D22_0%,_#111D22_40%,_rgba(17,29,34,0.7)_100%)] py-8">
-        {/* <nav className="bg-primary-green/70 bg-gradient-to-b from-[#111D22] to-[#111D22]/70 py-8"> */}
+        {/* <nav className="bg-primary-blue/70 bg-gradient-to-b from-[#111D22] to-[#111D22]/70 py-8"> */}
         <div className="container mx-auto flex flex-row items-center gap-2">
           <div className="flex items-center gap-2">
-            <p className="text-primary-green text-5xl font-extrabold">SELVO</p>
-            <p className="text-primary-green text-lg">Seller.</p>
+            <p className="text-primary-blue text-5xl font-extrabold">SELVO</p>
+            <p className="text-primary-blue text-lg">Seller.</p>
           </div>
 
           <div className="flex grow justify-between">
@@ -38,11 +38,11 @@ const SellerAppBar = () => {
           {/* Separator */}
 
           <div className="">
-            <button className="border-primary-green flex items-center gap-3 rounded-full border-2 bg-[#1A2B32] px-3 py-1.5">
+            <button className="border-primary-blue flex items-center gap-3 rounded-full border-2 bg-[#1A2B32] px-3 py-1.5">
               <div className="rounded-full bg-[#204E31] p-1.5">
-                <MdPerson size={24} className="text-primary-green" />
+                <MdPerson size={24} className="text-primary-blue" />
               </div>
-              <p className="text-primary-green text-sm font-semibold">
+              <p className="text-primary-blue text-sm font-semibold">
                 John Doe
               </p>
             </button>
