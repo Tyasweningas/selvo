@@ -1,38 +1,42 @@
-import Input from "@/components/global/input";
-import { MdCategory, MdEdit } from "react-icons/md";
+"use client";
+
+import Button from "@/components/global/button";
+import AddProductDescription from "@/components/seller/dashboard/product/add-product-description";
+import AddProductGeneral from "@/components/seller/dashboard/product/add-product-general";
+import AddProductStep from "@/components/seller/dashboard/product/add-product-step";
+import { add_product_steps } from "@/data/add-product-steps";
+import { useState } from "react";
 
 const AddProductPage = () => {
+  const [step, setStep] = useState<number>(0);
+
+  const isEndStep = step === add_product_steps.length - 1;
+
+  const handlePrev = () => {
+    setStep((prev) => prev - 1);
+  };
+
+  const handleNext = () => {
+    if (isEndStep) return;
+    setStep((prev) => prev + 1);
+  };
+
   return (
     <div>
-      <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
-        <div className="flex items-center gap-5">
-          <div className="bg-bg-blue rounded-xl p-2">
-            <MdEdit className="text-primary-blue size-8" />
-          </div>
-          <p className="text-3xl font-bold text-white">Nama Produk</p>
-        </div>
-        <p className="text-sec-netral text-sm">
-          Masukkan judul produk yang jelas dan mudah dikenali
-        </p>
-        <Input
-          type="text"
-          placeholder="Masukkan Nama Produk..."
-          name="name"
-          className="mb-3 w-full"
-        />
-      </div>
+      <AddProductStep currentStep={step} />
 
-      <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
-        <div className="flex items-center gap-5">
-          <div className="bg-bg-blue rounded-xl p-2">
-            <MdCategory className="text-primary-blue size-8" />
-          </div>
-          <p className="text-3xl font-bold text-white">Kategori Produk</p>
-        </div>
-        <p className="text-sec-netral text-sm">
-          Pilih kategori yang sesuai agar produkmu mudah ditemukan.
-        </p>
-        <div></div>
+      {step === 0 && <AddProductGeneral />}
+      {step === 1 && <AddProductDescription />}
+
+      <div className="mt-5 ml-auto flex w-fit gap-5">
+        {step > 0 && (
+          <Button size="sm" variant="none" onClick={handlePrev}>
+            Kembali
+          </Button>
+        )}
+        <Button size="sm" onClick={handleNext}>
+          {isEndStep ? "Upload Produk " : "Selanjutnya"}
+        </Button>
       </div>
     </div>
   );
