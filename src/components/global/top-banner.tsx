@@ -13,7 +13,6 @@ const TopBanner = ({ variant = "blue", className }: props) => {
     <div
       className={clsx({
         "bg-primary-blue": variant === "blue",
-        "bg-primary-blue": variant === "green",
         [className || ""]: Boolean(className),
       })}
     >
@@ -76,7 +75,6 @@ const TopBanner = ({ variant = "blue", className }: props) => {
 
 export default TopBanner;
 
-// 🇮🇩 Komponen bendera Indonesia (React)
 const IndonesiaFlag = () => (
   <span className="inline-block h-[12px] w-[18px] overflow-hidden rounded-sm border border-white">
     <span className="block h-1/2 w-full bg-red-600"></span>

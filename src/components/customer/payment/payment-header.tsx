@@ -40,33 +40,31 @@ export default function PaymentHeader() {
   };
 
   return (
-    <div className="rounded-xl bg-gradient-to-b from-[#f24e9d]  via-[#5e153858] to-[#170b11] p-6 shadow-lg">
+    <div className="rounded-xl overflow-hidden shadow-lg bg-[#04243A] border border-[#0F4C75]">
       {/* Bar atas */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
-          <div className="bg-black/20 p-3 rounded-full">
-            <ShoppingCart size={26} className="text-pink-400" />
-          </div>
-          <h1 className="text-white font-semibold text-4xl">
-            Pembayaran untuk Keranjang Anda
-          </h1>
-        </div>
-
-        {/* Timer */}
-        <div className="bg-black/60 px-8 py-6 rounded-xl font-mono text-pink-400 text-2xl font-bold shadow-lg border border-pink-500/30 ">
-            {formatTime(timeLeft)}
-        </div>
-
+      <div className="bg-[#1B6CA8] text-white px-6 py-2 text-sm font-semibold rounded-t-xl">
+        Pembayaran untuk Keranjang Anda
       </div>
 
-      {/* Teks utama */}
-      <div className="text-white mt-2">
-        <h2 className="text-2xl font-bold mb-1">
-          Selesaikan Pembayaran Anda
-        </h2>
-        <p className="text-sm text-gray-300">
-          Silakan selesaikan pembayaran sebelum batas waktu habis atau pesanan akan dibatalkan
-        </p>
+      {/* Konten utama */}
+      <div className="flex justify-between items-center bg-gradient-to-b from-[#1B6CA8] via-[#0B1E2D] to-[#000000] p-6">
+        {/* Kiri: ikon dan teks */}
+        <div className="flex items-start gap-4">
+          <div className="bg-[#0D1C2B] p-3 rounded-full flex items-center justify-center shadow-inner">
+            <ShoppingCart size={30} className="text-[#1B6CA8]" />
+          </div>
+          <div>
+            <h2 className="text-white text-2xl font-bold">Selesaikan Pembayaran Anda</h2>
+            <p className="text-gray-300 text-sm">
+              Silakan selesaikan pembayaran sebelum batas waktu habis atau pesanan akan dibatalkan
+            </p>
+          </div>
+        </div>
+
+        {/* Kanan: timer */}
+        <div className="bg-[#0D1C2B] px-6 py-3 rounded-lg font-mono text-primary-blue text-xl font-bold shadow-inner border border-shadow-primary-blue">
+          {formatTime(timeLeft)}
+        </div>
       </div>
     </div>
   );

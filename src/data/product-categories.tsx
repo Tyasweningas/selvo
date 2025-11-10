@@ -8,3 +8,4 @@ export const product_categories: ProductCategory[] = [
     icon: category_web.src,
   },
 ];
+
