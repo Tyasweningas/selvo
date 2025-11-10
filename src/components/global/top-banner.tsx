@@ -13,6 +13,7 @@ const TopBanner = ({ variant = "blue", className }: props) => {
     <div
       className={clsx({
         "bg-primary-blue": variant === "blue",
+        
         [className || ""]: Boolean(className),
       })}
     >
@@ -21,7 +22,7 @@ const TopBanner = ({ variant = "blue", className }: props) => {
           "container mx-auto flex h-[36px] w-full items-center justify-between text-sm text-white",
         )}
       >
-        <ul className="flex gap-6 font-medium">
+        <ul className="flex gap-6 font-bold">
           <li>
             <Link href="#">Syarat & Ketentuan</Link>
           </li>
@@ -33,11 +34,11 @@ const TopBanner = ({ variant = "blue", className }: props) => {
           </li>
         </ul>
 
-        <p className="font-light">Pasar Digital Favoritmu</p>
+        <p className="font-bold">Pasar Digital Favoritmu</p>
 
         <div className="flex items-center gap-2">
           <IndonesiaFlag />
-          <p className="font-medium">Indonesia (Rupiah IDR)</p>
+          <p className="font-bold">Indonesia (Rupiah IDR)</p>
           <div className="ml-5 flex items-center gap-3">
             <a
               href="https://www.instagram.com"
