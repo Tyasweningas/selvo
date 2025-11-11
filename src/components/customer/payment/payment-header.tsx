@@ -40,9 +40,9 @@ export default function PaymentHeader() {
   };
 
   return (
-    <div className="rounded-xl overflow-hidden shadow-lg bg-[#04243A] border border-[#0F4C75]">
+    <div className="rounded-3xl overflow-hidden shadow-2xl bg-[#04243A] border border-[#0F4C75]">
       {/* Bar atas */}
-      <div className="bg-[#1B6CA8] text-white px-6 py-2 text-sm font-semibold rounded-t-xl">
+      <div className="bg-[#1B6CA8] text-white px-8 py-4 text-lg font-semibold rounded-t-3xl">
         Pembayaran untuk Keranjang Anda
       </div>
 
@@ -51,7 +51,7 @@ export default function PaymentHeader() {
         {/* Kiri: ikon dan teks */}
         <div className="flex items-start gap-4">
           <div className="bg-[#0D1C2B] p-3 rounded-full flex items-center justify-center shadow-inner">
-            <ShoppingCart size={30} className="text-[#1B6CA8]" />
+            <ShoppingCart size={35} className="text-[#1B6CA8]" />
           </div>
           <div>
             <h2 className="text-white text-2xl font-bold">Selesaikan Pembayaran Anda</h2>
