@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductPaymentItem } from '@/data/product-payment-items';
 import { IoClose } from 'react-icons/io5';
+import { Category } from '@/components/global/category'; 
 
 type CheckOutCartProps = {
   items: ProductPaymentItem[];
@@ -12,12 +13,7 @@ type CheckOutCartProps = {
 export default function CheckOutCart({ items }: CheckOutCartProps) {
   const [cartItems, setCartItems] = useState(items);
 
-  const handleQtyChange = (id: number, qty: number) => {
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, qty } : item))
-    );
-  };
-
+  // Removed unused handler: qty changes are not supported in this component.
   const handleRemoveItem = (id: number) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
@@ -32,6 +28,7 @@ export default function CheckOutCart({ items }: CheckOutCartProps) {
     <div className="w-full space-y-6">
       {/* Daftar Item + Ringkasan Pesanan */}
       <div className="bg-[#111D22] border border-[#1A2B32] rounded-2xl p-6 space-y-8">
+        
         {/* Daftar Item */}
         <div className="space-y-4">
           {cartItems.map((item) => (
@@ -47,6 +44,7 @@ export default function CheckOutCart({ items }: CheckOutCartProps) {
                 <IoClose size={13} />
               </button>
 
+              {/* Gambar + Info Produk */}
               <div className="flex items-center gap-4">
                 <div className="relative w-16 h-16">
                   <Image
@@ -60,27 +58,13 @@ export default function CheckOutCart({ items }: CheckOutCartProps) {
                 <div>
                   <h4 className="font-semibold text-white">{item.name}</h4>
                   <p className="text-sm text-gray-400">{item.variant}</p>
-
-                  {/* Dropdown Qty */}
-                  <div className="mt-2 bg-bg-blue text-white px-3 py-1 rounded-[15px] text-sm inline-flex items-center gap-2">
-                    <span>Kategori</span>
-                    <select
-                      value={item.qty}
-                      onChange={(e) =>
-                        handleQtyChange(item.id, Number(e.target.value))
-                      }
-                      className="bg-bg-blue text-white focus:outline-none rounded-[15px] px-1 cursor-pointer"
-                    >
-                      {[1, 2, 3, 4, 5].map((q) => (
-                        <option key={q} value={q}>
-                          {q}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  
+                 
+                  <Category name={item.category ?? ''} />
                 </div>
               </div>
 
+              {/* Harga */}
               <div className="text-[#facc15] font-semibold text-right">
                 IDR {(item.price * item.qty).toLocaleString('id-ID')}
               </div>

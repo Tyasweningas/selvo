@@ -46,7 +46,7 @@ export default function Navbar() {
       <TopBanner variant="blue" />
 
       {/* === Main Navbar === */}
-      <div className="flex flex-wrap h-auto md:h-[100px] items-center justify-between px-6 md:px-12 border-b border-[#1E2A30] text-white">
+      <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 md:px-12 py-4 md:py-6 border-b border-[#1E2A30] text-white">
         {/* Logo + Hamburger */}
         <div className="flex items-center justify-between w-full md:w-auto">
           <p className="text-3xl md:text-4xl font-extrabold tracking-wide text-[#37A2EA]">
@@ -62,14 +62,14 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative hidden md:flex h-[60px] w-full md:w-[700px] items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-6 mt-4 md:mt-0">
-          {/* Kategori Dropdown */}
+        {/* Search Bar (Desktop) */}
+        <div className="hidden md:flex relative h-[55px] w-full md:w-[650px] items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4 md:px-6 mt-4 md:mt-0">
+          {/* Category Dropdown */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setCategoryDropdown((prev) => !prev)}
-              className="flex items-center gap-1 text-base md:text-lg font-semibold text-gray-300 cursor-pointer"
+              className="flex items-center gap-1 text-base font-semibold text-gray-300 cursor-pointer"
             >
               {selectedCategory}
               <IoChevronDownSharp
@@ -80,7 +80,7 @@ export default function Navbar() {
             </button>
 
             {categoryDropdown && (
-              <div className="absolute top-8 left-0 z-50 w-48 md:w-56 rounded-md border border-[#1E2A30] bg-[#1A252B] shadow-lg animate-fadeIn">
+              <div className="absolute top-8 left-0 z-50 w-48 rounded-md border border-[#1E2A30] bg-[#1A252B] shadow-lg animate-fadeIn">
                 {[
                   "Semua Kategori",
                   "Desain Grafis",
@@ -106,7 +106,7 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="mx-3 md:mx-4 h-[30px] w-[1px] bg-gray-600"></div>
+          <div className="mx-3 h-[30px] w-[1px] bg-gray-600"></div>
 
           {/* Search Input */}
           <form action="/" className="flex-1">
@@ -114,7 +114,7 @@ export default function Navbar() {
               type="search"
               name="search"
               placeholder="Cari item digital..."
-              className="h-[40px] w-full border-none bg-transparent pr-6 pl-2 text-base md:text-lg text-gray-300 placeholder-gray-500 focus:outline-none"
+              className="h-[40px] w-full border-none bg-transparent pr-6 pl-2 text-base text-gray-300 placeholder-gray-500 focus:outline-none"
             />
           </form>
 
@@ -122,26 +122,26 @@ export default function Navbar() {
             type="submit"
             className="absolute right-6 text-gray-400 hover:text-white transition"
           >
-            <IoSearch size={24} />
+            <IoSearch size={22} />
           </button>
         </div>
 
         {/* Right Section */}
-        <div className="hidden md:flex items-center gap-6 md:gap-8 text-lg mt-4 md:mt-0">
-          <div className="flex cursor-pointer items-center gap-2 px-2 md:px-4 py-2 text-green-400 hover:text-green-300 transition text-base md:text-lg">
+        <div className="hidden md:flex items-center gap-6 mt-4 md:mt-0">
+          <div className="flex cursor-pointer items-center gap-2 px-3 py-2 text-green-400 hover:text-green-300 transition">
             <PiBookOpenTextDuotone size={22} />
             <p className="font-semibold hidden lg:block">Panduan Penjual</p>
           </div>
 
-          <div className="flex cursor-pointer items-center gap-2 md:gap-3 rounded-full bg-[#4EBD77] px-4 md:px-6 py-2 md:py-3 transition hover:bg-[#3ea066]">
+          <div className="flex cursor-pointer items-center gap-2 rounded-full bg-[#4EBD77] px-4 py-2 transition hover:bg-[#3ea066]">
             <FaRegCircleUser size={22} className="text-white" />
             <p className="font-semibold text-white hidden lg:block">
               Yuk Mulai Menjual
             </p>
           </div>
 
-          <button className="relative rounded-full bg-primary-blue p-3 md:p-4 transition hover:bg-[#256ca3]">
-            <FaShoppingCart size={24} className="text-white" />
+          <button className="relative rounded-full bg-primary-blue p-3 transition hover:bg-[#256ca3]">
+            <FaShoppingCart size={22} className="text-white" />
             <span className="absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-blue">
               2
             </span>
@@ -150,7 +150,7 @@ export default function Navbar() {
       </div>
 
       {/* === Bottom Navigation (Desktop) === */}
-      <div className="hidden md:flex h-[56px] items-center gap-6 md:gap-10 border-t border-[#1E2A30] bg-[#111D22]/95 px-6 md:px-12 text-base md:text-lg font-semibold text-gray-300">
+      <div className="hidden md:flex flex-wrap items-center gap-6 border-t border-[#1E2A30] bg-[#111D22]/95 px-6 md:px-12 py-3 text-base font-semibold text-gray-300">
         {categories.map((cat) => (
           <div key={cat.name} className="relative" onClick={(e) => e.stopPropagation()}>
             <button
@@ -159,7 +159,7 @@ export default function Navbar() {
             >
               {cat.name}
               <IoChevronDownSharp
-                className={`text-[14px] md:text-[16px] transition-transform duration-200 ${
+                className={`text-[14px] transition-transform duration-200 ${
                   openDropdown === cat.name
                     ? "rotate-180 text-primary-blue"
                     : "text-gray-400"
@@ -168,12 +168,12 @@ export default function Navbar() {
             </button>
 
             {openDropdown === cat.name && (
-              <div className="animate-fadeIn absolute top-[45px] left-0 z-50 w-[200px] md:w-[240px] rounded-md border border-[#263238] bg-[#1A252B] px-3 py-2 shadow-lg">
+              <div className="animate-fadeIn absolute top-[45px] left-0 z-50 w-[200px] rounded-md border border-[#263238] bg-[#1A252B] px-3 py-2 shadow-lg">
                 {cat.items.map((sub) => (
                   <Link
                     key={sub}
                     href="#"
-                    className="block rounded px-3 py-2 text-gray-300 text-base md:text-lg hover:bg-[#222F35] hover:text-primary-blue transition"
+                    className="block rounded px-3 py-2 text-gray-300 hover:bg-[#222F35] hover:text-primary-blue transition"
                   >
                     {sub}
                   </Link>
@@ -186,10 +186,10 @@ export default function Navbar() {
 
       {/* === Mobile Menu === */}
       {mobileMenuOpen && (
-        <div className="md:hidden flex flex-col bg-[#0D171C]/95 px-6 py-4 border-t border-[#1E2A30] animate-fadeIn">
-          {/* Search (mobile version) */}
-          <div className="flex items-center gap-3 bg-[#0B1418] rounded-full border border-[#1F2C33] px-4 py-3 mb-4">
-            <IoSearch size={22} className="text-gray-400" />
+        <div className="md:hidden flex flex-col bg-[#0D171C]/95 px-4 py-4 border-t border-[#1E2A30] animate-fadeIn space-y-3">
+          {/* Search (mobile) */}
+          <div className="flex items-center gap-3 bg-[#0B1418] rounded-full border border-[#1F2C33] px-4 py-3">
+            <IoSearch size={20} className="text-gray-400" />
             <input
               type="search"
               placeholder="Cari item digital..."
@@ -197,12 +197,11 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Category Buttons */}
-          <div className="flex flex-col gap-2 text-gray-300">
-            {categories.map((cat) => (
+          {/* Categories */}
+          {categories.map((cat) => (
+            <div key={cat.name} className="w-full">
               <button
-                key={cat.name}
-                className="flex justify-between items-center py-2 px-3 rounded hover:bg-[#1E2A30] text-left"
+                className="flex justify-between items-center w-full py-2 px-3 rounded hover:bg-[#1E2A30] text-left text-gray-300"
                 onClick={() => toggleDropdown(cat.name)}
               >
                 <span>{cat.name}</span>
@@ -212,7 +211,33 @@ export default function Navbar() {
                   }`}
                 />
               </button>
-            ))}
+
+              {openDropdown === cat.name && (
+                <div className="ml-4 border-l border-[#1E2A30] pl-3">
+                  {cat.items.map((sub) => (
+                    <Link
+                      key={sub}
+                      href="#"
+                      className="block py-2 text-sm text-gray-400 hover:text-primary-blue"
+                    >
+                      {sub}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Bottom Buttons */}
+          <div className="flex flex-col gap-3 pt-3 border-t border-[#1E2A30]">
+            <button className="flex items-center gap-2 text-green-400 hover:text-green-300 transition">
+              <PiBookOpenTextDuotone size={20} />
+              <span>Panduan Penjual</span>
+            </button>
+            <button className="flex items-center justify-center gap-2 bg-[#4EBD77] rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]">
+              <FaRegCircleUser size={20} />
+              Yuk Mulai Menjual
+            </button>
           </div>
         </div>
       )}
