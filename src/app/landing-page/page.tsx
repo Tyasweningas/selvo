@@ -4,10 +4,12 @@ import ProductCard from "@/components/customer/landing-page/product-card";
 import GlowCircle from "@/assets/background/glow-circle.png";
 import LeftFloating from "@/assets/items/left-floating-items.png";
 import RightFloating from "@/assets/items/right-floating-items.png";
+import { glow_carousel } from "@/assets/background";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback } from "react";
+import BannerCarousel from "@/components/customer/landing-page/carousel/banner-carousel";
 
-export default function DashboardCust() {
+export default function LandingPage() {
 
   return (
      <>
@@ -67,10 +69,26 @@ export default function DashboardCust() {
     </div>
   </section>
 
-  <section className="relative min-h-screen flex items-center justify-center text-white z-10">
-    <div className="w-2xl h-[300px] bg-yellow-400 ">
+  <section className="relative z-0 pt-[100px] flex flex-col items-center justify-center text-white">
+    <Image 
+    src={glow_carousel} 
+    alt="Glow Carousel" 
+    width={1800} 
+    height={5} 
+    className="absolute object-contain pointer-events-none select-none -z-20 translate-y-45"
+    />
+  <div className="relative z-10">
+   <BannerCarousel/>
+   </div>
+    
+  </section>
 
-    </div>
+  <section className="relative min-h-screen flex items-center justify-center text-white">
+    <h2 className="text-4xl font-semibold">Slide ketiga</h2>
+  </section>
+
+  <section className="relative min-h-screen flex items-center justify-center text-white">
+    <h2 className="text-4xl font-semibold">Slide ketiga</h2>
   </section>
 
   <section className="relative min-h-screen flex items-center justify-center text-white">
