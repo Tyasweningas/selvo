@@ -9,6 +9,7 @@ export type ProductPaymentItem = {
   qty: number;
   price: number;
   img: string | StaticImageData; 
+  category?: string;
 };
 
 export const productPaymentItems: ProductPaymentItem[] = [
@@ -19,6 +20,7 @@ export const productPaymentItems: ProductPaymentItem[] = [
     qty: 1, 
     price: 1500000, 
     img: popular_item_1,
+    category : "Website",   // ✅ sesuai
   },
   {
     id: 2, 
@@ -27,6 +29,7 @@ export const productPaymentItems: ProductPaymentItem[] = [
     qty: 2, 
     price: 1500000, 
     img: item2,
+    category : "Illustrasi",  // ✅ ganti dari "design" ke "Illustrasi"
   },
   {
     id: 3, 
@@ -35,6 +38,7 @@ export const productPaymentItems: ProductPaymentItem[] = [
     qty: 3,
     price: 1500000, 
     img: item3,
+    category : "Video",   // ✅ sesuai
   },
   {
     id: 4, 
@@ -43,5 +47,6 @@ export const productPaymentItems: ProductPaymentItem[] = [
     qty: 4, 
     price: 1500000, 
     img: item4,
+    category : "Desain",  // ✅ ganti dari "vector" ke "Desain"
   },
 ];
