@@ -4,5 +4,5 @@ export type categoryType = {
   id: number;
   categorieName: string;
   categorieDesc: string;
-  icon: string | StaticImageData; // ✅ tambahkan StaticImageData
+  icon: string | StaticImageData;
 };
