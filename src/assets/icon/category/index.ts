@@ -5,4 +5,4 @@ export { default as category_mockup } from "./category-mockup.png";
 export { default as category_photography } from "./category-photography.png";
 export { default as category_video } from "./category-video.png";
 export { default as category_web } from "./category-web.png";
-export {default as category_unggulan } from "./category-unggulan.png";
+export { default as category_unggulan } from "./category-unggulan.png";

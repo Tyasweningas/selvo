@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { ProductPaymentItem } from '@/data/product-payment-items';
+import { ProductPaymentItem } from '@/data/mock/product-payment-items';
 import { IoClose } from 'react-icons/io5';
 import { Category } from '@/components/global/category'; 
 

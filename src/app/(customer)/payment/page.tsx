@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { FaCalendarAlt, FaClipboardList } from 'react-icons/fa';
 import { IoCopyOutline } from 'react-icons/io5';
-import { productPaymentItems } from '@/data/product-payment-items';
+import { productPaymentItems } from '@/data/mock/product-payment-items';
 import qrisLogo from '@/assets/logo/qrisLogo.png'
 import qrisCode from '@/assets/logo/qrisCode.png'
 
