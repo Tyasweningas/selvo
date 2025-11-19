@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { IoSearch, IoChevronDownSharp, IoMenu, IoClose } from "react-icons/io5";
+import {
+  IoSearch,
+  IoChevronDownSharp,
+  IoMenu,
+  IoClose
+} from "react-icons/io5";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -15,16 +20,6 @@ export default function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setIsSticky(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleDropdown = (menu: string) => {
-    setOpenDropdown((prev) => (prev === menu ? null : menu));
-  };
-
   const categories = [
     { name: "Templat Video", items: ["After Effects", "Premiere Pro", "DaVinci Resolve"] },
     { name: "Desain Grafis", items: ["Logo", "Poster", "Mockup"] },
@@ -35,145 +30,138 @@ export default function Navbar() {
     { name: "3D", items: ["Model 3D", "Texture", "Animation"] },
   ];
 
+  useEffect(() => {
+    const onScroll = () => setIsSticky(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <nav
       className={`font-gilroy fixed top-0 w-full z-50 transition-all duration-300 ${
         isSticky
-          ? "backdrop-blur-md bg-[#0D171C]/95 shadow-lg shadow-black/30"
+          ? "backdrop-blur-xl bg-[#0F191E]/95 shadow-lg shadow-black/30"
           : "bg-[#0D171C]"
       }`}
     >
-      <TopBanner variant="blue" />
+      
+      <div className="hidden sm:block">
+        <TopBanner variant="blue" />
+      </div>
 
-      {/* === Main Navbar === */}
-      <div className="flex flex-wrap items-center justify-between px-4 sm:px-6 md:px-12 py-4 md:py-6 border-b border-[#1E2A30] text-white">
-        {/* Logo + Hamburger */}
-        <div className="flex items-center justify-between w-full md:w-auto">
-          <p className="text-3xl md:text-4xl font-extrabold tracking-wide text-[#37A2EA]">
+    
+      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-12 py-4 border-b border-[#1E2A30]">
+        
+       
+        <div className="flex items-center w-full sm:w-auto justify-between sm:mr-6 lg:mr-10">
+          <p className="text-3xl sm:text-4xl font-extrabold tracking-wide text-[#37A2EA]">
             SELVO
           </p>
 
-          {/* Hamburger (mobile only) */}
           <button
-            className="md:hidden text-3xl text-gray-300 hover:text-white transition"
+            className="sm:hidden text-3xl text-gray-300 hover:text-white transition"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <IoClose /> : <IoMenu />}
           </button>
         </div>
 
-        {/* Search Bar (Desktop) */}
-        <div className="hidden md:flex relative h-[55px] w-full md:w-[650px] items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4 md:px-6 mt-4 md:mt-0">
-          {/* Category Dropdown */}
+       
+        <div className="hidden sm:flex relative h-[50px] w-full sm:w-[350px] lg:w-[650px] items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4 lg:px-6 mt-4 sm:mt-0 transition-all ">
+          
           <div className="relative">
             <button
               type="button"
-              onClick={() => setCategoryDropdown((prev) => !prev)}
-              className="flex items-center gap-1 text-base font-semibold text-gray-300 cursor-pointer"
+              onClick={() => setCategoryDropdown(!categoryDropdown)}
+              className="flex items-center gap-1 text-sm lg:text-base font-semibold text-gray-300 cursor-pointer"
             >
               {selectedCategory}
               <IoChevronDownSharp
-                className={`ml-1 text-xl transition-transform duration-200 ${
+                className={`ml-1 text-lg transition-transform ${
                   categoryDropdown ? "rotate-180" : ""
                 }`}
               />
             </button>
 
             {categoryDropdown && (
-              <div className="absolute top-8 left-0 z-50 w-48 rounded-md border border-[#1E2A30] bg-[#1A252B] shadow-lg animate-fadeIn">
-                {[
-                  "Semua Kategori",
-                  "Desain Grafis",
-                  "Musik & Efek Suara",
-                  "3D",
-                  "Templat Video",
-                  "Pengembangan Web",
-                  "Fotografi",
-                  "Gambar & Ilustrasi",
-                ].map((cat) => (
+              <div className="absolute top-8 left-0 z-50 w-48 rounded-md border border-[#0F191E] bg-[#0F191E] shadow-xl">
+                {categories.map((c) => (
                   <div
-                    key={cat}
+                    key={c.name}
                     onClick={() => {
-                      setSelectedCategory(cat);
+                      setSelectedCategory(c.name);
                       setCategoryDropdown(false);
                     }}
-                    className="cursor-pointer px-4 py-3 text-base text-gray-300 hover:bg-[#263238] hover:text-primary-blue"
+                    className="cursor-pointer px-4 py-3 text-sm lg:text-base text-gray-300 hover:bg-[#263238] hover:text-primary-blue"
                   >
-                    {cat}
+                    {c.name}
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="mx-3 h-[30px] w-[1px] bg-gray-600"></div>
+          <div className="mx-3 h-[28px] w-[1px] bg-gray-700"></div>
 
-          {/* Search Input */}
-          <form action="/" className="flex-1">
-            <input
-              type="search"
-              name="search"
-              placeholder="Cari item digital..."
-              className="h-[40px] w-full border-none bg-transparent pr-6 pl-2 text-base text-gray-300 placeholder-gray-500 focus:outline-none"
-            />
-          </form>
+         
+          <input
+            type="search"
+            placeholder="Cari item digital..."
+            className="flex-1 bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none text-sm lg:text-base"
+          />
 
-          <button
-            type="submit"
-            className="absolute right-6 text-gray-400 hover:text-white transition"
-          >
-            <IoSearch size={22} />
+          <button className="absolute right-6 text-gray-400 hover:text-white transition">
+            <IoSearch size={20} />
           </button>
         </div>
 
-        {/* Right Section */}
-        <div className="hidden md:flex items-center gap-6 mt-4 md:mt-0">
-          <div className="flex cursor-pointer items-center gap-2 px-3 py-2 text-green-400 hover:text-green-300 transition">
-            <PiBookOpenTextDuotone size={22} />
-            <p className="font-semibold hidden lg:block">Panduan Penjual</p>
-          </div>
+        
+        <div className="hidden sm:flex items-center gap-6">
+          <button className="flex items-center gap-2 text-green-400 hover:text-green-300">
+            <PiBookOpenTextDuotone size={20} />
+            <span className="hidden lg:block font-medium text-sm">Panduan Penjual</span>
+          </button>
 
-          <div className="flex cursor-pointer items-center gap-2 rounded-full bg-[#4EBD77] px-4 py-2 transition hover:bg-[#3ea066]">
-            <FaRegCircleUser size={22} className="text-white" />
-            <p className="font-semibold text-white hidden lg:block">
+          <button className=" bg-[#4EBD77] px-2 rounded-full hover:bg-[#3ea066] transition w-35 h-10">
+            <p className="hidden lg:block font-medium text-xs text-white">
               Yuk Mulai Menjual
             </p>
-          </div>
+          </button>
 
-          <button className="relative rounded-full bg-primary-blue p-3 transition hover:bg-[#256ca3]">
-            <FaShoppingCart size={22} className="text-white" />
-            <span className="absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-blue">
+          <button className="relative p-3 rounded-full bg-primary-blue hover:bg-[#256ca3]">
+            <FaShoppingCart size={18} className="text-white" />
+            <span className="absolute -top-1 -right-1 bg-white text-primary-blue text-[10px] font-medium h-[18px] w-[18px] flex items-center justify-center rounded-full">
               2
             </span>
           </button>
         </div>
       </div>
 
-      {/* === Bottom Navigation (Desktop) === */}
-      <div className="hidden md:flex flex-wrap items-center gap-6 border-t border-[#1E2A30] bg-[#111D22]/95 px-6 md:px-12 py-3 text-base font-semibold text-gray-300">
+     
+      <div className="hidden lg:flex gap-6 border-t border-[#0F191E] bg-[#0F191E]/95 px-6 lg:px-12 py-3 text-base font-semibold text-gray-300">
         {categories.map((cat) => (
-          <div key={cat.name} className="relative" onClick={(e) => e.stopPropagation()}>
+          <div key={cat.name} className="relative">
             <button
-              onClick={() => toggleDropdown(cat.name)}
+              onClick={() =>
+                setOpenDropdown(openDropdown === cat.name ? null : cat.name)
+              }
               className="flex items-center gap-2 hover:text-primary-blue transition"
             >
               {cat.name}
               <IoChevronDownSharp
-                className={`text-[14px] transition-transform duration-200 ${
-                  openDropdown === cat.name
-                    ? "rotate-180 text-primary-blue"
-                    : "text-gray-400"
+                className={`text-sm transition-transform ${
+                  openDropdown === cat.name ? "rotate-180 text-primary-blue" : ""
                 }`}
               />
             </button>
 
             {openDropdown === cat.name && (
-              <div className="animate-fadeIn absolute top-[45px] left-0 z-50 w-[200px] rounded-md border border-[#263238] bg-[#1A252B] px-3 py-2 shadow-lg">
+              <div className="absolute top-[45px] left-0 z-50 w-[200px] rounded-md border border-[#263238] bg-[#1A252B] shadow-lg px-3 py-2">
                 {cat.items.map((sub) => (
                   <Link
                     key={sub}
                     href="#"
-                    className="block rounded px-3 py-2 text-gray-300 hover:bg-[#222F35] hover:text-primary-blue transition"
+                    className="block py-2 px-3 text-gray-300 hover:bg-[#222F35] hover:text-primary-blue rounded transition"
                   >
                     {sub}
                   </Link>
@@ -184,10 +172,11 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* === Mobile Menu === */}
+      
       {mobileMenuOpen && (
-        <div className="md:hidden flex flex-col bg-[#0D171C]/95 px-4 py-4 border-t border-[#1E2A30] animate-fadeIn space-y-3">
-          {/* Search (mobile) */}
+        <div className="sm:hidden bg-[#0D171C]/95 border-t border-[#1E2A30] px-4 py-4 space-y-3 animate-fadeIn">
+          
+          
           <div className="flex items-center gap-3 bg-[#0B1418] rounded-full border border-[#1F2C33] px-4 py-3">
             <IoSearch size={20} className="text-gray-400" />
             <input
@@ -197,14 +186,16 @@ export default function Navbar() {
             />
           </div>
 
-          {/* Categories */}
+         
           {categories.map((cat) => (
-            <div key={cat.name} className="w-full">
+            <div key={cat.name}>
               <button
-                className="flex justify-between items-center w-full py-2 px-3 rounded hover:bg-[#1E2A30] text-left text-gray-300"
-                onClick={() => toggleDropdown(cat.name)}
+                onClick={() =>
+                  setOpenDropdown(openDropdown === cat.name ? null : cat.name)
+                }
+                className="w-full flex justify-between items-center text-gray-300 hover:bg-[#1E2A30] rounded px-3 py-2"
               >
-                <span>{cat.name}</span>
+                {cat.name}
                 <IoChevronDownSharp
                   className={`transition-transform ${
                     openDropdown === cat.name ? "rotate-180 text-primary-blue" : ""
@@ -228,15 +219,15 @@ export default function Navbar() {
             </div>
           ))}
 
-          {/* Bottom Buttons */}
-          <div className="flex flex-col gap-3 pt-3 border-t border-[#1E2A30]">
-            <button className="flex items-center gap-2 text-green-400 hover:text-green-300 transition">
+          
+          <div className="pt-3 border-t border-[#1E2A30] flex flex-col gap-3">
+            <button className="flex items-center gap-2 text-green-400 hover:text-green-300">
               <PiBookOpenTextDuotone size={20} />
-              <span>Panduan Penjual</span>
+              Panduan Penjual
             </button>
-            <button className="flex items-center justify-center gap-2 bg-[#4EBD77] rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]">
-              <FaRegCircleUser size={20} />
-              Yuk Mulai Menjual
+
+            <button className="bg-[#4EBD77] text-white py-2 rounded-full flex items-center justify-center gap-2 font-semibold hover:bg-[#3ea066]">
+              <FaRegCircleUser size={20} /> Yuk Mulai Menjual
             </button>
           </div>
         </div>

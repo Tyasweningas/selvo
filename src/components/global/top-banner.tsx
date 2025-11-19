@@ -12,7 +12,7 @@ const TopBanner = ({ variant = "blue", className }: Props) => {
   return (
     <div
       className={clsx(
-        "w-full text-white text-base",
+        "w-full text-white text-[11px]", 
         {
           "bg-primary-blue": variant === "blue",
           "bg-[#4EBD77]": variant === "green",
@@ -22,13 +22,12 @@ const TopBanner = ({ variant = "blue", className }: Props) => {
     >
       <div
         className={clsx(
-          // pakai grid agar kiri–tengah–kanan sejajar
-          "container mx-auto grid h-auto grid-cols-3 items-center px-4 py-2 text-center",
-          "md:h-[36px]"
+          "container mx-auto flex flex-col items-center gap-1 px-4 py-2",
+          "md:flex-row md:justify-between md:py-1.5"
         )}
       >
-        {/* === Kiri === */}
-        <ul className="flex flex-wrap items-center justify-start gap-4 font-bold text-[13px] md:text-base">
+        
+        <ul className="flex items-center gap-3 font-semibold overflow-x-auto whitespace-nowrap md:text-[12px] md:gap-4">
           <li>
             <Link href="#" className="hover:underline">
               Syarat & Ketentuan
@@ -46,44 +45,46 @@ const TopBanner = ({ variant = "blue", className }: Props) => {
           </li>
         </ul>
 
-        {/* === Tengah === */}
-        <p className="text-xs font-bold md:text-base text-center">
+        
+        <p className="text-[10px] font-bold text-center md:text-[11px]">
           Pasar Digital Favoritmu
         </p>
 
-        {/* === Kanan === */}
-        <div className="flex items-center justify-end gap-3 text-sm md:text-base">
-          <div className="flex items-center gap-3">
+        
+        <div className="flex items-center gap-2 text-[11px] md:text-[12px]">
+          <div className="flex items-center gap-1.5">
             <IndonesiaFlag />
-            <p className="font-bold hidden sm:block">Indonesia (Rupiah IDR)</p>
+            <p className="font-semibold hidden sm:block text-[11px]">
+              Indonesia (IDR)
+            </p>
           </div>
-          <div className="flex items-center gap-3">
+
+          <div className="flex items-center gap-2">
             <a
-              href="https://www.instagram.com"
+              href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="text-white hover:opacity-80"
+              className="hover:opacity-80"
             >
-              <FaInstagram size={16} />
+              <FaInstagram size={13} /> 
             </a>
+
             <a
-              href="https://www.tiktok.com"
+              href="https://tiktok.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="TikTok"
-              className="text-white hover:opacity-80"
+              className="hover:opacity-80"
             >
-              <FaTiktok size={16} />
+              <FaTiktok size={13} /> 
             </a>
+
             <a
               href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="X / Twitter"
-              className="text-white hover:opacity-80"
+              className="hover:opacity-80"
             >
-              <FaXTwitter size={16} />
+              <FaXTwitter size={13} /> 
             </a>
           </div>
         </div>
@@ -95,7 +96,7 @@ const TopBanner = ({ variant = "blue", className }: Props) => {
 export default TopBanner;
 
 const IndonesiaFlag = () => (
-  <span className="inline-block h-[12px] w-[18px] overflow-hidden rounded-sm border border-white">
+  <span className="inline-block h-[10px] w-[16px] overflow-hidden rounded-sm border border-white">
     <span className="block h-1/2 w-full bg-red-600"></span>
     <span className="block h-1/2 w-full bg-white"></span>
   </span>
