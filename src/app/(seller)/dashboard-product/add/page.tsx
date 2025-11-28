@@ -3,6 +3,8 @@
 import Button from "@/components/global/button";
 import AddProductDescription from "@/components/seller/dashboard/product/add-product-description";
 import AddProductGeneral from "@/components/seller/dashboard/product/add-product-general";
+import AddProductReview from "@/components/seller/dashboard/product/add-product-review";
+import AddProductSpesification from "@/components/seller/dashboard/product/add-product-spesification";
 import AddProductStep from "@/components/seller/dashboard/product/add-product-step";
 import { add_product_steps } from "@/data/add-product-steps";
 import { useState } from "react";
@@ -27,6 +29,8 @@ const AddProductPage = () => {
 
       {step === 0 && <AddProductGeneral />}
       {step === 1 && <AddProductDescription />}
+      {step === 2 && <AddProductSpesification />}
+      {step === 3 && <AddProductReview />}
 
       <div className="mt-5 ml-auto flex w-fit gap-5">
         {step > 0 && (
