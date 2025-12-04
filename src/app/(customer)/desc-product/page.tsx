@@ -80,17 +80,9 @@ export default function ProductPage() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 pt-2">
-
-        
         <Breadcrumb items={breadcrumb} />
-
-        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-          
           <div className="col-span-2">
-
-            
             <div className="bg-[#1C2434] p-2 rounded-lg flex items-center justify-center w-full">
               <Image
                 src={activeImage}
