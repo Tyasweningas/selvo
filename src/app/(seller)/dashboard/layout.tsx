@@ -5,7 +5,7 @@ import { dashboardTabItems } from "@/data/seller-tab-items";
 
 const SellerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="custom-scrollbar h-screen overflow-auto bg-[#0F191E] bg-gradient-to-b from-[#4EBD77]/34 to-[#0F191E]">
+    <main className="custom-scrollbar h-screen overflow-auto bg-[#0F191E] bg-gradient-to-b from-[#37a2ea]/34 to-[#0F191E]">
       <SellerAppBar />
       <div className="container mx-auto flex gap-5 py-10">
         <DashboardMenu />

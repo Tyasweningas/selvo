@@ -1,6 +1,7 @@
 import { add_product } from "@/assets/illustration";
 import Button from "@/components/global/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const UploadProductCard = () => {
   return (
@@ -9,9 +10,11 @@ const UploadProductCard = () => {
         <p className="grow text-3xl leading-12 font-semibold text-white">
           Tambahkan <br /> Produk <br /> Digitalmu
         </p>
-        <Button variant="white" size="lg">
-          Unggah
-        </Button>
+        <Link href={"/dashboard-product/add"}>
+          <Button variant="white" size="lg" className="w-full">
+            Unggah
+          </Button>
+        </Link>
       </div>
       <Image
         src={add_product}
