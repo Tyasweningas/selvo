@@ -3,6 +3,7 @@ import { thumbnail_1, thumbnail_2, thumbnail_3, thumbnail_4 } from "@/assets/ite
 
 
 export const products: ProductCardType[] = [
+  
   {
     id: 1,
     name: "Template Landing Page",
@@ -40,7 +41,7 @@ export const products: ProductCardType[] = [
     categoryId: 1,
   },
     {
-    id: 3,
+    id: 5,
     name: "Template PPT – Burung",
     thumbnail: thumbnail_1,
     price: 55400,
@@ -49,3 +50,4 @@ export const products: ProductCardType[] = [
     categoryId: 3,
   },
 ];
+console.log("TEST:", thumbnail_1);

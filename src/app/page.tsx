@@ -1,14 +1,15 @@
 import PaymentHeader from "@/components/customer/payment/payment-header";
 import AuthPage from "./(seller)/auth/page";
 import Footer from "@/components/global/footer";
-import SellerNavbar from "@/components/seller/seller-navbar";
-import BannerCarousel from "@/components/customer/landing-page/carousel/banner-carousel";
+import ProductCard from "@/components/global/product-card";
+import NavbarLanding from "@/components/global/navbar-landing";
+import Navbar from "@/components/global/navbar";
+
 
 export default function Home() {
   return (
  <>
-  <BannerCarousel/>
-       
+    <Navbar/>
  </>
   )
 }
