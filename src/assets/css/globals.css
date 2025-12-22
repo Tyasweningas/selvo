@@ -78,3 +78,12 @@ body {
   @apply w-full rounded-lg border border-[#1f2a2d] bg-[#0f1b1d] px-4 py-3 transition focus:border-pink-500 focus:outline-none;
 }
 
+/* Hide Scrollbar for Carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}

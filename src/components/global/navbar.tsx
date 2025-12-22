@@ -11,7 +11,7 @@ import {
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
-import TopBanner from "./top-banner";
+
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -45,10 +45,7 @@ export default function Navbar() {
       }`}
     >
       
-      <div className="hidden sm:block">
-        <TopBanner variant="blue" />
-      </div>
-
+      
     
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-12 py-4 border-b border-[#1E2A30]">
         
