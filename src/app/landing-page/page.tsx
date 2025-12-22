@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 import Navbar from "@/components/global/navbar";
-import ProductCard from "@/components/global/product-card";
+import CardLanding from "@/components/customer/landing-page/card-landing";
 import GlowCircle from "@/assets/background/glow-circle.png";
 import LeftFloating from "@/assets/items/left-floating-items.png";
 import RightFloating from "@/assets/items/right-floating-items.png";
@@ -13,6 +13,7 @@ import { products } from "@/data/mock/product-card-mock";
 import NavbarLanding from "@/components/global/navbar-landing";
 import { useState } from "react";
 import { IoSearch, IoChevronDownSharp } from "react-icons/io5";
+import Footer from "@/components/global/footer";
 
 export default function LandingPage() {
 console.log("products:", products);
@@ -144,24 +145,98 @@ console.log("products:", products);
   <div className="relative z-10">
    <BannerCarousel/>
    </div>
-    <div>
-      {products.map((p) => (
-    <ProductCard key={p.id} item={p} />
-  ))}
+  </section>
+
+  {/* Product Section */}
+  <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
+    <div className="w-full max-w-[1400px] px-8">
+      {/* Section Header */}
+      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
+        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
+        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
+          Ekspor lebih banyak →
+        </a>
+      </div>
+
+      {/* Custom Grid Layout: 2 large on top, 3 small below */}
+      <div className="space-y-6">
+        {/* Top Row: 2 Medium-Large Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
+          {products.slice(0, 2).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+        
+        {/* Bottom Row: 3 Smaller Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
+          {products.slice(2, 5).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 
-  <section className="relative min-h-screen flex items-center justify-center text-white">
-    <h2 className="text-4xl font-semibold">Slide ketiga</h2>
+
+     <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
+    <div className="w-full max-w-[1400px] px-8">
+      {/* Section Header */}
+      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
+        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
+        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
+          Ekspor lebih banyak →
+        </a>
+      </div>
+
+      {/* Custom Grid Layout: 2 large on top, 3 small below */}
+      <div className="space-y-6">
+        {/* Top Row: 2 Medium-Large Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
+          {products.slice(0, 2).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+        
+        {/* Bottom Row: 3 Smaller Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
+          {products.slice(2, 5).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section className="relative min-h-screen flex items-center justify-center text-white">
-    <h2 className="text-4xl font-semibold">Slide ketiga</h2>
+    <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
+    <div className="w-full max-w-[1400px] px-8">
+      {/* Section Header */}
+      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
+        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
+        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
+          Ekspor lebih banyak →
+        </a>
+      </div>
+
+      {/* Custom Grid Layout: 2 large on top, 3 small below */}
+      <div className="space-y-6">
+        {/* Top Row: 2 Medium-Large Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
+          {products.slice(0, 2).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+        
+        {/* Bottom Row: 3 Smaller Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
+          {products.slice(2, 5).map((product) => (
+            <CardLanding key={product.id} item={product} />
+          ))}
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section className="relative min-h-screen flex items-center justify-center text-white">
-    <h2 className="text-4xl font-semibold">Slide ketiga</h2>
-  </section>
+<Footer/>
 </>
 
 
