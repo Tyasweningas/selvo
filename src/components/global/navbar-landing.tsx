@@ -6,6 +6,8 @@ import { PiBookOpenTextDuotone } from "react-icons/pi";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import TopBanner from "./top-banner";
+import CartPopup from "./cart-popup";
+import { useCart } from "@/hooks/use-cart";
 
 export default function NavbarLanding() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -13,6 +15,9 @@ export default function NavbarLanding() {
   const [selectedCategory, setSelectedCategory] = useState("Semua Kategori");
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Cart hook
+  const { cart, toggleCart, closeCart, removeFromCart, getTotalPrice, getTotalItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 10);
@@ -105,11 +110,16 @@ export default function NavbarLanding() {
       </p>
     </div>
 
-    <button className="relative rounded-full bg-primary-blue p-3 transition hover:bg-[#256ca3]">
+    <button 
+      onClick={toggleCart}
+      className="relative rounded-full bg-primary-blue p-3 transition hover:bg-[#256ca3]"
+    >
       <FaShoppingCart size={22} className="text-white" />
-      <span className="absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-blue">
-        2
-      </span>
+      {getTotalItems() > 0 && (
+        <span className="absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-blue">
+          {getTotalItems()}
+        </span>
+      )}
     </button>
   </div>
 </div>
@@ -174,6 +184,15 @@ export default function NavbarLanding() {
           </div>
         </div>
       )}
+
+      {/* Cart Popup */}
+      <CartPopup
+        isOpen={cart.isOpen}
+        onClose={closeCart}
+        items={cart.items}
+        onRemoveItem={removeFromCart}
+        totalPrice={getTotalPrice()}
+      />
     </nav>
   );
 }
