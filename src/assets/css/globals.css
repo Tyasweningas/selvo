@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./carousel-banner.css";
+
 @theme {
   --color-bg-body: #0f191e;
   --color-bg-nav: #111d22;
@@ -43,6 +44,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 body {
   font-family: "Gilroy", sans-serif;
 }
