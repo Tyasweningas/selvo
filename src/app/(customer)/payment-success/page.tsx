@@ -10,57 +10,23 @@ import Input from "@/components/global/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { MdOutlineDescription } from "react-icons/md";
+import { products } from "@/data/mock/product-card-mock";
+import Navbar from "@/components/global/navbar";
 
 // Mock Data
-const MOCK_ITEMS: ProductCardType[] = [
-  {
-    id: 1,
-    name: "Templat Laman Website",
-    creator: "Ibnu Hanif",
-    thumbnail: "https://placehold.co/100x100/jpg", // Placeholder
-    price: 0,
-    rate: 5,
-    categoryId: 1,
-  },
-  {
-    id: 2,
-    name: "Templat Laman Website",
-    creator: "Ibnu Hanif",
-    thumbnail: "https://placehold.co/100x100/jpg",
-    price: 0,
-    rate: 5,
-    categoryId: 1,
-  },
-  {
-    id: 3,
-    name: "Templat Laman Website",
-    creator: "Ibnu Hanif",
-    thumbnail: "https://placehold.co/100x100/jpg",
-    price: 0,
-    rate: 5,
-    categoryId: 1,
-  },
-  {
-    id: 4,
-    name: "Templat Laman Website",
-    creator: "Ibnu Hanif",
-    thumbnail: "https://placehold.co/100x100/jpg",
-    price: 0,
-    rate: 5,
-    categoryId: 1,
-  },
-];
+
 
 const MOCK_DOWNLOAD_URL =
-  "https://play.google.com/store/apps/details?id=com.google.android.apps.docs&hl=id";
+  "https://play.google.com/store/apps/details?id=com.google.android.apps.docs&hl=id"; //Mock URL Download
 
 export default function PaymentSuccessPage() {
-  const userEmail = "ibnuhanif2000@gmail.com"; // Mock email for now
+  const userEmail = "ibnuhanif2000@gmail.com"; // Mock email 
 
   return (
     <>
-      <div className="fixed inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
-      <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 px-4 py-10 md:px-20 overflow-hidden">
+    <Navbar/>
+    <div className="fixed inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
+      <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 px-4 pt-40 pb-10 md:px-20 overflow-hidden">
       {/* Header Section */}
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)]">
@@ -75,7 +41,7 @@ export default function PaymentSuccessPage() {
       </div>
 
       {/* Items List Section */}
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-bg-light bg-bg-main p-6 sm:p-8">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-bg-light bg-bg-div p-6 sm:p-8">
         <div className="mb-6 flex items-center gap-2 text-xl font-bold text-white">
           <div className="rounded-lg bg-primary-blue p-2">
             <MdOutlineDescription className="text-white" />
@@ -88,7 +54,7 @@ export default function PaymentSuccessPage() {
         </p>
 
         <div className="flex flex-col gap-4">
-          {MOCK_ITEMS.map((item) => (
+          {products.slice(0, 4).map((item) => (
             <PaymentItemCard
               key={item.id}
               item={item}
@@ -100,7 +66,7 @@ export default function PaymentSuccessPage() {
       </div>
 
       {/* Email Section */}
-      <div className="w-full max-w-4xl rounded-3xl border-2 border-bg-light bg-bg-main p-6 sm:p-8">
+      <div className="w-full max-w-4xl rounded-3xl border-2 border-bg-light bg-bg-div p-6 sm:p-8">
         <div className="mb-4 flex items-center gap-2 text-xl font-bold text-white">
             <div className="rounded-lg bg-primary-blue p-2">
                 <HiOutlineMail className="text-white" />
