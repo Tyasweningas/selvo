@@ -1,17 +1,22 @@
 import { ProductCardType } from "@/types/product-card";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Input from "../global/input";
 import { FiCopy, FiTag } from "react-icons/fi";
-import { BsNintendoSwitch } from "react-icons/bs"; // Using a placeholder for the gamepad icon if needed, or stick to a generic one
 import { IoGameControllerOutline } from "react-icons/io5";
 
 interface PaymentItemCardProps {
   item: ProductCardType;
   downloadUrl: string;
   tag: string;
+  categoryIcon: string | StaticImageData;
 }
 
-const PaymentItemCard = ({ item, downloadUrl, tag }: PaymentItemCardProps) => {
+const PaymentItemCard = ({
+  item,
+  downloadUrl,
+  tag,
+  categoryIcon,
+}: PaymentItemCardProps) => {
   return (
     <div className="flex flex-col gap-4 rounded-xl border-2 border-bg-light bg-bg-div p-4 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-4">
@@ -32,10 +37,16 @@ const PaymentItemCard = ({ item, downloadUrl, tag }: PaymentItemCardProps) => {
 
       <div className="flex w-full flex-col gap-2 md:w-2/3 md:items-end">
         <div className="flex">
-            <span className="flex items-center gap-1 rounded-full bg-primary-pink px-3 py-1 text-xs font-bold text-white">
-            <IoGameControllerOutline size={14} />
+          <span className="flex items-center gap-1 rounded-full bg-primary-blue px-3 py-1 text-xs font-bold text-white">
+            <Image
+              src={categoryIcon}
+              alt={tag}
+              width={14}
+              height={14}
+              className="h-[14px] w-[14px] object-contain"
+            />
             {tag}
-            </span>
+          </span>
         </div>
         
         <div className="w-full">

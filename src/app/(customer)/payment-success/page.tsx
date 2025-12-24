@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { MdOutlineDescription } from "react-icons/md";
 import { products } from "@/data/mock/product-card-mock";
+import { product_categories } from "@/data/product-categories";
 import Navbar from "@/components/global/navbar";
 
 // Mock Data
@@ -54,14 +55,20 @@ export default function PaymentSuccessPage() {
         </p>
 
         <div className="flex flex-col gap-4">
-          {products.slice(0, 4).map((item) => (
-            <PaymentItemCard
-              key={item.id}
-              item={item}
-              downloadUrl={MOCK_DOWNLOAD_URL}
-              tag="Ilustrasi"
-            />
-          ))}
+          {products.slice(0, 4).map((item) => {
+            // Check both .ts and .tsx property names
+            const category: any = product_categories[(item.categoryId || 1) - 1] || product_categories[0];
+            const categoryName = category.categorieName || category.name || "Kategori";
+            return (
+              <PaymentItemCard
+                key={item.id}
+                item={item}
+                downloadUrl={MOCK_DOWNLOAD_URL}
+                tag={categoryName}
+                categoryIcon={category.icon}
+              />
+            );
+          })}
         </div>
       </div>
 
