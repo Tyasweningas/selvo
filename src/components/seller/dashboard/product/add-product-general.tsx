@@ -1,10 +1,31 @@
+"use client";
+
 import Input from "@/components/global/input";
-import { product_categories } from "@/data/product-categories";
-import Image from "next/image";
+import { categoryService } from "@/services/category.service";
+import { ProductCategory } from "@/types/product";
+import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import { MdCategory, MdEdit } from "react-icons/md";
 
 const AddProductGeneral = () => {
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await categoryService.getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <Fragment>
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
@@ -35,26 +56,28 @@ const AddProductGeneral = () => {
         <p className="text-sec-netral text-sm">
           Pilih kategori yang sesuai agar produkmu mudah ditemukan.
         </p>
-        <div className="grid grid-cols-5 gap-5">
-          {product_categories.map((category) => (
-            <div
-              key={category.name}
-              className="hover:bg-bg-div flex cursor-pointer items-center gap-3 rounded-lg p-3"
-            >
-              <Image
-                src={category.icon}
-                alt={category.name}
-                width={40}
-                height={40}
-                className="size-12"
-              />
-              <div>
-                <p className="font-bold text-white">{category.name}</p>
-                <p className="text-sm text-white">{category.description}</p>
+        {loading ? (
+          <p className="text-white">Loading categories...</p>
+        ) : (
+          <div className="grid grid-cols-5 gap-5">
+            {categories.map((category) => (
+              <div
+                key={category.productCategoryId}
+                className="hover:bg-bg-div flex cursor-pointer items-center gap-3 rounded-lg p-3"
+              >
+                <div className="bg-bg-blue rounded-xl p-2">
+                  <MdCategory className="text-primary-blue size-8" />
+                </div>
+                <div>
+                  <p className="font-bold text-white">{category.name}</p>
+                  <p className="text-sm text-white">
+                    {category.description || "No description"}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </Fragment>
   );
