@@ -71,10 +71,26 @@ export class ServerApiClient {
 
       // Handle other errors
       if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(
-          error.message || `HTTP ${response.status}: ${response.statusText}`,
-        );
+        const errorData = await response.json().catch(() => ({}));
+
+        // Extract error message from API response
+        // Priority: errorData.message > errorData.error > errorData
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        if (errorData) {
+          if (typeof errorData.message === "string" && errorData.message) {
+            errorMessage = errorData.message;
+          } else if (typeof errorData.error === "string" && errorData.error) {
+            errorMessage = errorData.error;
+          } else if (typeof errorData === "string" && errorData) {
+            errorMessage = errorData;
+          }
+        }
+
+        // Create and throw ApiError-compatible error
+        const apiError: any = new Error(errorMessage);
+        apiError.status = response.status;
+        apiError.data = errorData;
+        throw apiError;
       }
 
       return await response.json();

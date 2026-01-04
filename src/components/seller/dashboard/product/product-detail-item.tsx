@@ -1,39 +1,37 @@
 "use client";
 
 import Input from "@/components/global/input";
-import { useState } from "react";
 import { MdClose } from "react-icons/md";
 
 interface ProductDetailItemProps {
+  detailKey: string;
+  detailValue: string;
   onRemove?: () => void;
   onChange?: (data: { key: string; value: string }) => void;
   showRemove?: boolean;
 }
 
 const ProductDetailItem = ({
+  detailKey,
+  detailValue,
   onRemove,
   onChange,
   showRemove = true,
 }: ProductDetailItemProps) => {
-  const [keyLabel, setKeyLabel] = useState<string>("");
-  const [valueLabel, setValueLabel] = useState<string>("");
-
   const handleKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newKey = event.target.value;
-    setKeyLabel(newKey);
-    onChange?.({ key: newKey, value: valueLabel });
+    onChange?.({ key: newKey, value: detailValue });
   };
 
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    setValueLabel(newValue);
-    onChange?.({ key: keyLabel, value: newValue });
+    onChange?.({ key: detailKey, value: newValue });
   };
 
   return (
     <div className="flex items-center gap-3">
       <Input
-        value={keyLabel}
+        value={detailKey}
         onChange={handleKeyChange}
         placeholder="Ketikkan sesuatu"
         variant="colored"
@@ -41,7 +39,7 @@ const ProductDetailItem = ({
       />
       <div className="flex flex-1 items-center gap-3">
         <Input
-          value={valueLabel}
+          value={detailValue}
           onChange={handleValueChange}
           placeholder="Ketikkan alamat emailmu..."
           className="w-full pr-12"

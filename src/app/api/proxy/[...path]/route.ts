@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3000";
+const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3001";
 
 /**
  * Generic proxy untuk forward semua requests ke backend
@@ -75,31 +75,58 @@ async function handleRequest(
     }
 
     // Forward request ke backend
-    const response = await fetch(fullUrl, {
-      method: request.method,
-      headers,
-      body,
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 55000); // 55 second timeout
 
-    // Handle non-JSON responses
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      const data = await response.json();
-      return NextResponse.json(data, { status: response.status });
-    } else {
-      const text = await response.text();
-      return new NextResponse(text, { status: response.status });
+    try {
+      const response = await fetch(fullUrl, {
+        method: request.method,
+        headers,
+        body,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
+      return await handleResponse(response);
+    } catch (fetchError: any) {
+      clearTimeout(timeoutId);
+      if (fetchError.name === "AbortError") {
+        console.error("⏱️ Request timeout after 55 seconds");
+        return NextResponse.json(
+          {
+            error: true,
+            message: "Request timeout. Please try again.",
+            data: null,
+          },
+          { status: 504 },
+        );
+      }
+      throw fetchError;
     }
   } catch (error) {
     console.error("❌ Proxy error:", error);
     return NextResponse.json(
       {
-        status: "error",
+        error: true,
         message:
           error instanceof Error ? error.message : "Internal server error",
+        data: null,
       },
       { status: 500 },
     );
+  }
+}
+
+// Helper function to handle response
+async function handleResponse(response: Response) {
+  // Handle non-JSON responses
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.includes("application/json")) {
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+  } else {
+    const text = await response.text();
+    return new NextResponse(text, { status: response.status });
   }
 }
 

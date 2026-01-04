@@ -1,8 +1,8 @@
 import axios, {
   AxiosError,
   AxiosInstance,
-  InternalAxiosRequestConfig,
   AxiosResponse,
+  InternalAxiosRequestConfig,
 } from "axios";
 
 /**
@@ -81,6 +81,19 @@ apiClient.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response;
 
+      // Extract error message from API response
+      // Priority: data.message > data.error > data
+      let errorMessage = "An error occurred";
+      if (data) {
+        if (typeof data.message === "string" && data.message) {
+          errorMessage = data.message;
+        } else if (typeof data.error === "string" && data.error) {
+          errorMessage = data.error;
+        } else if (typeof data === "string" && data) {
+          errorMessage = data;
+        }
+      }
+
       switch (status) {
         case 401:
           // Unauthorized - Redirect to login
@@ -98,29 +111,29 @@ apiClient.interceptors.response.use(
 
         case 403:
           // Forbidden
-          console.error("🚫 Access Forbidden");
+          console.error("🚫 Access Forbidden:", errorMessage);
           break;
 
         case 404:
           // Not Found
-          console.error("🔍 Resource Not Found");
+          console.error("🔍 Resource Not Found:", errorMessage);
           break;
 
         case 500:
           // Internal Server Error
-          console.error("💥 Internal Server Error");
+          console.error("💥 Internal Server Error:", errorMessage);
           break;
 
         case 503:
           // Service Unavailable
-          console.error("⚠️ Service Unavailable");
+          console.error("⚠️ Service Unavailable:", errorMessage);
           break;
       }
 
-      // Return formatted error
+      // Return formatted error with API message
       return Promise.reject({
         status,
-        message: data?.message || error.message || "An error occurred",
+        message: errorMessage,
         data: data,
       });
     }

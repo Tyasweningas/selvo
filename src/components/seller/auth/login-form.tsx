@@ -1,10 +1,10 @@
 "use client";
-import { useState, FormEvent } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import AuthToggle from "./auth-toggle";
+import { formatErrorForDisplay, logError } from "@/lib/error-handler";
 import authService from "@/services/auth.service";
 import { AuthFormProps } from "@/types/auth";
-import { formatErrorForDisplay, logError } from "@/lib/error-handler";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, useState } from "react";
+import AuthToggle from "./auth-toggle";
 
 export default function LoginForm({ curform, setForm }: AuthFormProps) {
   const [email, setEmail] = useState("");
@@ -37,7 +37,7 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
     <>
       <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
         <AuthToggle curform={curform} setForm={setForm} />
-        <h2 className="my-[30px] text-[32px] font-[600] text-[#4EBD77]">
+        <h2 className="my-[30px] text-[32px] font-semibold text-[#4EBD77]">
           Masuk Ke Akun Kamu
         </h2>
         <p className="mb-[35px] text-center text-[#ffffff]">
@@ -54,7 +54,7 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
           onSubmit={handleSubmit}
           className="flex w-full flex-col items-center"
         >
-          <div className="mb-[10px] h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#3f494e] bg-[#29373D]">
+          <div className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D]">
             <input
               type="email"
               name="email"
@@ -66,7 +66,7 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
               required
             />
           </div>
-          <div className="h-[47px] w-[551px] rounded-[25px] border-[#363f42] bg-[#3f494e] bg-[#29373D]">
+          <div className="h-[47px] w-[551px] rounded-[25px] border-[#363f42] bg-[#29373D]">
             <input
               type="password"
               name="password"
@@ -117,12 +117,12 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
           </button>
         </form>
 
-        <div className="my-[20px] flex w-full items-center">
-          <div className="flex-grow border-t border-[#48464C]"></div>
-          <span className="mx-4 flex-shrink text-[#525155]">Masuk dengan?</span>
-          <div className="flex-grow border-t border-[#48464C]"></div>
+        <div className="my-5 flex w-full items-center">
+          <div className="grow border-t border-[#48464C]"></div>
+          <span className="mx-4 shrink text-[#525155]">Masuk dengan?</span>
+          <div className="grow border-t border-[#48464C]"></div>
         </div>
-        <button className="mb-[10px] h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D] font-[600] text-[#ffffff] hover:bg-[#3FA866]">
+        <button className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D] font-semibold text-[#ffffff] hover:bg-[#3FA866]">
           Masuk dengan Akun Google
         </button>
         <p>

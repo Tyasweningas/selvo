@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { CreateProductPayload } from "@/types/product";
+import { useFormContext } from "react-hook-form";
 import { MdListAlt } from "react-icons/md";
 import ProductDetailItem from "./product-detail-item";
 
@@ -11,9 +12,14 @@ interface ProductDetail {
 }
 
 const ProductDetailSection = () => {
-  const [details, setDetails] = useState<ProductDetail[]>([
-    { id: "1", key: "", value: "" },
-  ]);
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext<CreateProductPayload>();
+
+  const details = watch("details") || [];
 
   const handleAddDetail = () => {
     const newDetail: ProductDetail = {
@@ -21,12 +27,15 @@ const ProductDetailSection = () => {
       key: "",
       value: "",
     };
-    setDetails([...details, newDetail]);
+    setValue("details", [...details, newDetail]);
   };
 
   const handleRemoveDetail = (id: string) => {
     if (details.length > 1) {
-      setDetails(details.filter((detail) => detail.id !== id));
+      setValue(
+        "details",
+        details.filter((detail) => detail.id !== id),
+      );
     }
   };
 
@@ -34,7 +43,8 @@ const ProductDetailSection = () => {
     id: string,
     data: { key: string; value: string },
   ) => {
-    setDetails(
+    setValue(
+      "details",
       details.map((detail) =>
         detail.id === id ? { ...detail, ...data } : detail,
       ),
@@ -65,6 +75,8 @@ const ProductDetailSection = () => {
         {details.map((detail) => (
           <ProductDetailItem
             key={detail.id}
+            detailKey={detail.key}
+            detailValue={detail.value}
             onRemove={() => handleRemoveDetail(detail.id)}
             onChange={(data) => handleDetailChange(detail.id, data)}
             showRemove={details.length > 1}

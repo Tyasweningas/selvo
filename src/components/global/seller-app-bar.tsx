@@ -4,8 +4,8 @@ import TopBanner from "./top-banner";
 const SellerAppBar = () => {
   return (
     <>
-      <TopBanner variant="green" />
-      <nav className="bg-[linear-gradient(to_bottom,_#111D22_0%,_#111D22_40%,_rgba(17,29,34,0.7)_100%)] py-8">
+      {/* <TopBanner variant="green" /> */}
+      <nav className="bg-[linear-gradient(to_bottom,#111D22_0%,#111D22_40%,rgba(17,29,34,0.7)_100%)] py-8">
         {/* <nav className="bg-primary-blue/70 bg-gradient-to-b from-[#111D22] to-[#111D22]/70 py-8"> */}
         <div className="container mx-auto flex flex-row items-center gap-2">
           <div className="flex items-center gap-2">

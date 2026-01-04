@@ -6,6 +6,7 @@ interface props {
   children?: React.ReactNode;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -14,12 +15,14 @@ const Button = ({
   children,
   className,
   onClick,
+  disabled = false,
 }: props) => {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={clsx(
-        "cursor-pointer rounded-full border-2 font-semibold transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none",
+        "cursor-pointer rounded-full border-2 font-semibold transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95",
         variant === "primary" &&
           "bg-primary-blue border-primary-blue hover:border-secondary-blue hover:bg-secondary-blue text-white shadow-[5px_5px_0_#1086d5]",
         variant === "outline" &&
@@ -27,10 +30,12 @@ const Button = ({
         variant === "white" &&
           "border-primary-blue text-primary-blue bg-white shadow-[5px_5px_0_#17547d]",
         variant === "none" &&
-          "text-primary-blue border-transparent hover:!translate-x-0 hover:!translate-y-0 hover:underline",
+          "text-primary-blue border-transparent hover:translate-x-0! hover:translate-y-0! hover:underline",
         size === "sm" && "px-3 py-1.5 text-sm",
         size === "md" && "px-4 py-2",
         size === "lg" && "px-6 py-3",
+        disabled &&
+          "cursor-not-allowed opacity-50 hover:translate-x-0! hover:translate-y-0!",
         className,
       )}
     >

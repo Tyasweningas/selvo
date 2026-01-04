@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3000";
+const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3001";
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       return NextResponse.json(
-        { status: "error", message: "Not authenticated" },
+        { error: true, message: "Not authenticated", data: null },
         { status: 401 },
       );
     }
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Get user error:", error);
     return NextResponse.json(
-      { status: "error", message: "Internal server error" },
+      { error: true, message: "Internal server error", data: null },
       { status: 500 },
     );
   }

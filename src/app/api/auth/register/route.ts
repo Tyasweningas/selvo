@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3000";
+const BACKEND_URL = process.env.BACKEND_API_URL || "http://localhost:3001";
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // JANGAN return token ke client
     return NextResponse.json({
-      status: "success",
+      error: false,
       message: data.message,
       data: {
         seller: data.data.seller,
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Register error:", error);
     return NextResponse.json(
-      { status: "error", message: "Internal server error" },
+      { error: true, message: "Internal server error", data: null },
       { status: 500 },
     );
   }

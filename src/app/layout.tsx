@@ -1,5 +1,8 @@
 import localFont from "next/font/local";
-import 'assets/css/globals.css'
+import "assets/css/globals.css";
+import { Toaster } from "sonner";
+import { ToastHandler } from "@/components/global/toast-handler";
+
 const gilroy = localFont({
   src: [
     {
@@ -32,10 +35,32 @@ const gilroy = localFont({
   display: "swap",
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={`${gilroy.variable} antialiased`}>
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{
+            style: {
+              background: "#1a2b32",
+              border: "1px solid #29373d",
+              color: "#D9D9D9",
+            },
+            classNames: {
+              success: "toast-success",
+              error: "toast-error",
+              warning: "toast-warning",
+              info: "toast-info",
+            },
+          }}
+        />
+        <ToastHandler />
         {children}
       </body>
     </html>

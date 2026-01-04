@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import AuthToggle from "./auth-toggle";
+import { formatErrorForDisplay, logError } from "@/lib/error-handler";
 import authService from "@/services/auth.service";
 import { AuthFormProps } from "@/types/auth";
-import { formatErrorForDisplay, logError } from "@/lib/error-handler";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import AuthToggle from "./auth-toggle";
 
 export default function RegisterForm({ curform, setForm }: AuthFormProps) {
   const [name, setName] = useState("");
