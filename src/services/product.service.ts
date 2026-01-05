@@ -1,6 +1,5 @@
 import apiClient from "@/lib/api-client";
-import serverApiClient from "@/lib/server-api-client";
-import { BaseResponse, PaginatedResponse } from "@/types/api";
+import { BaseResponse } from "@/types/api";
 import { CreateProductPayload, Product } from "@/types/product";
 
 /**
@@ -148,26 +147,8 @@ export const getProducts = async (): Promise<Product[]> => {
   }
 };
 
-/**
- * Get seller's own products (server-side)
- * @returns List of seller's products
- */
-export const getMyProducts = async (): Promise<PaginatedResponse<Product>> => {
-  try {
-    const response = await serverApiClient.get<
-      PaginatedResponse<Product> & { data: Product[] }
-    >("/api/products/me/products");
-
-    return response;
-  } catch (error: any) {
-    console.error("❌ Get My Products Error:", error);
-    throw error;
-  }
-};
-
 export default {
   createProduct,
   createProductJSON,
   getProducts,
-  getMyProducts,
 };
