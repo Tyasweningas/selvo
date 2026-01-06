@@ -21,7 +21,7 @@ export const product_categories: ProductCategory[] = [
     productCategoryId: "718f05de-4860-4a37-8afc-88a842a2ef39",
     name: "Illustrasi",
     description: "Ilustrasi siap pakai",
-    icon: category_illustration.src,
+    icon: category_illustration.src,  
   },
   {
     productCategoryId: "2db1ee98-45f8-4204-b6d4-e2e202441632",

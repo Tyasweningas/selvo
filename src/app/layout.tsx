@@ -1,7 +1,7 @@
-import localFont from "next/font/local";
-import "assets/css/globals.css";
-import { Toaster } from "sonner";
 import { ToastHandler } from "@/components/global/toast-handler";
+import "assets/css/globals.css";
+import localFont from "next/font/local";
+import { Toaster } from "sonner";
 
 const gilroy = localFont({
   src: [
@@ -34,6 +34,12 @@ const gilroy = localFont({
   variable: "--font-gilroy",
   display: "swap",
 });
+
+export const metadata = {
+  title: "Selvo - Marketplace Digital Produk Kreatif",
+  description:
+    "Selvo adalah marketplace digital untuk produk kreatif seperti template, aset desain, dan lainnya.",
+};
 
 export default function RootLayout({
   children,

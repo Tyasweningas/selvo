@@ -7,8 +7,14 @@ export enum ProductStatus {
 export interface ProductCategory {
   productCategoryId: string;
   name: string;
-  description: string | null;
-  icon?: string; // Frontend only, tidak ada di Prisma
+  description?: string | null;
+  icon?: string;
+}
+
+export interface Seller {
+  sellerId: string;
+  name: string;
+  email: string;
 }
 
 export interface ProductDetail {
@@ -44,6 +50,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   // Relations (optional, depending on API response)
+  seller?: Seller;
   category?: ProductCategory;
   images?: ProductImage[];
   details?: ProductDetail[];

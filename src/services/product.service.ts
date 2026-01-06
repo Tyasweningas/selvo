@@ -147,8 +147,27 @@ export const getProducts = async (): Promise<Product[]> => {
   }
 };
 
+/**
+ * Get product by slug
+ * @param slug - Product slug
+ * @returns Product detail
+ */
+export const getProductBySlug = async (slug: string): Promise<Product> => {
+  try {
+    const response = await apiClient.get<
+      BaseResponse & { data: { product: Product } }
+    >(`/products/slug/${slug}`);
+
+    return response.data.data.product;
+  } catch (error: any) {
+    console.error("❌ Get Product By Slug Error:", error);
+    throw error;
+  }
+};
+
 export default {
   createProduct,
   createProductJSON,
   getProducts,
+  getProductBySlug,
 };
