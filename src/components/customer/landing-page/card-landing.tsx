@@ -1,5 +1,7 @@
-import Image from "next/image";
+import { Product } from "@/types/product";
 import { ProductCardType } from "@/types/product-card";
+import Image from "next/image";
+import Link from "next/link";
 import { IoStar } from "react-icons/io5";
 
 const categoryNames: Record<number, string> = {
@@ -12,70 +14,91 @@ const categoryNames: Record<number, string> = {
 };
 
 interface Props {
-  item: ProductCardType;
+  item: ProductCardType | Product;
+}
+
+// Type guard to check if item is Product from API
+function isProductAPI(item: ProductCardType | Product): item is Product {
+  return "productId" in item;
 }
 
 export default function CardLanding({ item }: Props) {
+  // Extract data depending on type
+  const id = isProductAPI(item) ? item.productId : item.id.toString();
+  const name = item.name;
+  const price = item.price;
+  const thumbnail = isProductAPI(item)
+    ? item.images?.[0]?.imageUrl || "/placeholder-product.png"
+    : item.thumbnail;
+  const categoryId = isProductAPI(item)
+    ? parseInt(item.categoryId || "1")
+    : item.categoryId;
+  const creator = isProductAPI(item)
+    ? item.seller?.name || "Seller"
+    : (item as ProductCardType).creator;
+  const rate = isProductAPI(item) ? 4.5 : (item as ProductCardType).rate;
+  const slug = isProductAPI(item) ? item.slug : `product-${item.id}`;
+
   // Mock formats since they're not in ProductCardType yet
   const formats = [".Png", ".Jpg", ".Raw"];
 
   return (
-    <div className="bg-[#1A252B] rounded-2xl overflow-hidden hover:scale-[1.02] transition-all duration-300 cursor-pointer w-full group shadow-lg hover:shadow-xl">
-      {/* Product Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
-          src={item.thumbnail}
-          alt={item.name}
-          width={400}
-          height={300}
-          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-        />
-      </div>
-
-      {/* Product Details */}
-      <div className="p-4 space-y-3">
-        {/* Category and Format Badges - Above product name */}
-        <div className="flex flex-wrap gap-2">
-          <span className="px-3 py-1.5 bg-[#0F1922] text-gray-300 text-xs font-medium rounded-md border border-gray-700">
-            {categoryNames[item.categoryId] || "Kategori"}
-          </span>
-          {formats.map((format, index) => (
-            <span 
-              key={index}
-              className="px-2 py-1.5 bg-[#0F1922] text-gray-300 text-xs font-medium rounded-md border border-gray-700"
-            >
-              {format}
-            </span>
-          ))}
+    <Link href={`/products/${slug}`}>
+      <div className="group w-full cursor-pointer overflow-hidden rounded-2xl bg-[#1A252B] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+        {/* Product Image Container */}
+        <div className="relative aspect-4/3 overflow-hidden bg-gray-800">
+          <Image
+            src={thumbnail}
+            alt={name}
+            width={400}
+            height={300}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            unoptimized={isProductAPI(item)}
+          />
         </div>
 
-        {/* Product Name */}
-        <h3 className="text-white font-semibold text-base leading-tight line-clamp-2">
-          {item.name}
-        </h3>
-
-        {/* Price and Rating Row */}
-        <div className="flex items-center justify-between">
-          <p className="text-[#FFD700] font-bold text-lg">
-            IDR {item.price.toLocaleString("id-ID")}
-          </p>
-          <div className="flex items-center gap-1.5">
-            <IoStar className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-white text-sm font-semibold">
-              {item.rate.toFixed(1)}
+        {/* Product Details */}
+        <div className="space-y-3 p-4">
+          {/* Category and Format Badges - Above product name */}
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-md border border-gray-700 bg-[#0F1922] px-3 py-1.5 text-xs font-medium text-gray-300">
+              {categoryNames[categoryId] || "Kategori"}
             </span>
-            <span className="text-gray-400 text-sm">
-              ({Math.floor(item.rate * 24)})
-            </span>
+            {formats.map((format, index) => (
+              <span
+                key={index}
+                className="rounded-md border border-gray-700 bg-[#0F1922] px-2 py-1.5 text-xs font-medium text-gray-300"
+              >
+                {format}
+              </span>
+            ))}
           </div>
-        </div>
 
-        {/* Creator */}
-        <p className="text-sm text-gray-400">
-          {item.creator}
-        </p>
+          {/* Product Name */}
+          <h3 className="line-clamp-2 text-base leading-tight font-semibold text-white">
+            {name}
+          </h3>
+
+          {/* Price and Rating Row */}
+          <div className="flex items-center justify-between">
+            <p className="text-lg font-bold text-[#FFD700]">
+              IDR {price.toLocaleString("id-ID")}
+            </p>
+            <div className="flex items-center gap-1.5">
+              <IoStar className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-semibold text-white">
+                {rate.toFixed(1)}
+              </span>
+              <span className="text-sm text-gray-400">
+                ({Math.floor(rate * 24)})
+              </span>
+            </div>
+          </div>
+
+          {/* Creator */}
+          <p className="text-sm text-gray-400">{creator}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
-

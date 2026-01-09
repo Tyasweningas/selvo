@@ -5,11 +5,11 @@ import { productTabItems } from "@/data/seller-tab-items";
 
 const SellerProductLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="custom-scrollbar h-screen overflow-auto bg-[#0F191E] bg-gradient-to-b from-[#37a2ea]/34 to-[#0F191E]">
+    <main className="custom-scrollbar h-screen overflow-auto bg-[#0F191E] bg-linear-to-b from-primary-blue/34 to-[#0F191E]">
       <SellerAppBar />
       <div className="container mx-auto flex gap-5 py-10">
         <DashboardMenu />
-        <div className="grow">
+        <div className="min-w-0 grow">
           <DashboardTab sellerTabs={productTabItems} />
           {children}
         </div>
