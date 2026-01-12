@@ -3,10 +3,10 @@ import { formatErrorForDisplay, logError } from "@/lib/error-handler";
 import authService from "@/services/auth.service";
 import { AuthFormProps } from "@/types/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import AuthToggle from "./auth-toggle";
 
-export default function LoginForm({ curform, setForm }: AuthFormProps) {
+function LoginFormContent({ curform, setForm }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,7 +20,7 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
     setIsLoading(true);
 
     try {
-      const response = await authService.login({ email, password });
+      await authService.login({ email, password });
 
       // Get redirect URL from query params or default to dashboard
       const redirectUrl = searchParams.get("redirect") || "/dashboard";
@@ -136,5 +136,22 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
         </p>
       </div>
     </>
+  );
+}
+
+export default function LoginForm({ curform, setForm }: AuthFormProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
+          <div className="flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] bg-[#29373D]">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-[#4EBD77]"></div>
+            <span className="text-gray-400">Memuat...</span>
+          </div>
+        </div>
+      }
+    >
+      <LoginFormContent curform={curform} setForm={setForm} />
+    </Suspense>
   );
 }

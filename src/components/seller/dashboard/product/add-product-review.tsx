@@ -33,13 +33,6 @@ const AddProductReview = () => {
     // dragFree: true,
   });
 
-  const imagePreview = useMemo(() => {
-    if (formData.images && formData.images[0]) {
-      return URL.createObjectURL(formData.images[0]);
-    }
-    return "https://i.etsystatic.com/10683147/r/il/d4a024/4900691314/il_1080xN.4900691314_fu21.jpg";
-  }, [formData.images]);
-
   const imagePreviews = useMemo(() => {
     if (formData.images && formData.images.length > 0) {
       return formData.images

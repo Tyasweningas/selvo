@@ -8,12 +8,12 @@ import { getTransactionByOrderId } from "@/services/transaction.service";
 import { Transaction } from "@/types/transaction";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { HiOutlineMail } from "react-icons/hi";
 import { MdOutlineDescription } from "react-icons/md";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
@@ -202,5 +202,26 @@ export default function PaymentSuccessPage() {
       </div>
       <Footer />
     </div>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="relative min-h-screen">
+          <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
+          <Navbar />
+          <div className="relative flex min-h-screen flex-col items-center justify-center">
+            <div className="text-center">
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
+              <p className="text-gray-400">Memuat...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

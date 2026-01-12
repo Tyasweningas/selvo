@@ -21,7 +21,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
     setIsLoading(true);
 
     try {
-      const response = await authService.register({
+      await authService.register({
         email,
         password,
         name: name || undefined,

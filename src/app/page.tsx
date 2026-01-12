@@ -9,6 +9,7 @@ import { products as mockProducts } from "@/data/mock/product-card-mock";
 import { getProducts } from "@/services/product.service";
 import { Product } from "@/types/product";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoChevronDownSharp, IoSearch } from "react-icons/io5";
 
@@ -181,12 +182,12 @@ export default function Home() {
             <h2 className="text-2xl font-bold">
               Telusuri berdasarkan Kategori
             </h2>
-            <a
+            <Link
               href="/products"
               className="hover:text-primary-blue text-sm font-medium text-gray-400 transition"
             >
               Ekspor lebih banyak →
-            </a>
+            </Link>
           </div>
 
           {/* Loading State */}
@@ -241,4 +242,3 @@ export default function Home() {
     </div>
   );
 }
-

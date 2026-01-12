@@ -8,30 +8,19 @@ import {
 } from "@/services/transaction.service";
 import { Transaction } from "@/types/transaction";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoCopy } from "react-icons/io5";
 import { toast } from "sonner";
 
-export default function TransactionPage({
-  params,
-}: {
-  params: Promise<{ orderId: string }>;
-}) {
+export default function TransactionPage() {
   const router = useRouter();
-  const [orderId, setOrderId] = useState<string>("");
+  const params = useParams<{ orderId: string }>();
+  const orderId = params.orderId;
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCheckingPayment, setIsCheckingPayment] = useState(false);
-
-  useEffect(() => {
-    const initialize = async () => {
-      const resolvedParams = await params;
-      setOrderId(resolvedParams.orderId);
-    };
-    initialize();
-  }, [params]);
 
   useEffect(() => {
     if (!orderId) return;

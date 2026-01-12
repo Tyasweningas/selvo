@@ -81,6 +81,7 @@ const AddProductPage = () => {
       console.log("Form Data:", formData);
 
       // Call API to create product
+
       await productService.createProduct(formData);
 
       toast.success("Produk berhasil ditambahkan!");

@@ -1,5 +1,4 @@
 import { MdMail, MdNotifications, MdPerson } from "react-icons/md";
-import TopBanner from "./top-banner";
 
 const SellerAppBar = () => {
   return (

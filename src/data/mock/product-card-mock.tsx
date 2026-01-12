@@ -1,9 +1,12 @@
+import {
+  thumbnail_1,
+  thumbnail_2,
+  thumbnail_3,
+  thumbnail_4,
+} from "@/assets/items";
 import { ProductCardType } from "@/types/product-card";
-import { thumbnail_1, thumbnail_2, thumbnail_3, thumbnail_4 } from "@/assets/items";
-
 
 export const products: ProductCardType[] = [
-  
   {
     id: 1,
     name: "Template Landing Page",
@@ -12,7 +15,7 @@ export const products: ProductCardType[] = [
     creator: "Bayu Maulana",
     rate: 4.2,
     categoryId: 1,
-    fileTypes: ["zip"]
+    fileTypes: ["zip"],
   },
   {
     id: 2,
@@ -22,7 +25,7 @@ export const products: ProductCardType[] = [
     creator: "Ibnu Hanif",
     rate: 3.2,
     categoryId: 5,
-    fileTypes: ["jpg", "png"]
+    fileTypes: ["jpg", "png"],
   },
   {
     id: 3,
@@ -32,9 +35,9 @@ export const products: ProductCardType[] = [
     creator: "Rahel",
     rate: 5.0,
     categoryId: 2,
-    fileTypes: ["jpg", "png"]
+    fileTypes: ["jpg", "png"],
   },
-    {
+  {
     id: 4,
     name: "Template PPT – Burung",
     thumbnail: thumbnail_4,
@@ -42,9 +45,9 @@ export const products: ProductCardType[] = [
     creator: "Rahel",
     rate: 5.0,
     categoryId: 1,
-    fileTypes: ["ppt", "pdf"]
+    fileTypes: ["ppt", "pdf"],
   },
-    {
+  {
     id: 5,
     name: "Template PPT – Burung",
     thumbnail: thumbnail_1,
@@ -52,7 +55,6 @@ export const products: ProductCardType[] = [
     creator: "Tyas",
     rate: 5.0,
     categoryId: 3,
-    fileTypes: ["ppt", "pdf"]
+    fileTypes: ["ppt", "pdf"],
   },
 ];
-console.log("TEST:", thumbnail_1);

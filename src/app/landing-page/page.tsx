@@ -1,43 +1,38 @@
-'use client';
-import Image from "next/image";
-import Navbar from "@/components/global/navbar";
-import CardLanding from "@/components/customer/landing-page/card-landing";
-import GlowCircle from "@/assets/background/glow-circle.png";
-import LeftFloating from "@/assets/items/left-floating-items.png";
-import RightFloating from "@/assets/items/right-floating-items.png";
+"use client";
 import { glow_carousel } from "@/assets/background";
-import useEmblaCarousel from "embla-carousel-react";
-import { useCallback } from "react";
+import GlowCircle from "@/assets/background/glow-circle.png";
+import CardLanding from "@/components/customer/landing-page/card-landing";
 import BannerCarousel from "@/components/customer/landing-page/carousel/banner-carousel";
-import { products } from "@/data/mock/product-card-mock";
-import NavbarLanding from "@/components/global/navbar-landing";
-import { useState } from "react";
-import { IoSearch, IoChevronDownSharp } from "react-icons/io5";
 import Footer from "@/components/global/footer";
+import NavbarLanding from "@/components/global/navbar-landing";
+import { products } from "@/data/mock/product-card-mock";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { IoChevronDownSharp, IoSearch } from "react-icons/io5";
 
 export default function LandingPage() {
-console.log("products:", products);
   const [categoryDropdown, setCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Semua Kategori");
 
   return (
-     <>
-  <NavbarLanding/>
-  <div className="fixed inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
+    <>
+      <NavbarLanding />
+      <div className="fixed inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
 
-  <section className="relative min-h-screen flex flex-col items-center text-white">
-    <div className="absolute top-[110px] left-1/2 -translate-x-1/2 -z-10 w-full h-full">
-      <Image
-        src={GlowCircle}
-        alt="Glow background"
-        width={1600}
-        height={1600}
-        className="object-contain opacity-80 pointer-events-none select-none"
-        priority
-      />
-    </div>
+      <section className="relative flex min-h-screen flex-col items-center text-white">
+        <div className="absolute top-[110px] left-1/2 -z-10 h-full w-full -translate-x-1/2">
+          <Image
+            src={GlowCircle}
+            alt="Glow background"
+            width={1600}
+            height={1600}
+            className="pointer-events-none object-contain opacity-80 select-none"
+            priority
+          />
+        </div>
 
-    {/* <Image
+        {/* <Image
       src={LeftFloating}
       alt="Left Floating"
       width={600}
@@ -54,192 +49,200 @@ console.log("products:", products);
       priority
     /> */}
 
- 
-    <div className="flex flex-col items-center justify-center text-center pt-[170px] z-10">
-      <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#92CDEE] to-[#9DDAB7]">
-        Stop Desain Dari Nol <br /> Mulai dengan Aset Terbaik
-      </h1>
-      <p className="text-[20px] mb-4 font-gilroy pt-6">
-        Ribuan template UI/UX, font, dan ilustrasi untuk mempercepat workflow proyekmu.
-      </p>
+        <div className="z-10 flex flex-col items-center justify-center pt-[170px] text-center">
+          <h1 className="bg-gradient-to-b from-[#92CDEE] to-[#9DDAB7] bg-clip-text text-5xl font-bold text-transparent">
+            Stop Desain Dari Nol <br /> Mulai dengan Aset Terbaik
+          </h1>
+          <p className="font-gilroy mb-4 pt-6 text-[20px]">
+            Ribuan template UI/UX, font, dan ilustrasi untuk mempercepat
+            workflow proyekmu.
+          </p>
 
-      {/* 🔍 Search Bar — Dipindahkan dari Navbar */}
-    <div className="relative w-full max-w-2xl">
-      <div className="relative h-[55px] flex items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4">
-        {/* Category Dropdown */}
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setCategoryDropdown((prev) => !prev)}
-            className="flex items-center gap-1 text-base font-semibold text-gray-300 cursor-pointer"
-          >
-            {selectedCategory}
-            <IoChevronDownSharp
-              className={`ml-1 text-xl transition-transform duration-200 ${
-                categoryDropdown ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-
-          {categoryDropdown && (
-            <div className="absolute top-12 left-0 z-20 w-48 rounded-md border border-[#1E2A30] bg-[#1A252B] shadow-lg animate-fadeIn">
-              {[
-                "Semua Kategori",
-                "Desain Grafis",
-                "Musik & Efek Suara",
-                "3D",
-                "Templat Video",
-                "Pengembangan Web",
-                "Fotografi",
-                "Gambar & Ilustrasi",
-              ].map((cat) => (
-                <div
-                  key={cat}
-                  onClick={() => {
-                    setSelectedCategory(cat);
-                    setCategoryDropdown(false);
-                  }}
-                  className="cursor-pointer px-4 py-3 text-base text-gray-300 hover:bg-[#263238] hover:text-[#37A2EA] transition"
+          {/* 🔍 Search Bar — Dipindahkan dari Navbar */}
+          <div className="relative w-full max-w-2xl">
+            <div className="relative flex h-[55px] items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4">
+              {/* Category Dropdown */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setCategoryDropdown((prev) => !prev)}
+                  className="flex cursor-pointer items-center gap-1 text-base font-semibold text-gray-300"
                 >
-                  {cat}
-                </div>
+                  {selectedCategory}
+                  <IoChevronDownSharp
+                    className={`ml-1 text-xl transition-transform duration-200 ${
+                      categoryDropdown ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {categoryDropdown && (
+                  <div className="animate-fadeIn absolute top-12 left-0 z-20 w-48 rounded-md border border-[#1E2A30] bg-[#1A252B] shadow-lg">
+                    {[
+                      "Semua Kategori",
+                      "Desain Grafis",
+                      "Musik & Efek Suara",
+                      "3D",
+                      "Templat Video",
+                      "Pengembangan Web",
+                      "Fotografi",
+                      "Gambar & Ilustrasi",
+                    ].map((cat) => (
+                      <div
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setCategoryDropdown(false);
+                        }}
+                        className="cursor-pointer px-4 py-3 text-base text-gray-300 transition hover:bg-[#263238] hover:text-[#37A2EA]"
+                      >
+                        {cat}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mx-3 h-[30px] w-[1px] bg-gray-600"></div>
+
+              {/* Search Input */}
+              <form action="/search" method="GET" className="flex-1">
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Cari template, font, ilustrasi..."
+                  className="h-[40px] w-full border-none bg-transparent pr-10 pl-2 text-base text-white placeholder-gray-400 focus:outline-none"
+                />
+              </form>
+
+              <button
+                type="submit"
+                className="absolute right-4 text-gray-400 transition hover:text-white"
+              >
+                <IoSearch size={22} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-0 flex flex-col items-center justify-center pt-[100px] text-white">
+        <Image
+          src={glow_carousel}
+          alt="Glow Carousel"
+          width={1800}
+          height={5}
+          className="pointer-events-none absolute -z-20 translate-y-45 object-contain select-none"
+        />
+        <div className="relative z-10">
+          <BannerCarousel />
+        </div>
+      </section>
+
+      {/* Product Section */}
+      <section className="relative z-0 flex flex-col items-center pt-[80px] pb-[100px] text-white">
+        <div className="w-full max-w-[1400px] px-8">
+          {/* Section Header */}
+          <div className="mx-auto mb-8 flex max-w-[1000px] items-center justify-between">
+            <h2 className="text-2xl font-bold">
+              Telusuri berdasarkan Kategori
+            </h2>
+            <Link
+              href="/products"
+              className="hover:text-primary-blue text-sm font-medium text-gray-400 transition"
+            >
+              Ekspor lebih banyak →
+            </Link>
+          </div>
+
+          {/* Custom Grid Layout: 2 large on top, 3 small below */}
+          <div className="space-y-6">
+            {/* Top Row: 2 Medium-Large Cards */}
+            <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-6 md:grid-cols-2">
+              {products.slice(0, 2).map((product) => (
+                <CardLanding key={product.id} item={product} />
               ))}
             </div>
-          )}
+
+            {/* Bottom Row: 3 Smaller Cards */}
+            <div className="mx-auto grid max-w-[890px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products.slice(2, 5).map((product) => (
+                <CardLanding key={product.id} item={product} />
+              ))}
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="mx-3 h-[30px] w-[1px] bg-gray-600"></div>
+      <section className="relative z-0 flex flex-col items-center pt-[80px] pb-[100px] text-white">
+        <div className="w-full max-w-[1400px] px-8">
+          {/* Section Header */}
+          <div className="mx-auto mb-8 flex max-w-[1000px] items-center justify-between">
+            <h2 className="text-2xl font-bold">
+              Telusuri berdasarkan Kategori
+            </h2>
+            <Link
+              href="/products"
+              className="hover:text-primary-blue text-sm font-medium text-gray-400 transition"
+            >
+              Ekspor lebih banyak →
+            </Link>
+          </div>
 
-        {/* Search Input */}
-        <form action="/search" method="GET" className="flex-1">
-          <input
-            type="search"
-            name="q"
-            placeholder="Cari template, font, ilustrasi..."
-            className="h-[40px] w-full border-none bg-transparent pr-10 pl-2 text-base text-white placeholder-gray-400 focus:outline-none"
-          />
-        </form>
+          {/* Custom Grid Layout: 2 large on top, 3 small below */}
+          <div className="space-y-6">
+            {/* Top Row: 2 Medium-Large Cards */}
+            <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-6 md:grid-cols-2">
+              {products.slice(0, 2).map((product) => (
+                <CardLanding key={product.id} item={product} />
+              ))}
+            </div>
 
-        <button
-          type="submit"
-          className="absolute right-4 text-gray-400 hover:text-white transition"
-        >
-          <IoSearch size={22} />
-        </button>
-      </div>
-    </div>
-
-
-    
-    </div>
-  </section>
-
-  <section className="relative z-0 pt-[100px] flex flex-col items-center justify-center text-white">
-    <Image 
-    src={glow_carousel} 
-    alt="Glow Carousel" 
-    width={1800} 
-    height={5} 
-    className="absolute object-contain pointer-events-none select-none -z-20 translate-y-45"
-    />
-  <div className="relative z-10">
-   <BannerCarousel/>
-   </div>
-  </section>
-
-  {/* Product Section */}
-  <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
-    <div className="w-full max-w-[1400px] px-8">
-      {/* Section Header */}
-      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
-        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
-        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
-          Ekspor lebih banyak →
-        </a>
-      </div>
-
-      {/* Custom Grid Layout: 2 large on top, 3 small below */}
-      <div className="space-y-6">
-        {/* Top Row: 2 Medium-Large Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
-          {products.slice(0, 2).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
+            {/* Bottom Row: 3 Smaller Cards */}
+            <div className="mx-auto grid max-w-[890px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products.slice(2, 5).map((product) => (
+                <CardLanding key={product.id} item={product} />
+              ))}
+            </div>
+          </div>
         </div>
-        
-        {/* Bottom Row: 3 Smaller Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
-          {products.slice(2, 5).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
+      </section>
+
+      <section className="relative z-0 flex flex-col items-center pt-[80px] pb-[100px] text-white">
+        <div className="w-full max-w-[1400px] px-8">
+          {/* Section Header */}
+          <div className="mx-auto mb-8 flex max-w-[1000px] items-center justify-between">
+            <h2 className="text-2xl font-bold">
+              Telusuri berdasarkan Kategori
+            </h2>
+            <Link
+              href="/products"
+              className="hover:text-primary-blue text-sm font-medium text-gray-400 transition"
+            >
+              Ekspor lebih banyak →
+            </Link>
+          </div>
+
+          {/* Custom Grid Layout: 2 large on top, 3 small below */}
+          <div className="space-y-6">
+            {/* Top Row: 2 Medium-Large Cards */}
+            <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-6 md:grid-cols-2">
+              {products.slice(0, 2).map((product) => (
+                <CardLanding key={product.id} item={product} />
+              ))}
+            </div>
+
+            {/* Bottom Row: 3 Smaller Cards */}
+            <div className="mx-auto grid max-w-[890px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products.slice(2, 5).map((product) => (
+                <CardLanding key={product.id} item={product} />
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-
-     <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
-    <div className="w-full max-w-[1400px] px-8">
-      {/* Section Header */}
-      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
-        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
-        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
-          Ekspor lebih banyak →
-        </a>
-      </div>
-
-      {/* Custom Grid Layout: 2 large on top, 3 small below */}
-      <div className="space-y-6">
-        {/* Top Row: 2 Medium-Large Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
-          {products.slice(0, 2).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
-        </div>
-        
-        {/* Bottom Row: 3 Smaller Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
-          {products.slice(2, 5).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-    <section className="relative z-0 pt-[80px] pb-[100px] flex flex-col items-center text-white">
-    <div className="w-full max-w-[1400px] px-8">
-      {/* Section Header */}
-      <div className="flex justify-between items-center mb-8 max-w-[1000px] mx-auto">
-        <h2 className="text-2xl font-bold">Telusuri berdasarkan Kategori</h2>
-        <a href="/products" className="text-sm text-gray-400 hover:text-primary-blue transition font-medium">
-          Ekspor lebih banyak →
-        </a>
-      </div>
-
-      {/* Custom Grid Layout: 2 large on top, 3 small below */}
-      <div className="space-y-6">
-        {/* Top Row: 2 Medium-Large Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[900px] mx-auto">
-          {products.slice(0, 2).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
-        </div>
-        
-        {/* Bottom Row: 3 Smaller Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[890px] mx-auto">
-          {products.slice(2, 5).map((product) => (
-            <CardLanding key={product.id} item={product} />
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-<Footer/>
-</>
-
-
+      <Footer />
+    </>
   );
-
 }

@@ -12,11 +12,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import img2 from "@/assets/items/img-desc-product-2.png";
-import img1 from "@/assets/items/img-desc-product.png";
-
-const productImages = [img1, img2];
-
 interface ProductDescriptionProps {
   product: Product | null;
 }

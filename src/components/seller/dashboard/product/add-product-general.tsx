@@ -36,7 +36,7 @@ const AddProductGeneral = () => {
     const fetchCategories = async () => {
       try {
         const data = await categoryService.getCategories();
-        const categories = data.map((cat, index) => {
+        const categories = data.map((cat) => {
           const icon = product_categories.find(
             (pc) => pc.name === cat.name,
           )?.icon;

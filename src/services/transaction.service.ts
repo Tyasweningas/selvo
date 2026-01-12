@@ -72,8 +72,10 @@ export const checkPaymentStatus = async (
   }
 };
 
-export default {
+const transactionService = {
   createTransaction,
   getTransactionByOrderId,
   checkPaymentStatus,
 };
+
+export default transactionService;

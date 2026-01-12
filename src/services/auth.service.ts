@@ -94,59 +94,69 @@ authApiClient.interceptors.response.use(
   },
 );
 
-class AuthService {
-  /**
-   * Register new seller
-   * Calls /api/auth/register yang akan set httpOnly cookie
-   */
-  async register(
-    data: RegisterData,
-  ): Promise<BaseResponse<{ seller: Seller }>> {
-    const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
-      "/register",
-      data,
-    );
-    return response.data;
-  }
+/**
+ * Register new seller
+ * Calls /api/auth/register yang akan set httpOnly cookie
+ */
+export const register = async (
+  data: RegisterData,
+): Promise<BaseResponse<{ seller: Seller }>> => {
+  const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
+    "/register",
+    data,
+  );
+  return response.data;
+};
 
-  /**
-   * Login seller
-   * Calls /api/auth/login yang akan set httpOnly cookie
-   */
-  async login(data: LoginData): Promise<BaseResponse<{ seller: Seller }>> {
-    const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
-      "/login",
-      data,
-    );
-    return response.data;
-  }
+/**
+ * Login seller
+ * Calls /api/auth/login yang akan set httpOnly cookie
+ */
+export const login = async (
+  data: LoginData,
+): Promise<BaseResponse<{ seller: Seller }>> => {
+  const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
+    "/login",
+    data,
+  );
+  return response.data;
+};
 
-  /**
-   * Get current user
-   * Token automatically sent via httpOnly cookie
-   */
-  async getCurrentUser(): Promise<BaseResponse<{ seller: Seller }>> {
-    const response =
-      await authApiClient.get<BaseResponse<{ seller: Seller }>>("/me");
-    return response.data;
-  }
+/**
+ * Get current user
+ * Token automatically sent via httpOnly cookie
+ */
+export const getCurrentUser = async (): Promise<
+  BaseResponse<{ seller: Seller }>
+> => {
+  const response =
+    await authApiClient.get<BaseResponse<{ seller: Seller }>>("/me");
+  return response.data;
+};
 
-  /**
-   * Get user from HTTP-only cookie
-   * Retrieves user data stored in cookie after login
-   */
-  async getUser(): Promise<BaseResponse<Seller>> {
-    const response = await authApiClient.get<BaseResponse<Seller>>("/user");
-    return response.data;
-  }
+/**
+ * Get user from HTTP-only cookie
+ * Retrieves user data stored in cookie after login
+ */
+export const getUser = async (): Promise<BaseResponse<Seller>> => {
+  const response = await authApiClient.get<BaseResponse<Seller>>("/user");
+  return response.data;
+};
 
-  /**
-   * Logout
-   * Clears httpOnly cookie
-   */
-  async logout(): Promise<void> {
-    await authApiClient.post("/logout");
-  }
-}
+/**
+ * Logout
+ * Clears httpOnly cookie
+ */
+export const logout = async (): Promise<void> => {
+  await authApiClient.post("/logout");
+};
 
-export default new AuthService();
+const authService = {
+  register,
+  login,
+  getCurrentUser,
+  getUser,
+  logout,
+};
+
+export default authService;

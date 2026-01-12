@@ -25,6 +25,8 @@ export const getMyProducts = async (): Promise<PaginatedResponse<Product>> => {
   }
 };
 
-export default {
+const productServerService = {
   getMyProducts,
 };
+
+export default productServerService;

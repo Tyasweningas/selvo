@@ -12,12 +12,7 @@ interface ProductDetail {
 }
 
 const ProductDetailSection = () => {
-  const {
-    register,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useFormContext<CreateProductPayload>();
+  const { setValue, watch } = useFormContext<CreateProductPayload>();
 
   const details = watch("details") || [];
 

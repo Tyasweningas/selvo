@@ -24,7 +24,6 @@ function isProductAPI(item: ProductCardType | Product): item is Product {
 
 export default function CardLanding({ item }: Props) {
   // Extract data depending on type
-  const id = isProductAPI(item) ? item.productId : item.id.toString();
   const name = item.name;
   const price = item.price;
   const thumbnail = isProductAPI(item)

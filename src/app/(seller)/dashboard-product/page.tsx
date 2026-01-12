@@ -1,7 +1,7 @@
 import Button from "@/components/global/button";
 import Input from "@/components/global/input";
 import ProductListTable from "@/components/seller/dashboard/product/product-list-table";
-import productService from "@/services/product.service";
+import productServerService from "@/services/product.server.service";
 import { Product } from "@/types/product";
 import Link from "next/link";
 import { Fragment } from "react";
@@ -11,7 +11,7 @@ const ProductPage = async () => {
   let products: Product[] = [];
 
   try {
-    const response = await productService.getMyProducts();
+    const response = await productServerService.getMyProducts();
     products = response.data || [];
     console.log("Products fetched:", products.length);
   } catch (error) {

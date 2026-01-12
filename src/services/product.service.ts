@@ -50,17 +50,18 @@ export const createProduct = async (
 
     // Add images
     if (payload.images && payload.images.length > 0) {
-      payload.images.forEach((image, index) => {
+      payload.images.forEach((image) => {
         if (image instanceof File) {
           formData.append("images", image);
         }
       });
     }
+    console.log("INI FORMDATA NAME", formData.get("name"));
 
     // Log FormData contents before sending
     console.log("📦 Creating Product with FormData:");
     console.log({
-      name: formData.get("name"),
+      // name: formData.get("name"),
       description: formData.get("description"),
       price: formData.get("price"),
       categoryId: formData.get("categoryId"),
@@ -100,7 +101,7 @@ export const createProductJSON = async (
 ): Promise<Product> => {
   try {
     // First upload images if any
-    let imageUrls: string[] = [];
+    const imageUrls: string[] = [];
     if (payload.images && payload.images.length > 0) {
       // You'll need to implement uploadImages service
       // imageUrls = await uploadImages(payload.images);
@@ -165,9 +166,11 @@ export const getProductBySlug = async (slug: string): Promise<Product> => {
   }
 };
 
-export default {
+const productService = {
   createProduct,
   createProductJSON,
   getProducts,
   getProductBySlug,
 };
+
+export default productService;
