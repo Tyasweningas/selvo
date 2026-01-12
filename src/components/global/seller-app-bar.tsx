@@ -1,6 +1,20 @@
+"use client";
+import { logout } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 import { MdMail, MdNotifications, MdPerson } from "react-icons/md";
 
 const SellerAppBar = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <>
       {/* <TopBanner variant="green" /> */}
@@ -37,13 +51,14 @@ const SellerAppBar = () => {
           {/* Separator */}
 
           <div className="">
-            <button className="border-primary-blue flex items-center gap-3 rounded-full border-2 bg-[#1A2B32] px-3 py-1.5">
+            <button
+              onClick={handleLogout}
+              className="border-primary-blue flex items-center gap-3 rounded-full border-2 bg-[#1A2B32] px-3 py-1.5 transition hover:bg-[#29373D]"
+            >
               <div className="rounded-full bg-[#204E31] p-1.5">
                 <MdPerson size={24} className="text-primary-blue" />
               </div>
-              <p className="text-primary-blue text-sm font-semibold">
-                John Doe
-              </p>
+              <p className="text-primary-blue text-sm font-semibold">Logout</p>
             </button>
           </div>
         </div>
