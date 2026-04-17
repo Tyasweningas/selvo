@@ -33,10 +33,9 @@ const apiClient: AxiosInstance = axios.create({
  */
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const incomingHeaders = AxiosHeaders.from(config.headers).toJSON(true) as Record<
-      string,
-      string
-    >;
+    const incomingHeaders = AxiosHeaders.from(config.headers).toJSON(
+      true,
+    ) as Record<string, string>;
     const authHeaders = await withAuthHeader(incomingHeaders);
     config.headers = AxiosHeaders.from(authHeaders);
 
