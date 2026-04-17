@@ -1,5 +1,5 @@
 "use client";
-import qrisCode from "@/assets/logo/qrisCode.png";
+// import qrisCode from "@/assets/logo/qrisCode.png";
 import qrisLogo from "@/assets/logo/qrisLogo.png";
 import CheckOutCart from "@/components/customer/payment/check-out-cart";
 import PaymentHeader from "@/components/customer/payment/payment-header";
@@ -176,13 +176,13 @@ export default function PaymentPage() {
                     Scan Kode QRIS dibawah
                   </h3>
                   <div className="mb-6 flex justify-center">
-                    <Image
+                    {/* <Image
                       src={qrisCode}
                       alt="QRIS Code"
                       width={230}
                       height={230}
                       className="rounded-xl"
-                    />
+                    /> */}
                   </div>
                   <button className="bg-bg-blue hover:bg-primary-blue w-full rounded-full px-8 py-3 font-bold text-white transition-all duration-300">
                     Cek Pembayaran

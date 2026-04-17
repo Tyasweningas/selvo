@@ -1,3 +1,4 @@
+import AuthSessionProvider from "@/components/global/session-provider";
 import { ToastHandler } from "@/components/global/toast-handler";
 import "assets/css/globals.css";
 import localFont from "next/font/local";
@@ -49,25 +50,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${gilroy.variable} antialiased`}>
-        <Toaster
-          position="top-right"
-          richColors
-          toastOptions={{
-            style: {
-              background: "#1a2b32",
-              border: "1px solid #29373d",
-              color: "#D9D9D9",
-            },
-            classNames: {
-              success: "toast-success",
-              error: "toast-error",
-              warning: "toast-warning",
-              info: "toast-info",
-            },
-          }}
-        />
-        <ToastHandler />
-        {children}
+        <AuthSessionProvider>
+          <Toaster
+            position="top-right"
+            richColors
+            toastOptions={{
+              style: {
+                background: "#1a2b32",
+                border: "1px solid #29373d",
+                color: "#D9D9D9",
+              },
+              classNames: {
+                success: "toast-success",
+                error: "toast-error",
+                warning: "toast-warning",
+                info: "toast-info",
+              },
+            }}
+          />
+          <ToastHandler />
+          {children}
+        </AuthSessionProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 import { formatErrorForDisplay, logError } from "@/lib/error-handler";
-import authService from "@/services/auth.service";
 import { AuthFormProps } from "@/types/auth";
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useState } from "react";
 import AuthToggle from "./auth-toggle";
@@ -20,11 +20,21 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
     setIsLoading(true);
 
     try {
-      await authService.login({ email, password });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!result?.ok || result.error) {
+        setError("Email atau kata sandi tidak valid.");
+        return;
+      }
 
       // Get redirect URL from query params or default to dashboard
       const redirectUrl = searchParams.get("redirect") || "/dashboard";
       router.push(redirectUrl);
+      router.refresh();
     } catch (err: any) {
       logError(err, "LoginForm");
       setError(formatErrorForDisplay(err));

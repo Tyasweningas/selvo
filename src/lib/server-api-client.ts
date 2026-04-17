@@ -1,4 +1,5 @@
-import { cookies } from "next/headers";
+import { authOptions } from "@/lib/auth-options";
+import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 
 const BACKEND_API_URL =
@@ -25,11 +26,11 @@ export class ServerApiClient {
   }
 
   /**
-   * Get token from httpOnly cookie
+   * Get backend token from NextAuth session
    */
   private async getToken(): Promise<string | undefined> {
-    const cookieStore = await cookies();
-    return cookieStore.get("token")?.value;
+    const session = await getServerSession(authOptions);
+    return session?.accessToken;
   }
 
   /**
@@ -61,10 +62,6 @@ export class ServerApiClient {
 
       // Handle 401 Unauthorized
       if (response.status === 401) {
-        // Clear the invalid token
-        const cookieStore = await cookies();
-        cookieStore.delete("token");
-
         // Redirect to login
         redirect("/auth");
       }

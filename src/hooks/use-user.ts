@@ -1,55 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import authService from "@/services/auth.service";
-import { Seller } from "@/services/auth.service";
+import { useAuthStore } from "@/store/auth-store";
+import { getSession } from "next-auth/react";
 
 export function useUser() {
-  const [user, setUser] = useState<Seller | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await authService.getUser();
-        setUser(response.data);
-      } catch (err: any) {
-        if (err?.response?.status === 404) {
-          setUser(null);
-        } else {
-          setError(
-            err?.response?.data?.message ||
-              err.message ||
-              "Failed to fetch user",
-          );
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const user = useAuthStore((state) => state.user);
+  const isHydrated = useAuthStore((state) => state.isHydrated);
 
   const refetch = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await authService.getUser();
-      setUser(response.data);
-    } catch (err: any) {
-      if (err?.response?.status === 404) {
-        setUser(null);
-      } else {
-        setError(
-          err?.response?.data?.message || err.message || "Failed to fetch user",
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
+    const session = await getSession();
+    useAuthStore.getState().hydrateFromSession(session);
   };
 
-  return { user, loading, error, refetch };
+  return {
+    user,
+    loading: !isHydrated,
+    error: null,
+    refetch,
+  };
 }

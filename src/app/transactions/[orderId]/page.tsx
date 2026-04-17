@@ -1,5 +1,6 @@
 "use client";
 
+import { qris } from "@/assets/logo";
 import Footer from "@/components/global/footer";
 import Navbar from "@/components/global/navbar";
 import {
@@ -192,13 +193,14 @@ export default function TransactionPage() {
         {transaction.qrCodeUrl && (
           <div className="mb-6 rounded-xl border border-[#1b2436] bg-[#0F1624] p-6 text-center">
             <h3 className="mb-4 text-lg font-bold">QR Code Pembayaran</h3>
-            <div className="mx-auto max-w-xs rounded-lg bg-white p-4">
+            <Image src={qris} alt="Logo qris" className="mx-auto mb-5 w-32" />
+            <div className="mx-auto max-w-xs rounded-lg">
               <Image
                 src={transaction.qrCodeUrl}
                 alt="QR Code Pembayaran"
                 width={300}
                 height={300}
-                className="h-auto w-full"
+                className="h-auto w-full rounded-lg"
                 unoptimized
               />
             </div>

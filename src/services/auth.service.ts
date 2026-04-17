@@ -21,16 +21,19 @@ export interface Seller {
 }
 
 /**
- * Auth API Client - Direct ke /api/auth (bukan lewat proxy)
- * Karena auth endpoints tidak perlu token
+ * Auth API Client untuk endpoint register
  */
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_API_URL ||
+  process.env.BACKEND_API_URL ||
+  "http://localhost:3001";
+
 const authApiClient = axios.create({
-  baseURL: "/api/auth",
+  baseURL: `${BACKEND_URL}/api/auth`,
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Enable cookies
 });
 
 /**
@@ -96,7 +99,6 @@ authApiClient.interceptors.response.use(
 
 /**
  * Register new seller
- * Calls /api/auth/register yang akan set httpOnly cookie
  */
 export const register = async (
   data: RegisterData,
@@ -108,55 +110,8 @@ export const register = async (
   return response.data;
 };
 
-/**
- * Login seller
- * Calls /api/auth/login yang akan set httpOnly cookie
- */
-export const login = async (
-  data: LoginData,
-): Promise<BaseResponse<{ seller: Seller }>> => {
-  const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
-    "/login",
-    data,
-  );
-  return response.data;
-};
-
-/**
- * Get current user
- * Token automatically sent via httpOnly cookie
- */
-export const getCurrentUser = async (): Promise<
-  BaseResponse<{ seller: Seller }>
-> => {
-  const response =
-    await authApiClient.get<BaseResponse<{ seller: Seller }>>("/me");
-  return response.data;
-};
-
-/**
- * Get user from HTTP-only cookie
- * Retrieves user data stored in cookie after login
- */
-export const getUser = async (): Promise<BaseResponse<Seller>> => {
-  const response = await authApiClient.get<BaseResponse<Seller>>("/user");
-  return response.data;
-};
-
-/**
- * Logout
- * Clears httpOnly cookie
- */
-export const logout = async (): Promise<void> => {
-  await authApiClient.post("/logout");
-};
-
 const authService = {
   register,
-  login,
-  getCurrentUser,
-  getUser,
-  logout,
 };
 
 export default authService;

@@ -3,6 +3,7 @@
 import { formatErrorForDisplay, logError } from "@/lib/error-handler";
 import authService from "@/services/auth.service";
 import { AuthFormProps } from "@/types/auth";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import AuthToggle from "./auth-toggle";
@@ -27,8 +28,20 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
         name: name || undefined,
       });
 
+      const loginResult = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (!loginResult?.ok || loginResult.error) {
+        setError("Registrasi berhasil, tetapi login otomatis gagal.");
+        return;
+      }
+
       // After successful registration, redirect to dashboard
       router.push("/dashboard");
+      router.refresh();
     } catch (err: any) {
       logError(err, "RegisterForm");
       setError(formatErrorForDisplay(err));

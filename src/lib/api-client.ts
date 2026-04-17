@@ -1,3 +1,5 @@
+import { withAuthHeader } from "@/lib/client-auth";
+import { useAuthStore } from "@/store/auth-store";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -6,23 +8,22 @@ import axios, {
 } from "axios";
 
 /**
- * API Client untuk Next.js
+ * API Client untuk browser
  *
- * Base URL: /api/proxy
- * Semua requests akan di-proxy oleh Next.js ke backend
- * Token automatically attached via httpOnly cookies
- *
- * Usage:
- * - auth endpoints: apiClient.post('/auth/login', data)
- * - other endpoints: apiClient.get('/products'), apiClient.post('/orders', data)
+ * Base URL: <BACKEND>/api
+ * Token diambil dari global auth state yang dihydrate dari NextAuth session.
  */
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_API_URL ||
+  process.env.BACKEND_API_URL ||
+  "http://localhost:3001";
+
 const apiClient: AxiosInstance = axios.create({
-  baseURL: "/api/proxy",
+  baseURL: `${BACKEND_URL}/api`,
   timeout: 30000, // 30 seconds
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // Enable cookies untuk httpOnly cookies
 });
 
 /**
@@ -30,12 +31,15 @@ const apiClient: AxiosInstance = axios.create({
  * - Log request untuk debugging
  */
 apiClient.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  async (config: InternalAxiosRequestConfig) => {
+    const incomingHeaders = (config.headers || {}) as Record<string, string>;
+    config.headers = await withAuthHeader(incomingHeaders);
+
     // Log request in development
     if (process.env.NODE_ENV === "development") {
       console.log("📤 API Request:", {
         method: config.method?.toUpperCase(),
-        url: config.url,
+        url: `${config.baseURL || ""}${config.url || ""}`,
         data: config.data,
       });
     }
@@ -99,6 +103,7 @@ apiClient.interceptors.response.use(
           // Unauthorized - Redirect to login
           if (typeof window !== "undefined") {
             console.warn("🔒 Unauthorized - Redirecting to login...");
+            useAuthStore.getState().clearAuthState();
 
             // Redirect to login (only if not already on auth page)
             if (!window.location.pathname.includes("/auth")) {

@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 // Routes yang memerlukan authentication
 const protectedRoutes = ["/dashboard", "/dashboard-product"];
@@ -7,8 +8,12 @@ const protectedRoutes = ["/dashboard", "/dashboard-product"];
 // Routes yang hanya bisa diakses jika belum login
 const authRoutes = ["/auth"];
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
+export async function middleware(request: NextRequest) {
+  const sessionToken = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  const isAuthenticated = Boolean(sessionToken?.accessToken);
   const { pathname } = request.url ? new URL(request.url) : { pathname: "" };
 
   // Check if accessing protected route
@@ -20,7 +25,7 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
   // Redirect to login if accessing protected route without token
-  if (isProtectedRoute && !token) {
+  if (isProtectedRoute && !isAuthenticated) {
     const redirectUrl = new URL("/auth", request.url);
     // Preserve the original URL for redirect after login
     redirectUrl.searchParams.set("redirect", pathname);
@@ -28,7 +33,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect to dashboard if accessing auth route with token
-  if (isAuthRoute && token) {
+  if (isAuthRoute && isAuthenticated) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

@@ -1,5 +1,5 @@
 "use client";
-import { logout } from "@/services/auth.service";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MdMail, MdNotifications, MdPerson } from "react-icons/md";
 
@@ -8,8 +8,9 @@ const SellerAppBar = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await signOut({ redirect: false });
       router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Logout failed:", error);
     }
