@@ -2,6 +2,7 @@ import { withAuthHeader } from "@/lib/client-auth";
 import { useAuthStore } from "@/store/auth-store";
 import axios, {
   AxiosError,
+  AxiosHeaders,
   AxiosInstance,
   AxiosResponse,
   InternalAxiosRequestConfig,
@@ -32,8 +33,12 @@ const apiClient: AxiosInstance = axios.create({
  */
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
-    const incomingHeaders = (config.headers || {}) as Record<string, string>;
-    config.headers = await withAuthHeader(incomingHeaders);
+    const incomingHeaders = AxiosHeaders.from(config.headers).toJSON(true) as Record<
+      string,
+      string
+    >;
+    const authHeaders = await withAuthHeader(incomingHeaders);
+    config.headers = AxiosHeaders.from(authHeaders);
 
     // Log request in development
     if (process.env.NODE_ENV === "development") {
