@@ -5,6 +5,20 @@ import { redirect } from "next/navigation";
 const BACKEND_API_URL =
   process.env.BACKEND_API_URL || "http://localhost:3000/api";
 
+type RedirectErrorLike = {
+  digest: string;
+};
+
+function isNextRedirectError(error: unknown): error is RedirectErrorLike {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "digest" in error &&
+    typeof (error as RedirectErrorLike).digest === "string" &&
+    (error as RedirectErrorLike).digest.startsWith("NEXT_REDIRECT")
+  );
+}
+
 /**
  * Server-side API Client untuk Server Components
  *
@@ -92,6 +106,11 @@ export class ServerApiClient {
 
       return await response.json();
     } catch (error) {
+      // Next.js redirect() throws internally; preserve redirect flow without noisy logs.
+      if (isNextRedirectError(error)) {
+        throw error;
+      }
+
       console.error(`[Server API] Error calling ${endpoint}:`, error);
       throw error;
     }
