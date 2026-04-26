@@ -121,7 +121,7 @@ export default function NavbarLanding() {
         <div className="hidden items-center gap-6 md:flex">
           <Link
             href="/auth"
-            className="flex cursor-pointer items-center gap-2 rounded-full bg-[#4EBD77] px-4 py-2 transition hover:bg-[#3ea066]"
+            className="bg-primary-blue flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition hover:bg-[#3ea066]"
           >
             <FaRegCircleUser size={22} className="text-white" />
             <p className="hidden font-semibold text-white lg:block">
@@ -198,7 +198,7 @@ export default function NavbarLanding() {
             </button>
             <Link
               href="/auth"
-              className="flex items-center justify-center gap-2 rounded-full bg-[#4EBD77] py-2 font-semibold text-white hover:bg-[#3ea066]"
+              className="bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]"
             >
               <FaRegCircleUser size={20} />
               Yuk Mulai Menjual

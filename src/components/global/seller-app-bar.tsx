@@ -1,10 +1,12 @@
 "use client";
+import { useUser } from "@/hooks/use-user";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MdMail, MdNotifications, MdPerson } from "react-icons/md";
 
 const SellerAppBar = () => {
   const router = useRouter();
+  const { user, loading } = useUser();
 
   const handleLogout = async () => {
     try {
@@ -59,7 +61,12 @@ const SellerAppBar = () => {
               <div className="rounded-full bg-[#204E31] p-1.5">
                 <MdPerson size={24} className="text-primary-blue" />
               </div>
-              <p className="text-primary-blue text-sm font-semibold">Logout</p>
+              <div className="text-left">
+                <p className="text-primary-blue max-w-[140px] truncate text-sm font-semibold">
+                  {loading ? "Memuat..." : (user?.name ?? "Seller")}
+                </p>
+                <p className="text-primary-blue text-xs font-medium">Logout</p>
+              </div>
             </button>
           </div>
         </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoSearch, IoChevronDownSharp, IoMenu, IoClose } from "react-icons/io5";
-import { PiBookOpenTextDuotone } from "react-icons/pi";
+import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { IoChevronDownSharp, IoClose, IoMenu, IoSearch } from "react-icons/io5";
+import { PiBookOpenTextDuotone } from "react-icons/pi";
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -50,9 +50,12 @@ export default function Navbar() {
 
       <div className="flex items-center justify-between border-b border-[#1E2A30] px-4 py-4 sm:px-6 lg:px-12">
         <div className="flex w-full items-center justify-between sm:mr-6 sm:w-auto lg:mr-10">
-          <p className="text-3xl font-extrabold tracking-wide text-[#37A2EA] sm:text-4xl">
+          <Link
+            href="/"
+            className="text-3xl font-extrabold tracking-wide text-[#37A2EA] hover:brightness-75 sm:text-4xl"
+          >
             SELVO
-          </p>
+          </Link>
 
           <button
             className="text-3xl text-gray-300 transition hover:text-white sm:hidden"
@@ -116,7 +119,7 @@ export default function Navbar() {
             </span>
           </button>
 
-          <button className="h-10 w-35 rounded-full bg-[#4EBD77] px-2 transition hover:bg-[#3ea066]">
+          <button className="bg-primary-blue h-10 w-35 rounded-full px-2 transition hover:bg-[#3ea066]">
             <p className="hidden text-xs font-medium text-white lg:block">
               Yuk Mulai Menjual
             </p>
@@ -224,7 +227,7 @@ export default function Navbar() {
               Panduan Penjual
             </button>
 
-            <button className="flex items-center justify-center gap-2 rounded-full bg-[#4EBD77] py-2 font-semibold text-white hover:bg-[#3ea066]">
+            <button className="bg-primary-blue hover:bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white">
               <FaRegCircleUser size={20} /> Yuk Mulai Menjual
             </button>
           </div>
