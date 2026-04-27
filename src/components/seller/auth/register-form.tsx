@@ -54,7 +54,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
     <>
       <div className="mx-auto flex w-[551px] flex-col items-center justify-center">
         <AuthToggle curform={curform} setForm={setForm} />
-        <h2 className="my-[30px] text-[32px] font-[600] text-[#4EBD77]">
+        <h2 className="text-primary-blue my-[30px] text-[32px] font-[600]">
           Buat Akun Gratis
         </h2>
         <p className="mb-[35px] text-center text-[#ffffff]">
@@ -118,7 +118,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-[10px] flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] bg-[#4EBD77] font-[600] text-[#ffffff] transition-all hover:bg-[#3FA866] disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary-blue hover:bg-primary-blue/80 mt-[10px] flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
@@ -153,7 +153,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
         <p className="mt-[20px] text-[#ffffff]">
           Sudah punya akun?{" "}
           <span
-            className="cursor-pointer text-[#4EBD77] hover:underline"
+            className="text-primary-blue cursor-pointer hover:underline"
             onClick={() => setForm("Sign In")}
           >
             Masuk

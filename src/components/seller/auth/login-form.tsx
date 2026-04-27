@@ -47,7 +47,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
     <>
       <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
         <AuthToggle curform={curform} setForm={setForm} />
-        <h2 className="my-[30px] text-[32px] font-semibold text-[#4EBD77]">
+        <h2 className="text-primary-blue my-[30px] text-[32px] font-semibold">
           Masuk Ke Akun Kamu
         </h2>
         <p className="mb-[35px] text-center text-[#ffffff]">
@@ -95,7 +95,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] bg-[#4EBD77] font-[600] text-[#ffffff] transition-all hover:bg-[#3FA866] disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary-blue hover:bg-primary-blue/80 flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
@@ -127,18 +127,18 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
           </button>
         </form>
 
-        <div className="my-5 flex w-full items-center">
+        {/* <div className="my-5 flex w-full items-center">
           <div className="grow border-t border-[#48464C]"></div>
           <span className="mx-4 shrink text-[#525155]">Masuk dengan?</span>
           <div className="grow border-t border-[#48464C]"></div>
         </div>
         <button className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D] font-semibold text-[#ffffff] hover:bg-[#3FA866]">
           Masuk dengan Akun Google
-        </button>
-        <p>
-          Tidak&apos; Memiliki akun ?{" "}
+        </button> */}
+        <p className="mt-5">
+          Tidak Memiliki akun ?{" "}
           <span
-            className="cursor-pointer text-[#4EBD77] hover:underline"
+            className="text-primary-blue cursor-pointer hover:underline"
             onClick={() => setForm("Sign Up")}
           >
             Daftar

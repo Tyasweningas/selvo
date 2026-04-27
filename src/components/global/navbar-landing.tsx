@@ -66,7 +66,7 @@ export default function NavbarLanding() {
             href="/"
             className="pr-4 text-2xl font-extrabold tracking-wide text-[#37A2EA] md:text-3xl"
           >
-            SELVO.
+            SELVO
           </Link>
 
           {/* Hamburger (mobile only) */}
@@ -121,7 +121,7 @@ export default function NavbarLanding() {
         <div className="hidden items-center gap-6 md:flex">
           <Link
             href="/auth"
-            className="bg-primary-blue flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition hover:bg-[#3ea066]"
+            className="bg-primary-blue hover:bg-primary-blue/80 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition"
           >
             <FaRegCircleUser size={22} className="text-white" />
             <p className="hidden font-semibold text-white lg:block">
