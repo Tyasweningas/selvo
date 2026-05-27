@@ -1,3 +1,4 @@
+import apiClient from "@/lib/api-client";
 import { BaseResponse } from "@/types/api";
 import axios, { AxiosError } from "axios";
 
@@ -12,12 +13,16 @@ export interface LoginData {
   password: string;
 }
 
+export type SellerBankName = "BNI" | "BRI" | "MANDIRI" | "BCA" | "BSI";
+
 export interface Seller {
   sellerId: string;
   email: string;
   name: string;
   balance: number;
   createdAt: string;
+  bankName?: SellerBankName | null;
+  bankNumber?: string | null;
 }
 
 /**
@@ -110,8 +115,22 @@ export const register = async (
   return response.data;
 };
 
+/**
+ * Get current authenticated seller (calls /auth/me with seller bearer token)
+ */
+export const getMe = async (): Promise<Seller> => {
+  const response =
+    await apiClient.get<BaseResponse<{ seller: Seller }>>("/auth/me");
+  const seller = response.data.data?.seller;
+  if (!seller) {
+    throw new Error("Gagal memuat data seller.");
+  }
+  return seller;
+};
+
 const authService = {
   register,
+  getMe,
 };
 
 export default authService;

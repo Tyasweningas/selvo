@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { MdEdit, MdSearch } from "react-icons/md";
 
+export const dynamic = "force-dynamic";
+
 const ProductPage = async () => {
   let products: Product[] = [];
 

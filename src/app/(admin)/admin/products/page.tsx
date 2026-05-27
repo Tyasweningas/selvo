@@ -3,6 +3,8 @@ import adminServerService from "@/services/admin.server.service";
 import { Product, ProductStatus } from "@/types/product";
 import { MdInventory2, MdPendingActions } from "react-icons/md";
 
+export const dynamic = "force-dynamic";
+
 const AdminProductsPage = async () => {
   let products: Product[] = [];
   let fetchError: string | null = null;

@@ -3,6 +3,8 @@ import adminServerService from "@/services/admin.server.service";
 import type { PlatformStats } from "@/types/admin";
 import { MdAccountBalance, MdTrendingUp } from "react-icons/md";
 
+export const dynamic = "force-dynamic";
+
 const currencyFormatter = new Intl.NumberFormat("id-ID");
 
 const AdminDashboardPage = async () => {
