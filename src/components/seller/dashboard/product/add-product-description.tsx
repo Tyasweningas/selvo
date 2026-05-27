@@ -3,7 +3,7 @@
 import ChipsInput from "@/components/global/chips-input";
 import Input from "@/components/global/input";
 import TextArea from "@/components/global/textarea";
-import { CreateProductPayload } from "@/types/product";
+import { CreateProductFormValues } from "@/lib/validation/product.schema";
 import { Fragment, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { IoSearch } from "react-icons/io5";
@@ -15,9 +15,9 @@ const AddProductDescription = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useFormContext<CreateProductPayload>();
+  } = useFormContext<CreateProductFormValues>();
 
-  const keywords = watch("keywords") || [];
+  const keywords = watch("keywords") ?? [];
 
   useEffect(() => {
     register("keywords");
@@ -38,13 +38,7 @@ const AddProductDescription = () => {
         <TextArea
           className="h-48 w-full"
           placeholder="Tuliskan deksripsi produk"
-          {...register("description", {
-            required: "Deskripsi produk wajib diisi",
-            minLength: {
-              value: 20,
-              message: "Deskripsi minimal 20 karakter",
-            },
-          })}
+          {...register("description")}
         />
         {errors.description && (
           <p className="text-sm text-red-500">{errors.description.message}</p>
@@ -65,7 +59,9 @@ const AddProductDescription = () => {
         </p>
         <ChipsInput
           value={keywords}
-          onChange={(value) => setValue("keywords", value)}
+          onChange={(value) =>
+            setValue("keywords", value, { shouldDirty: true })
+          }
           placeholder="Ketik kata kunci dan tekan spasi..."
           className="min-h-48 w-full overflow-y-auto"
         />
@@ -90,14 +86,7 @@ const AddProductDescription = () => {
           type="number"
           placeholder="Tulis estimasi pesenanmu..."
           className="w-full"
-          {...register("price", {
-            required: "Harga produk wajib diisi",
-            min: {
-              value: 1000,
-              message: "Harga minimal Rp 1.000",
-            },
-            valueAsNumber: true,
-          })}
+          {...register("price", { valueAsNumber: true })}
         />
         {errors.price && (
           <p className="text-sm text-red-500">{errors.price.message}</p>

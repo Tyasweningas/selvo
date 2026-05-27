@@ -8,20 +8,40 @@ import AddProductSpesification from "@/components/seller/dashboard/product/add-p
 import AddProductStep from "@/components/seller/dashboard/product/add-product-step";
 import { add_product_steps } from "@/data/add-product-steps";
 import { formatErrorForDisplay, logError } from "@/lib/error-handler";
+import {
+  CreateProductFormValues,
+  createProductSchema,
+  REQUIRED_PRODUCT_IMAGE_COUNT,
+} from "@/lib/validation/product.schema";
 import productService from "@/services/product.service";
 import { CreateProductPayload } from "@/types/product";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldPath, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+const stepFields: Record<number, FieldPath<CreateProductFormValues>[]> = {
+  0: ["name", "categoryId"],
+  1: ["description", "price"],
+  2: ["images", "details"],
+  3: [],
+};
 
 const AddProductPage = () => {
   const [step, setStep] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const method = useForm<CreateProductPayload>({
+  const method = useForm<CreateProductFormValues>({
+    resolver: zodResolver(createProductSchema),
+    mode: "onChange",
     defaultValues: {
+      name: "",
+      categoryId: "",
+      description: "",
+      price: undefined,
+      productLink: "",
       keywords: [],
-      images: [],
+      images: Array.from({ length: REQUIRED_PRODUCT_IMAGE_COUNT }, () => null),
       details: [
         {
           id: "default-1",
@@ -39,21 +59,24 @@ const AddProductPage = () => {
   };
 
   const handleNext = async () => {
-    let isValid = false;
-
-    // Validate current step before proceeding
-    if (step === 0) {
-      isValid = await method.trigger(["name", "categoryId"]);
-    } else if (step === 1) {
-      isValid = await method.trigger(["description", "price"]);
-    } else if (step === 2) {
-      isValid = await method.trigger(["images"]);
-    } else if (step === 3) {
-      isValid = true; // Review step, no validation needed
-    }
+    const fieldsToValidate = stepFields[step] ?? [];
+    const isValid =
+      fieldsToValidate.length === 0
+        ? true
+        : await method.trigger(fieldsToValidate, { shouldFocus: true });
 
     if (!isValid) {
-      toast.error("Mohon lengkapi semua field yang diperlukan");
+      const errors = method.formState.errors;
+      const firstError = fieldsToValidate
+        .map((field) => {
+          const error = errors[field as keyof typeof errors];
+          return error && "message" in error
+            ? (error.message as string | undefined)
+            : undefined;
+        })
+        .find((message): message is string => Boolean(message));
+
+      toast.error(firstError ?? "Mohon lengkapi semua field yang diperlukan");
       return;
     }
 
@@ -66,7 +89,7 @@ const AddProductPage = () => {
   };
 
   const handleSubmit = async () => {
-    const isValid = await method.trigger();
+    const isValid = await method.trigger(undefined, { shouldFocus: true });
 
     if (!isValid) {
       toast.error("Mohon lengkapi semua field yang diperlukan");
@@ -77,16 +100,24 @@ const AddProductPage = () => {
 
     try {
       const formData = method.getValues();
+      const images = (formData.images ?? []).filter(
+        (item): item is File => item instanceof File,
+      );
 
-      console.log("Form Data:", formData);
+      const payload: CreateProductPayload = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        categoryId: formData.categoryId,
+        keywords: formData.keywords ?? [],
+        productLink: formData.productLink || undefined,
+        details: formData.details,
+        images,
+      };
 
-      // Call API to create product
-
-      await productService.createProduct(formData);
+      await productService.createProduct(payload);
 
       toast.success("Produk berhasil ditambahkan!");
-      // TODO: Redirect to product list or detail page
-      // router.push('/dashboard-product');
     } catch (error) {
       logError(error, "AddProductPage");
       toast.error(formatErrorForDisplay(error));

@@ -2,8 +2,9 @@
 
 import Input from "@/components/global/input";
 import { product_categories } from "@/data/product-categories";
+import { CreateProductFormValues } from "@/lib/validation/product.schema";
 import { categoryService } from "@/services/category.service";
-import { CreateProductPayload, ProductCategory } from "@/types/product";
+import { ProductCategory } from "@/types/product";
 import clsx from "clsx";
 import Image from "next/image";
 import { Fragment, useEffect, useState } from "react";
@@ -17,26 +18,21 @@ const AddProductGeneral = () => {
     register,
     setValue,
     watch,
+    trigger,
     formState: { errors },
-  } = useFormContext<CreateProductPayload>();
+  } = useFormContext<CreateProductFormValues>();
 
   const selectedCategoryId = watch("categoryId");
 
-  // Register categoryId for validation
   useEffect(() => {
-    register("categoryId", {
-      required: "kwontol",
-    });
-    register("categoryId", {
-      required: "Kategori produk wajib dipilih",
-    });
+    register("categoryId");
   }, [register]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await categoryService.getCategories();
-        const categories = data.map((cat) => {
+        const mapped = data.map((cat) => {
           const icon = product_categories.find(
             (pc) => pc.name === cat.name,
           )?.icon;
@@ -47,9 +43,7 @@ const AddProductGeneral = () => {
           };
         });
 
-        console.log("New Category", categories);
-
-        setCategories(categories);
+        setCategories(mapped);
       } catch (error) {
         console.error("Error fetching categories:", error);
       } finally {
@@ -76,13 +70,7 @@ const AddProductGeneral = () => {
           type="text"
           placeholder="Masukkan Nama Produk..."
           className="mb-3 w-full"
-          {...register("name", {
-            required: "Nama produk wajib diisi",
-            minLength: {
-              value: 3,
-              message: "Nama produk minimal 3 karakter",
-            },
-          })}
+          {...register("name")}
         />
         {errors.name && (
           <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -115,25 +103,25 @@ const AddProductGeneral = () => {
                   <div className="bg-bg-div h-4 w-32 animate-pulse rounded-full"></div>
                 </div>
               </div>
-              // <div
-              //   key={index}
-              //   className="bg-bg-div h-22 w-full animate-pulse rounded-lg"
-              // ></div>
             ))}
           </div>
         ) : (
           <div className="grid grid-cols-4 gap-5">
             {categories.map((category) => (
               <button
+                type="button"
                 key={category.productCategoryId}
                 className={clsx(
                   "hover:bg-bg-div flex cursor-pointer items-center gap-3 rounded-lg p-3 text-left transition duration-100 active:scale-95",
                   selectedCategoryId === category.productCategoryId &&
                     "bg-bg-div",
                 )}
-                onClick={() =>
-                  setValue("categoryId", category.productCategoryId)
-                }
+                onClick={() => {
+                  setValue("categoryId", category.productCategoryId, {
+                    shouldDirty: true,
+                  });
+                  void trigger("categoryId");
+                }}
               >
                 {category.icon ? (
                   <Image

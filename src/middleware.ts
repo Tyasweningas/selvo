@@ -2,11 +2,17 @@ import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-// Routes yang memerlukan authentication
-const protectedRoutes = ["/dashboard", "/dashboard-product"];
+// Routes yang memerlukan authentication seller
+const sellerProtectedRoutes = ["/dashboard", "/dashboard-product"];
 
-// Routes yang hanya bisa diakses jika belum login
-const authRoutes = ["/auth"];
+// Routes yang memerlukan authentication admin
+const adminProtectedRoutes = ["/admin"];
+
+// Routes yang hanya bisa diakses jika belum login sebagai seller
+const sellerAuthRoutes = ["/auth"];
+
+// Routes yang hanya bisa diakses jika belum login sebagai admin
+const adminAuthRoutes = ["/auth/admin"];
 
 export async function middleware(request: NextRequest) {
   const sessionToken = await getToken({
@@ -14,45 +20,63 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   const isAuthenticated = Boolean(sessionToken?.accessToken);
+  const role = sessionToken?.role;
   const { pathname } = request.url ? new URL(request.url) : { pathname: "" };
 
-  // Check if accessing protected route
-  const isProtectedRoute = protectedRoutes.some((route) =>
+  const isAdminAuthRoute = adminAuthRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+  const isAdminProtectedRoute = adminProtectedRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+  const isSellerAuthRoute =
+    !isAdminAuthRoute &&
+    sellerAuthRoutes.some((route) => pathname.startsWith(route));
+  const isSellerProtectedRoute = sellerProtectedRoutes.some((route) =>
     pathname.startsWith(route),
   );
 
-  // Check if accessing auth route
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  // Redirect to login if accessing protected route without token
-  if (isProtectedRoute && !isAuthenticated) {
-    const redirectUrl = new URL("/auth", request.url);
-    // Preserve the original URL for redirect after login
-    redirectUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(redirectUrl);
+  // Admin protected route
+  if (isAdminProtectedRoute) {
+    if (!isAuthenticated || role !== "ADMIN") {
+      const redirectUrl = new URL("/auth/admin", request.url);
+      redirectUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
-  // Redirect to dashboard if accessing auth route with token
-  if (isAuthRoute && isAuthenticated) {
+  // Seller protected route
+  if (isSellerProtectedRoute) {
+    if (!isAuthenticated) {
+      const redirectUrl = new URL("/auth", request.url);
+      redirectUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+    if (role && role !== "SELLER") {
+      // Logged in but not as seller, force seller login
+      const redirectUrl = new URL("/auth", request.url);
+      redirectUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(redirectUrl);
+    }
+  }
+
+  // Admin auth route, already logged in as admin
+  if (isAdminAuthRoute && isAuthenticated && role === "ADMIN") {
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  }
+
+  // Seller auth route, already logged in as seller
+  if (isSellerAuthRoute && isAuthenticated && role === "SELLER") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   // Add security headers
   const response = NextResponse.next();
-
-  // Prevent MIME type sniffing
   response.headers.set("X-Content-Type-Options", "nosniff");
-
-  // Prevent clickjacking
   response.headers.set("X-Frame-Options", "DENY");
-
-  // XSS Protection (legacy, but still useful for older browsers)
   response.headers.set("X-XSS-Protection", "1; mode=block");
-
-  // Control referrer information
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 
-  // HTTPS enforcement (only in production)
   if (process.env.NODE_ENV === "production") {
     response.headers.set(
       "Strict-Transport-Security",
@@ -63,7 +87,6 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
-// Configure which routes to run middleware on
 export const config = {
   matcher: [
     /*

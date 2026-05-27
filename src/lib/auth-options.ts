@@ -1,4 +1,5 @@
 import { Seller } from "@/services/auth.service";
+import type { Admin } from "@/types/admin";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -10,6 +11,7 @@ interface BackendLoginResponse {
   data?: {
     token?: string;
     seller?: Seller;
+    admin?: Admin;
   };
 }
 
@@ -18,6 +20,7 @@ interface BackendMeResponse {
   message?: string;
   data?: {
     seller?: Seller;
+    admin?: Admin;
   };
 }
 
@@ -48,6 +51,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialsProvider({
+      id: "credentials",
       name: "credentials",
       credentials: {
         email: {
@@ -72,6 +76,7 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify({
             email: credentials.email,
             password: credentials.password,
+            role: "SELLER",
           }),
         });
 
@@ -115,6 +120,81 @@ export const authOptions: NextAuthOptions = {
           balance: seller.balance,
           createdAt: seller.createdAt,
           accessToken,
+          role: "SELLER",
+        };
+      },
+    }),
+    CredentialsProvider({
+      id: "admin-credentials",
+      name: "admin-credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+        },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials.password) {
+          throw new Error("Email dan password wajib diisi.");
+        }
+
+        const loginResponse = await fetch(`${BACKEND_URL}/api/auth/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: credentials.email,
+            password: credentials.password,
+            role: "ADMIN",
+          }),
+        });
+
+        const loginData = (await loginResponse
+          .json()
+          .catch(() => null)) as BackendLoginResponse | null;
+
+        if (!loginResponse.ok || !loginData?.data?.token) {
+          const fallbackMessage = "Email atau kata sandi admin tidak valid.";
+          throw new Error(getErrorMessage(loginData, fallbackMessage));
+        }
+
+        const accessToken = loginData.data.token;
+        let admin = loginData.data.admin;
+
+        if (!admin) {
+          const meResponse = await fetch(`${BACKEND_URL}/api/auth/me`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          const meData = (await meResponse
+            .json()
+            .catch(() => null)) as BackendMeResponse | null;
+
+          const fallbackAdmin = meData?.data?.admin;
+          if (!meResponse.ok || !fallbackAdmin) {
+            throw new Error(
+              getErrorMessage(meData, "Gagal mengambil data admin."),
+            );
+          }
+
+          admin = fallbackAdmin;
+        }
+
+        return {
+          id: admin.adminId,
+          email: admin.email,
+          name: admin.name,
+          adminId: admin.adminId,
+          createdAt: admin.createdAt,
+          accessToken,
+          role: "ADMIN",
         };
       },
     }),
@@ -123,7 +203,9 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.accessToken = user.accessToken;
+        token.role = user.role;
         token.sellerId = user.sellerId;
+        token.adminId = user.adminId;
         token.balance = user.balance;
         token.createdAt = user.createdAt;
       }
@@ -133,11 +215,14 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.sellerId = token.sellerId as string | undefined;
+        session.user.adminId = token.adminId as string | undefined;
         session.user.balance = token.balance as number | undefined;
         session.user.createdAt = token.createdAt as string | undefined;
+        session.user.role = token.role;
       }
 
       session.accessToken = token.accessToken as string | undefined;
+      session.role = token.role;
 
       return session;
     },

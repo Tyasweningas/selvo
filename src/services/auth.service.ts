@@ -105,7 +105,7 @@ export const register = async (
 ): Promise<BaseResponse<{ seller: Seller }>> => {
   const response = await authApiClient.post<BaseResponse<{ seller: Seller }>>(
     "/register",
-    data,
+    { ...data, role: "SELLER" },
   );
   return response.data;
 };

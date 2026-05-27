@@ -1,45 +1,41 @@
 "use client";
 
+import { CreateProductFormValues } from "@/lib/validation/product.schema";
 import { categoryService } from "@/services/category.service";
-import { CreateProductPayload } from "@/types/product";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 const AddProductReview = () => {
-  const { watch } = useFormContext<CreateProductPayload>();
+  const { watch } = useFormContext<CreateProductFormValues>();
+  const formData = watch();
   const [categoryName, setCategoryName] = useState<string>("");
+  const [emblaRef] = useEmblaCarousel({
+    loop: true,
+  });
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await categoryService.getCategories();
-        const categoryName = data.find(
+        const matched = data.find(
           (cat) => cat.productCategoryId === formData.categoryId,
         )?.name;
-        setCategoryName(categoryName || "Kategori tidak ditemukan");
+        setCategoryName(matched || "Kategori tidak ditemukan");
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
 
     fetchCategories();
-  }, []);
-
-  const formData = watch();
-  const [emblaRef] = useEmblaCarousel({
-    loop: true,
-    // dragFree: true,
-  });
+  }, [formData.categoryId]);
 
   const imagePreviews = useMemo(() => {
-    if (formData.images && formData.images.length > 0) {
-      return formData.images
-        .filter((img): img is File => img !== null)
-        .map((img) => URL.createObjectURL(img));
-    }
-    return [];
+    const files = (formData.images ?? []).filter(
+      (img): img is File => img instanceof File,
+    );
+    return files.map((img) => URL.createObjectURL(img));
   }, [formData.images]);
 
   return (
@@ -80,7 +76,7 @@ const AddProductReview = () => {
           </p>
           <p className="text-3xl font-semibold text-gray-100">
             <span className="text-primary-yellow mr-3">IDR</span>
-            {formData.price.toLocaleString("id-ID")}
+            {(formData.price ?? 0).toLocaleString("id-ID")}
           </p>
         </div>
 
@@ -96,7 +92,7 @@ const AddProductReview = () => {
 
           <div>
             <h2 className="text-sec-netral mb-2 text-lg font-semibold">
-              Deskripsi Produk
+              Detail Produk
             </h2>
             {formData.details && formData.details.length > 0 ? (
               <div className="space-y-3">
@@ -144,13 +140,7 @@ const AddProductReview = () => {
 
         {/* Product Link */}
         <div className="border-bg-div bg-bg-nav space-y-5 rounded-xl border-2 p-5">
-          <h2 className="text-2xl font-bold text-white">Tauran Produk</h2>
-          <a
-            href={formData.productLink || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-blue text-sm break-all hover:underline"
-          ></a>
+          <h2 className="text-2xl font-bold text-white">Tautan Produk</h2>
           <div className="border-bg-light bg-bg-div text-tertier-netral flex h-10 flex-1 items-center rounded-full border-2 px-5 text-sm">
             {formData.productLink || "Belum ada link produk"}
           </div>

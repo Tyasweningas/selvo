@@ -1,44 +1,55 @@
 "use client";
 
 import Input from "@/components/global/input";
-import { CreateProductPayload } from "@/types/product";
+import {
+  CreateProductFormValues,
+  REQUIRED_PRODUCT_IMAGE_COUNT,
+} from "@/lib/validation/product.schema";
 import { Fragment, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { MdCamera, MdModeEdit } from "react-icons/md";
 import ProductDetailSection from "./product-detail-section";
 import ProductPhotoUpload from "./product-photo-upload";
 
+const photoSlots: { label: string }[] = [
+  { label: "Foto Utama" },
+  { label: "Foto Kedua" },
+  { label: "Foto Ketiga" },
+  { label: "Foto Keempat" },
+];
+
 const AddProductSpesification = () => {
   const {
     register,
     setValue,
     watch,
+    trigger,
     formState: { errors },
-  } = useFormContext<CreateProductPayload>();
+  } = useFormContext<CreateProductFormValues>();
 
-  const images = watch("images") || [];
+  const images = watch("images") ?? [];
 
   useEffect(() => {
-    register("images", {
-      validate: (value) =>
-        (value && value.length > 0 && value[0] !== null) ||
-        "Minimal 1 foto produk wajib diupload",
-    });
+    register("images");
   }, [register]);
 
-  const photoSlots = [
-    { label: "Foto Utama" },
-    { label: "Foto Kedua" },
-    { label: "Foto Ketiga" },
-    { label: "Foto Keempat" },
-  ];
-
   const handlePhotoChange = (index: number, file: File | null) => {
-    const currentImages =
-      images.length > 0 ? [...images] : [null, null, null, null];
-    currentImages[index] = file;
-    setValue("images", currentImages as File[]);
+    const next: (File | null)[] = Array.from(
+      { length: REQUIRED_PRODUCT_IMAGE_COUNT },
+      (_, i) => images[i] ?? null,
+    );
+    next[index] = file;
+    setValue("images", next, {
+      shouldDirty: true,
+    });
+    void trigger("images");
   };
+
+  const filledCount = images.filter(
+    (item): item is File => item instanceof File,
+  ).length;
+
+  const imagesError = errors.images?.message;
 
   return (
     <Fragment>
@@ -50,16 +61,16 @@ const AddProductSpesification = () => {
           <p className="text-3xl font-bold text-white">Foto Produk</p>
         </div>
         <p className="text-sec-netral text-sm">
-          Unggah gambar pratinjau atau tampilan produk digitalmu.
+          Unggah {REQUIRED_PRODUCT_IMAGE_COUNT} gambar pratinjau produk
+          digitalmu. ({filledCount}/{REQUIRED_PRODUCT_IMAGE_COUNT} terisi)
         </p>
-        {errors.images && (
-          <p className="text-sm text-red-500">{errors.images.message}</p>
-        )}
+        {imagesError && <p className="text-sm text-red-500">{imagesError}</p>}
         <div className="no-scrollbar flex gap-5 overflow-x-auto">
           {photoSlots.map((slot, index) => (
-            <div key={index} className="aspect-16/10 w-80 shrink-0">
+            <div key={slot.label} className="aspect-16/10 w-80 shrink-0">
               <ProductPhotoUpload
                 label={slot.label}
+                value={images[index] ?? null}
                 onChange={(file) => handlePhotoChange(index, file)}
               />
             </div>
@@ -80,12 +91,7 @@ const AddProductSpesification = () => {
         <Input
           placeholder="Masukkan link produk"
           className="w-full"
-          {...register("productLink", {
-            pattern: {
-              value: /^https?:\/\/.+/,
-              message: "Link harus dimulai dengan http:// atau https://",
-            },
-          })}
+          {...register("productLink")}
         />
         {errors.productLink && (
           <p className="text-sm text-red-500">{errors.productLink.message}</p>

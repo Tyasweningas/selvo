@@ -1,6 +1,6 @@
 "use client";
 
-import { CreateProductPayload } from "@/types/product";
+import { CreateProductFormValues } from "@/lib/validation/product.schema";
 import { useFormContext } from "react-hook-form";
 import { MdListAlt } from "react-icons/md";
 import ProductDetailItem from "./product-detail-item";
@@ -12,7 +12,7 @@ interface ProductDetail {
 }
 
 const ProductDetailSection = () => {
-  const { setValue, watch } = useFormContext<CreateProductPayload>();
+  const { setValue, watch } = useFormContext<CreateProductFormValues>();
 
   const details = watch("details") || [];
 

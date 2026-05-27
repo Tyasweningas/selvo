@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { IoImage } from "react-icons/io5";
 
 interface ProductPhotoUploadProps {
   label: string;
   onChange: (file: File | null) => void;
-  value?: string | null;
+  value?: File | null;
 }
 
 const ProductPhotoUpload = ({
@@ -16,36 +16,43 @@ const ProductPhotoUpload = ({
   onChange,
   value,
 }: ProductPhotoUploadProps) => {
-  const [preview, setPreview] = useState<string | null>(value || null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!value) {
+      setPreview(null);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(value);
+    setPreview(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [value]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith("image/")) {
-        alert("File harus berupa gambar");
-        return;
-      }
-
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Ukuran file maksimal 5MB");
-        return;
-      }
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-
-      onChange(file);
+    if (!file) {
+      return;
     }
+
+    if (!file.type.startsWith("image/")) {
+      alert("File harus berupa gambar");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Ukuran file maksimal 5MB");
+      return;
+    }
+
+    onChange(file);
+    event.target.value = "";
   };
 
   const handleRemove = () => {
-    setPreview(null);
     onChange(null);
   };
 
@@ -61,7 +68,7 @@ const ProductPhotoUpload = ({
         />
         <label
           htmlFor={`photo-upload-${label}`}
-          className={`border-bg-light bg-bg-div hover:border-primary-blue group flex aspect-square w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed transition-all $${preview ? "p-2" : ""}`}
+          className={`border-bg-light bg-bg-div hover:border-primary-blue group flex aspect-square w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed transition-all ${preview ? "p-2" : ""}`}
         >
           {preview ? (
             <div className="relative h-full w-full overflow-hidden rounded-lg">
