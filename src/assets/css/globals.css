@@ -51,6 +51,35 @@ body {
   font-family: "Gilroy", sans-serif;
 }
 
+/* Animations */
+@keyframes selvoFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes selvoSlideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: selvoFadeIn 0.18s ease-out;
+}
+
+.animate-slideInRight {
+  animation: selvoSlideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .input {
   @apply w-full rounded-lg border border-[#1f2a2d] bg-[#0f1b1d] px-4 py-3 transition focus:border-pink-500 focus:outline-none;
 }

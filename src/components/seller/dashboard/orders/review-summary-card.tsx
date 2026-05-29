@@ -2,7 +2,7 @@
 
 import type { ReviewStarKey, SellerReviewMeta } from "@/types/seller-orders";
 import { MdRateReview, MdStar } from "react-icons/md";
-import StarRating from "./star-rating";
+import StarRating from "../../../global/star-rating";
 
 interface ReviewSummaryCardProps {
   meta: SellerReviewMeta;

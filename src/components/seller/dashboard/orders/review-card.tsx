@@ -2,7 +2,7 @@ import type { SellerReviewItem } from "@/types/seller-orders";
 import Image from "next/image";
 import Link from "next/link";
 import { MdPerson } from "react-icons/md";
-import StarRating from "./star-rating";
+import StarRating from "../../../global/star-rating";
 
 interface ReviewCardProps {
   review: SellerReviewItem;

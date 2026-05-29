@@ -1,15 +1,15 @@
-import { StaticImageData } from "next/image";
-
+/**
+ * Item dalam keranjang.
+ *
+ * Catatan: produk digital di Selvo dijual sebagai lisensi tunggal per pembeli,
+ * sehingga tidak ada konsep `quantity`. Identitas item = `productId`.
+ */
 export interface CartItem {
-    id: number;
-    name: string;
-    thumbnail: string | StaticImageData;
-    price: number;
-    creator: string;
-    quantity: number;
-}
-
-export interface CartState {
-    items: CartItem[];
-    isOpen: boolean;
+  productId: string;
+  slug: string;
+  name: string;
+  price: number;
+  thumbnail: string | null;
+  sellerName?: string | null;
+  categoryName?: string | null;
 }

@@ -1,6 +1,7 @@
 "use client";
 import { glow_carousel } from "@/assets/background";
 import GlowCircle from "@/assets/background/glow-circle.png";
+import AdsPopup from "@/components/customer/landing-page/ads-popup";
 import CardLanding from "@/components/customer/landing-page/card-landing";
 import BannerCarousel from "@/components/customer/landing-page/carousel/banner-carousel";
 import Footer from "@/components/global/footer";
@@ -86,6 +87,7 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen">
+      <AdsPopup />
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
       <NavbarLanding />
 
@@ -220,8 +222,9 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
               {categories.map((category) => (
-                <button
+                <Link
                   key={category.productCategoryId}
+                  href={`/search?category=${encodeURIComponent(category.productCategoryId)}`}
                   className={clsx(
                     "hover:bg-bg-div flex cursor-pointer items-center gap-2 rounded-lg p-2 text-left transition duration-100 active:scale-95 sm:gap-3 sm:p-3",
                   )}
@@ -247,7 +250,7 @@ export default function Home() {
                       {category.description || "No description"}
                     </p>
                   </div>
-                </button>
+                </Link>
               ))}
             </div>
           )}
@@ -276,10 +279,10 @@ export default function Home() {
               Telusuri berdasarkan Kategori
             </h2>
             <Link
-              href="/products"
+              href="/search"
               className="hover:text-primary-blue text-sm font-medium text-gray-400 transition"
             >
-              Ekspor lebih banyak →
+              Eksplor lebih banyak →
             </Link>
           </div>
 

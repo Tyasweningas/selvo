@@ -18,7 +18,7 @@ import {
   MdReceiptLong,
 } from "react-icons/md";
 import { toast } from "sonner";
-import StarRating from "./star-rating";
+import StarRating from "../../../global/star-rating";
 import StatusPill from "./status-pill";
 
 interface TransactionDetailModalProps {

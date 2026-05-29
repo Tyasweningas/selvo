@@ -1,5 +1,5 @@
 "use client";
-import { useCart } from "@/hooks/use-cart";
+import { useCartStore } from "@/store/cart-store";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
@@ -12,16 +12,17 @@ export default function NavbarLanding() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  // Cart hook
-  const {
-    cart,
-    toggleCart,
-    closeCart,
-    removeFromCart,
-    getTotalPrice,
-    getTotalItems,
-  } = useCart();
+  // Cart store
+  const isOpen = useCartStore((s) => s.isOpen);
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const closeCart = useCartStore((s) => s.closeCart);
+  const totalItems = useCartStore((s) => s.items.length);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsSticky(window.scrollY > 10);
@@ -134,9 +135,9 @@ export default function NavbarLanding() {
             className="bg-primary-blue relative rounded-full p-3 transition hover:bg-[#256ca3]"
           >
             <FaShoppingCart size={22} className="text-white" />
-            {getTotalItems() > 0 && (
+            {mounted && totalItems > 0 && (
               <span className="text-primary-blue absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold">
-                {getTotalItems()}
+                {totalItems}
               </span>
             )}
           </button>
@@ -207,13 +208,7 @@ export default function NavbarLanding() {
         </div>
       )}
       {/* Cart Popup */}
-      <CartPopup
-        isOpen={cart.isOpen}
-        onClose={closeCart}
-        items={cart.items}
-        onRemoveItem={removeFromCart}
-        totalPrice={getTotalPrice()}
-      />
+      <CartPopup isOpen={isOpen} onClose={closeCart} />
     </nav>
   );
 }

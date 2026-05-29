@@ -2,62 +2,128 @@
 
 import CheckoutModal from "@/components/customer/checkout-modal";
 import Breadcrumb from "@/components/customer/descrip-product/breadcrumb";
+import ProductReviews from "@/components/customer/descrip-product/product-reviews";
 import Footer from "@/components/global/footer";
 import Navbar from "@/components/global/navbar";
+import StarRating from "@/components/global/star-rating";
+import { useProductReviews } from "@/hooks/use-product-reviews";
 import { getProductBySlug } from "@/services/product.service";
 import { createTransaction } from "@/services/transaction.service";
+import { useCartStore } from "@/store/cart-store";
 import { Product } from "@/types/product";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import {
+  MdAddShoppingCart,
+  MdDescription,
+  MdLocalOffer,
+  MdShoppingBag,
+  MdTune,
+  MdVisibility,
+} from "react-icons/md";
 import { toast } from "sonner";
 
 interface ProductDescriptionProps {
-  product: Product | null;
+  product: Product;
 }
 
-function ProductDescription({ product }: ProductDescriptionProps) {
-  if (!product) return null;
+const integerFormatter = new Intl.NumberFormat("id-ID");
 
-  // Extract keywords from product details or use empty array
+const SectionHeader = ({
+  icon,
+  title,
+  subtitle,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  subtitle?: string;
+}) => (
+  <div className="flex items-center gap-3">
+    <div className="bg-bg-blue text-primary-blue grid size-11 shrink-0 place-items-center rounded-xl">
+      {icon}
+    </div>
+    <div className="min-w-0">
+      <h2 className="text-lg font-bold text-white sm:text-xl">{title}</h2>
+      {subtitle && (
+        <p className="text-tertier-netral text-xs sm:text-sm">{subtitle}</p>
+      )}
+    </div>
+  </div>
+);
+
+function ProductDescription({ product }: ProductDescriptionProps) {
   const keywords =
     product.details
       ?.filter((detail) => detail.key.toLowerCase() === "keywords")
       .map((detail) => detail.value)
-      .flatMap((value) => value.split(",").map((k) => k.trim())) || [];
+      .flatMap((value) => value.split(",").map((k) => k.trim()))
+      .filter(Boolean) ?? [];
 
   return (
-    <div className="mt-2 w-full rounded-2xl border border-[#1b2436] bg-[#0A0F1C] p-5 shadow-xl sm:p-7">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="bg-bg-blue flex h-10 w-10 items-center justify-center rounded-xl sm:h-11 sm:w-11">
-          <span className="text-primary-blue text-xl">✏️</span>
-        </div>
-        <h2 className="text-xl font-bold sm:text-2xl">Deskripsi Produk</h2>
-      </div>
+    <section className="border-bg-light bg-bg-nav rounded-2xl border p-5 shadow-xl sm:p-6">
+      <SectionHeader
+        icon={<MdDescription size={22} />}
+        title="Deskripsi Produk"
+        subtitle="Detail produk dari penjual"
+      />
 
-      <div className="w-full rounded-2xl border border-[#2a3345] bg-[#0F1624] p-5 text-sm leading-relaxed text-gray-300 sm:p-7 sm:text-base">
-        <p className="mb-4">
-          <strong>{product.name}</strong>
-        </p>
-
-        <p className="mb-4 whitespace-pre-wrap">
+      <div className="border-bg-light bg-bg-div mt-5 rounded-xl border p-5 text-sm leading-relaxed text-gray-300 sm:p-6 sm:text-base">
+        <p className="mb-3 font-semibold text-white">{product.name}</p>
+        <p className="whitespace-pre-wrap">
           {product.description || "Tidak ada deskripsi"}
         </p>
       </div>
 
       {keywords.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-3 rounded-2xl border border-[#2a3345] bg-[#0F1624] p-4 sm:p-6">
-          {keywords.map((item, i) => (
-            <span
-              key={i}
-              className="rounded-xl bg-[#162231] px-4 py-2 text-xs whitespace-nowrap text-gray-300 sm:text-sm"
-            >
-              {item}
-            </span>
-          ))}
+        <div className="mt-5">
+          <div className="text-tertier-netral mb-2 flex items-center gap-2 text-xs font-semibold uppercase">
+            <MdLocalOffer className="size-4" />
+            Tag Produk
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {keywords.map((item, i) => (
+              <span
+                key={`${item}-${i}`}
+                className="border-bg-light bg-bg-div rounded-full border px-3 py-1.5 text-xs text-gray-300 sm:text-sm"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
       )}
-    </div>
+    </section>
+  );
+}
+
+interface ProductSpecificationsProps {
+  details: NonNullable<Product["details"]>;
+}
+
+function ProductSpecifications({ details }: ProductSpecificationsProps) {
+  return (
+    <section className="border-bg-light bg-bg-nav rounded-2xl border p-5 shadow-lg sm:p-6">
+      <SectionHeader
+        icon={<MdTune size={22} />}
+        title="Spesifikasi Produk"
+        subtitle="Informasi teknis"
+      />
+
+      <dl className="border-bg-light divide-bg-light bg-bg-div mt-5 divide-y rounded-xl border">
+        {details.map((spec) => (
+          <div
+            key={spec.productDetailId}
+            className="grid grid-cols-1 gap-1 px-4 py-3 sm:grid-cols-[160px_1fr] sm:items-center sm:gap-4"
+          >
+            <dt className="text-tertier-netral text-xs font-semibold uppercase">
+              {spec.key}
+            </dt>
+            <dd className="text-sm text-white sm:text-base">{spec.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   );
 }
 
@@ -67,6 +133,7 @@ export default function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [slug, setSlug] = useState<string>("");
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -74,6 +141,16 @@ export default function ProductPage({
   const [activeImage, setActiveImage] = useState<string>("");
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  // Simpan adsId yang men-trigger kunjungan ini, agar dapat dikirim
+  // sebagai bagian payload checkout (untuk tracking konversi iklan).
+  const [adsId, setAdsId] = useState<string | null>(null);
+
+  // Cart store
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
+  const isInCart = useCartStore((s) =>
+    product ? s.isInCart(product.productId) : false,
+  );
 
   useEffect(() => {
     const initialize = async () => {
@@ -86,43 +163,95 @@ export default function ProductPage({
   useEffect(() => {
     if (!slug) return;
 
+    // Ambil adsId dari query (jika ada). Tracking klik dilakukan
+    // di backend ketika query ini diteruskan ke endpoint detail produk.
+    const queryAdsId = searchParams.get("adsId") ?? undefined;
+    if (queryAdsId) {
+      setAdsId(queryAdsId);
+    }
+
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const data = await getProductBySlug(slug);
+        const data = await getProductBySlug(slug, { adsId: queryAdsId });
         setProduct(data);
-
-        // Set first image as active
         if (data.images && data.images.length > 0) {
           setActiveImage(data.images[0].imageUrl);
         }
 
-        console.log("✅ Product loaded:", data);
-      } catch (err: any) {
+        // Bersihkan query `adsId` dari URL agar refresh tidak men-trigger
+        // increment klik yang sama berkali-kali.
+        if (queryAdsId) {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete("adsId");
+          const next = params.toString();
+          router.replace(next ? `?${next}` : "?", { scroll: false });
+        }
+      } catch (err) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : (err as { message?: string })?.message ||
+              "Failed to load product";
         console.error("❌ Failed to load product:", err);
-        setError(err?.message || "Failed to load product");
+        setError(message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  const breadcrumb = [
-    "Beranda",
-    product?.category?.name || "Kategori",
-    product?.name || "Produk",
-  ];
+  // Lightweight rating preview di sticky purchase card.
+  const { meta: reviewMeta } = useProductReviews({
+    productId: product?.productId ?? null,
+    page: 1,
+    limit: 1,
+  });
 
-  // Get product details for specifications
-  const specifications =
-    product?.details?.filter(
-      (detail) => detail.key.toLowerCase() !== "keywords",
-    ) || [];
+  const breadcrumb = useMemo(
+    () => [
+      "Beranda",
+      product?.category?.name || "Kategori",
+      product?.name || "Produk",
+    ],
+    [product],
+  );
 
-  const handleBuyNow = () => {
-    setIsCheckoutModalOpen(true);
+  const specifications = useMemo(
+    () =>
+      product?.details?.filter(
+        (detail) => detail.key.toLowerCase() !== "keywords",
+      ) ?? [],
+    [product],
+  );
+
+  const handleBuyNow = () => setIsCheckoutModalOpen(true);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    if (isInCart) {
+      openCart();
+      return;
+    }
+
+    const added = addItem({
+      productId: product.productId,
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+      thumbnail: product.images?.[0]?.imageUrl ?? null,
+      sellerName: product.seller?.name ?? null,
+      categoryName: product.category?.name ?? null,
+    });
+
+    if (added) {
+      toast.success("Ditambahkan ke keranjang");
+      openCart();
+    }
   };
 
   const handleCheckoutSubmit = async (data: {
@@ -133,33 +262,34 @@ export default function ProductPage({
 
     try {
       setIsProcessingCheckout(true);
-
       const transaction = await createTransaction({
         name: data.name,
         email: data.email,
         items: [product.productId],
+        adsIds: adsId ? [adsId] : undefined,
       });
-
       toast.success("Transaksi berhasil dibuat!");
-
-      // Redirect to transaction page
       router.push(`/transactions/${transaction.orderId}`);
-    } catch (err: any) {
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : (err as { message?: string })?.message || "Gagal membuat transaksi";
       console.error("❌ Failed to create transaction:", err);
-      toast.error(err?.message || "Gagal membuat transaksi");
+      toast.error(message);
       setIsProcessingCheckout(false);
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(180deg,#1A2B32_20%,#111D22_80%,#0F191E_100%)] text-white">
+      <div className="bg-bg-body min-h-screen text-white">
         <Navbar />
         <main className="mx-auto max-w-7xl px-4 pt-20">
-          <div className="flex items-center justify-center py-20">
+          <div className="flex items-center justify-center py-24">
             <div className="text-center">
-              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-500"></div>
-              <p className="text-gray-400">Memuat produk...</p>
+              <div className="border-bg-light border-t-primary-blue mx-auto mb-4 size-12 animate-spin rounded-full border-4" />
+              <p className="text-tertier-netral">Memuat produk...</p>
             </div>
           </div>
         </main>
@@ -170,13 +300,13 @@ export default function ProductPage({
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(180deg,#1A2B32_20%,#111D22_80%,#0F191E_100%)] text-white">
+      <div className="bg-bg-body min-h-screen text-white">
         <Navbar />
         <main className="mx-auto max-w-7xl px-4 pt-20">
-          <div className="flex items-center justify-center py-20">
-            <div className="mx-auto max-w-md rounded-lg border border-red-500/20 bg-red-500/10 p-6 text-center">
-              <p className="text-red-400">
-                ⚠️ {error || "Produk tidak ditemukan"}
+          <div className="flex items-center justify-center py-24">
+            <div className="mx-auto max-w-md rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
+              <p className="font-semibold text-red-300">
+                {error || "Produk tidak ditemukan"}
               </p>
             </div>
           </div>
@@ -186,208 +316,154 @@ export default function ProductPage({
     );
   }
 
+  const totalReviews = reviewMeta?.total ?? 0;
+  const averageStar = reviewMeta?.averageStar ?? 0;
+
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#1A2B32_20%,#111D22_80%,#0F191E_100%)] text-white">
+    <div className="from-bg-div via-bg-nav to-bg-body min-h-screen bg-linear-to-b text-white">
       <Navbar />
 
-      <main className="mx-auto max-w-7xl px-4 pt-2">
+      <main className="mx-auto max-w-7xl px-4 pt-2 pb-20">
         <Breadcrumb items={breadcrumb} />
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="col-span-2">
-            <div className="relative aspect-16/10 w-full overflow-hidden rounded-lg bg-[#1C2434] p-4">
-              <div className="relative h-full w-full">
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+          {/* LEFT: gallery + description + spec */}
+          <div className="space-y-6 lg:col-span-2">
+            {/* Hero image */}
+            <div className="border-bg-light bg-bg-nav relative aspect-16/10 w-full overflow-hidden rounded-2xl border p-3 sm:p-4">
+              <div className="bg-bg-div relative h-full w-full overflow-hidden rounded-xl">
                 <Image
                   src={activeImage || "/placeholder-product.png"}
                   alt={product.name}
                   fill
-                  className="rounded-lg object-cover"
+                  className="object-cover"
                   unoptimized
                 />
               </div>
             </div>
 
-            {product.images && product.images.length > 0 && (
-              <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-                {product.images.map((image, i) => (
-                  <button
-                    key={image.productImageId}
-                    onClick={() => setActiveImage(image.imageUrl)}
-                    className={`relative aspect-16/10 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 transition sm:w-32 ${
-                      activeImage === image.imageUrl
-                        ? "border-yellow-400"
-                        : "border-transparent"
-                    }`}
-                  >
-                    <Image
-                      src={image.imageUrl}
-                      alt={`${product.name} - Image ${i + 1}`}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </button>
-                ))}
+            {product.images && product.images.length > 1 && (
+              <div className="custom-scrollbar flex gap-3 overflow-x-auto pb-1">
+                {product.images.map((image, i) => {
+                  const isActive = activeImage === image.imageUrl;
+                  return (
+                    <button
+                      key={image.productImageId}
+                      type="button"
+                      onClick={() => setActiveImage(image.imageUrl)}
+                      className={`relative aspect-16/10 w-24 shrink-0 overflow-hidden rounded-xl border-2 transition sm:w-28 ${
+                        isActive
+                          ? "border-primary-blue"
+                          : "border-bg-light hover:border-primary-blue/60"
+                      }`}
+                      aria-label={`Lihat gambar ${i + 1}`}
+                    >
+                      <Image
+                        src={image.imageUrl}
+                        alt={`${product.name} - Image ${i + 1}`}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </button>
+                  );
+                })}
               </div>
             )}
 
-            <div className="mt-6 w-full">
-              <ProductDescription product={product} />
-            </div>
+            <ProductDescription product={product} />
+
+            {/* Spesifikasi muncul di kolom kiri pada mobile (lg:hidden),
+                desktop pakai sidebar */}
+            {specifications.length > 0 && (
+              <div className="lg:hidden">
+                <ProductSpecifications details={specifications} />
+              </div>
+            )}
           </div>
 
-          <div className="flex h-fit flex-col gap-8 lg:sticky lg:top-24">
-            <div className="h-fit rounded-xl bg-[#111827] p-6 shadow-lg">
-              <span className="font-medium text-green-400">
-                {product.category?.name || "Kategori"}
-              </span>
+          {/* RIGHT: sticky purchase card + spec (desktop) */}
+          <aside className="flex h-fit flex-col gap-6 lg:sticky lg:top-24">
+            <section className="border-bg-light bg-bg-nav rounded-2xl border p-6 shadow-xl">
+              {product.category?.name && (
+                <span className="bg-bg-green text-primary-green inline-flex rounded-full px-3 py-1 text-xs font-semibold">
+                  {product.category.name}
+                </span>
+              )}
 
-              <h3 className="mt-1 text-xl font-bold">{product.name}</h3>
+              <h1 className="mt-3 text-2xl leading-tight font-bold text-white">
+                {product.name}
+              </h1>
 
-              <p className="mt-3 text-2xl font-bold text-yellow-400">
-                IDR {product.price.toLocaleString("id-ID")}
-              </p>
+              {/* Rating + meta strip */}
+              <div className="text-tertier-netral mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5">
+                  <StarRating value={averageStar} size={16} />
+                  <span className="font-semibold text-white">
+                    {totalReviews > 0
+                      ? averageStar.toFixed(1)
+                      : "Belum dinilai"}
+                  </span>
+                  {totalReviews > 0 && (
+                    <span>
+                      · {integerFormatter.format(totalReviews)} ulasan
+                    </span>
+                  )}
+                </div>
+                <span className="bg-bg-light h-3 w-px" />
+                <span className="inline-flex items-center gap-1">
+                  <MdShoppingBag className="size-4" />
+                  {integerFormatter.format(product.totalSold ?? 0)} terjual
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <MdVisibility className="size-4" />
+                  {integerFormatter.format(product.viewCount ?? 0)} dilihat
+                </span>
+              </div>
 
-              <div className="mt-4 flex flex-col gap-3">
+              {/* Price */}
+              <div className="border-bg-light bg-bg-div mt-5 rounded-xl border p-4">
+                <p className="text-tertier-netral text-xs">Harga</p>
+                <p className="mt-1 text-3xl font-bold text-white">
+                  <span className="text-primary-yellow mr-2 text-xl">IDR</span>
+                  {integerFormatter.format(product.price)}
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-5 flex flex-col gap-3">
                 <button
+                  type="button"
                   onClick={handleBuyNow}
-                  className="rounded-xl bg-sky-500 py-2 font-semibold text-white hover:bg-sky-600"
+                  className="bg-primary-blue border-primary-blue hover:bg-secondary-blue inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 px-4 py-2.5 font-semibold text-white shadow-[5px_5px_0_#1086d5] transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95"
                 >
+                  <MdShoppingBag className="size-5" />
                   Beli Produk
                 </button>
-                <button className="rounded-xl bg-pink-500 py-2 font-semibold text-white hover:bg-pink-600">
-                  Tambah ke Keranjang
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className="bg-bg-div border-primary-blue text-primary-blue hover:bg-bg-blue hover:border-bg-blue inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 px-4 py-2.5 font-semibold shadow-[5px_5px_0_#17547d] transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:text-white hover:shadow-none active:scale-95"
+                >
+                  <MdAddShoppingCart className="size-5" />
+                  {isInCart ? "Sudah di Keranjang" : "Tambah ke Keranjang"}
                 </button>
               </div>
-            </div>
+            </section>
 
             {specifications.length > 0 && (
-              <div className="rounded-xl border border-[#1b2436] bg-[#0F1624] p-6 shadow-lg">
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0A84FF]/20 text-xl text-[#0A84FF]">
-                    ✏️
-                  </div>
-                  <h3 className="text-xl font-bold">Spesifikasi Produk</h3>
-                </div>
-
-                <div className="space-y-4">
-                  {specifications.map((spec) => (
-                    <div
-                      key={spec.productDetailId}
-                      className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4"
-                    >
-                      <div className="w-full rounded-2xl bg-[#1E3A8A] px-5 py-3 text-center text-sm font-medium text-white sm:w-48">
-                        {spec.key}
-                      </div>
-                      <div className="w-full flex-1 rounded-2xl border border-[#1e293b] bg-[#0A0F1C] px-5 py-3 text-sm text-gray-300">
-                        {spec.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="hidden lg:block">
+                <ProductSpecifications details={specifications} />
               </div>
             )}
-          </div>
+          </aside>
         </div>
 
-        <div className="mt-14 mb-20">
-          <h3 className="mb-4 text-lg font-bold sm:text-xl">Ulasan Pembeli</h3>
-
-          <div className="mb-8 rounded-xl border border-[#6D5D14] bg-[#5F5B35] p-5 shadow-lg sm:p-6">
-            <p className="bg-gradient-to-r from-yellow-400 to-[#5F5B35] bg-clip-text text-4xl font-extrabold text-transparent sm:text-5xl">
-              4.0 ⭐
-            </p>
-            <p className="text-xs text-gray-400 sm:text-sm">
-              999+ rating • 258 ulasan
-            </p>
-
-            <div className="mt-4 space-y-2">
-              {[
-                { star: 5, width: "80%" },
-                { star: 4, width: "60%" },
-                { star: 3, width: "40%" },
-                { star: 2, width: "15%" },
-                { star: 1, width: "20%" },
-              ].map((item) => (
-                <div key={item.star} className="flex items-center gap-3">
-                  <div className="flex w-10 items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#FACC15"
-                      viewBox="0 0 24 24"
-                      className="h-4 w-4"
-                    >
-                      <path
-                        d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 
-                               8.279L12 18.896l-7.416 4.517 1.48-8.279L0 
-                               9.306l8.332-1.151z"
-                      />
-                    </svg>
-                    <span className="text-xs sm:text-sm">{item.star}</span>
-                  </div>
-
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-700">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-b from-yellow-400 via-[#5F5B35] to-[#403d24]"
-                      style={{ width: item.width }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {[
-            {
-              name: "Ibnu Hanif Salsabila",
-              date: "15 November 2025",
-              stars: 5,
-              review: "Secara keseluruhan mantep!",
-              detail:
-                "Packing bubble nya rapi, pengiriman cepat, kualitas sesuai deskripsi. Sangat recommended.",
-            },
-            {
-              name: "Rahel Simanjuntak",
-              date: "13 November 2025",
-              stars: 4,
-              review: "Bagus tapi agak lama.",
-              detail:
-                "Desain oke dan file lengkap. Hanya saja pengiriman download lumayan lama.",
-            },
-            {
-              name: "Tyas Wening Ayu Sawitri",
-              date: "10 November 2025",
-              stars: 3,
-              review: "Cukup lah.",
-              detail:
-                "Desain bagus tapi ukuran file terlalu besar. Bisa dioptimalkan lagi.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="mb-4 rounded-xl border border-[#1b2436] bg-[#111827] p-4 shadow-lg sm:p-5"
-            >
-              <p className="text-sm font-semibold sm:text-base">
-                {item.name} • {item.date}
-              </p>
-
-              <p className="mt-1 bg-gradient-to-r from-yellow-400 to-[#5F5B35] bg-clip-text text-sm font-bold text-transparent sm:text-base">
-                {"⭐".repeat(item.stars)}
-              </p>
-
-              <p className="mt-2 text-xs text-gray-300 sm:text-sm">
-                {item.review}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-gray-400 sm:text-sm">
-                {item.detail}
-              </p>
-            </div>
-          ))}
-        </div>
+        <ProductReviews productId={product.productId} />
       </main>
 
       <Footer />
 
-      {/* Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutModalOpen}
         onClose={() => setIsCheckoutModalOpen(false)}

@@ -1,53 +1,156 @@
-'use client';
+"use client";
+
+import CheckoutModal from "@/components/customer/checkout-modal";
+import { createTransaction } from "@/services/transaction.service";
+import { useCartStore } from "@/store/cart-store";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { MdShoppingBag, MdShoppingCart } from "react-icons/md";
+import { toast } from "sonner";
 import CartItemComponent from "./cart-item";
-import { CartItem } from "@/types/cart";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  items: CartItem[];
-  onRemoveItem: (id: number) => void;
-  totalPrice: number;
 }
 
-export default function CartPopup({ isOpen, onClose, items, onRemoveItem, totalPrice }: Props) {
+export default function CartPopup({ isOpen, onClose }: Props) {
+  const router = useRouter();
+  const items = useCartStore((s) => s.items);
+  const removeItem = useCartStore((s) => s.removeItem);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const subtotal = useCartStore((s) => s.subtotal());
+
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Lock body scroll saat drawer terbuka.
+  useEffect(() => {
+    if (!isOpen) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [isOpen]);
+
+  // Tutup drawer kalau user menekan Escape.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
+
+  const handleCheckout = () => {
+    if (items.length === 0) return;
+    setShowCheckout(true);
+  };
+
+  const handleSubmitCheckout = async (data: {
+    name: string;
+    email: string;
+  }) => {
+    if (items.length === 0) return;
+    try {
+      setIsProcessing(true);
+      const transaction = await createTransaction({
+        name: data.name,
+        email: data.email,
+        items: items.map((i) => i.productId),
+      });
+      toast.success("Transaksi berhasil dibuat!");
+      clearCart();
+      setShowCheckout(false);
+      onClose();
+      router.push(`/transactions/${transaction.orderId}`);
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : (err as { message?: string })?.message || "Gagal membuat transaksi";
+      console.error("❌ Failed to create transaction:", err);
+      toast.error(message);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 animate-fadeIn"
+        className="animate-fadeIn fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
-      {/* Cart Popup */}
-      <div className="fixed top-0 right-0 h-full w-full max-w-[320px] bg-[#0D171C] z-50 shadow-2xl animate-slideInRight flex flex-col">
+      {/* Drawer */}
+      <aside
+        role="dialog"
+        aria-label="Keranjang Belanja"
+        aria-modal="true"
+        className="bg-bg-nav border-bg-light animate-slideInRight fixed top-0 right-0 z-50 flex h-full w-full max-w-[400px] flex-col border-l shadow-2xl"
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
-          <h2 className="text-white font-bold text-lg">Keranjang Kamu</h2>
+        <div className="border-bg-light flex items-center justify-between border-b px-5 py-4">
+          <div className="flex items-center gap-2">
+            <div className="bg-bg-blue text-primary-blue grid size-9 place-items-center rounded-xl">
+              <MdShoppingCart className="size-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-extrabold text-white">
+                Keranjang Kamu
+              </h2>
+              <p className="text-tertier-netral text-xs">{items.length} item</p>
+            </div>
+          </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            aria-label="Tutup keranjang"
+            className="text-tertier-netral hover:bg-bg-div grid size-9 cursor-pointer place-items-center rounded-full transition hover:text-white"
           >
-            <IoClose size={24} />
+            <IoClose className="size-5" />
           </button>
         </div>
 
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {/* Items */}
+        <div className="custom-scrollbar flex-1 space-y-3 overflow-y-auto px-5 py-4">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <p className="text-gray-400 text-sm">Keranjang kamu masih kosong</p>
-              <p className="text-gray-500 text-xs mt-1">Mulai belanja sekarang!</p>
+            <div className="flex h-full flex-col items-center justify-center gap-4 px-4 text-center">
+              <div className="bg-bg-div border-bg-light grid size-20 place-items-center rounded-2xl border">
+                <MdShoppingBag className="text-tertier-netral size-10" />
+              </div>
+              <div>
+                <p className="font-bold text-white">Keranjang masih kosong</p>
+                <p className="text-tertier-netral mt-1 text-sm">
+                  Yuk cari produk digital favoritmu di Selvo.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  router.push("/");
+                }}
+                className="bg-primary-blue hover:bg-secondary-blue cursor-pointer rounded-full px-5 py-2 text-sm font-bold text-white shadow-[5px_5px_0_#1086d5] transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95"
+              >
+                Mulai Belanja
+              </button>
             </div>
           ) : (
             items.map((item) => (
               <CartItemComponent
-                key={item.id}
+                key={item.productId}
                 item={item}
-                onRemove={onRemoveItem}
+                onRemove={removeItem}
+                onNavigate={onClose}
               />
             ))
           )}
@@ -55,31 +158,53 @@ export default function CartPopup({ isOpen, onClose, items, onRemoveItem, totalP
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-gray-800 p-4 space-y-3">
-            {/* Promo Code Button */}
-            <button className="w-full py-2.5 border border-primary-blue text-primary-blue rounded-lg font-semibold text-sm hover:bg-primary-blue/10 transition-colors">
-              Tukarkan Kode Promo →
-            </button>
-
-            {/* Total */}
-            <div className="flex justify-between items-center py-2">
-              <span className="text-white font-semibold">Perkiraan total</span>
-              <span className="text-[#FFD700] font-bold text-lg">
-                IDR {totalPrice.toLocaleString("id-ID")}
-              </span>
+          <div className="border-bg-light bg-bg-nav space-y-4 border-t px-5 py-4">
+            <div className="border-bg-light bg-bg-div rounded-xl border p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-white">
+                  Subtotal
+                </span>
+                <span className="text-primary-yellow text-lg font-extrabold">
+                  IDR {subtotal.toLocaleString("id-ID")}
+                </span>
+              </div>
+              <p className="text-tertier-netral mt-1.5 text-xs">
+                Biaya admin & layanan dihitung saat membuat pesanan.
+              </p>
             </div>
 
-            <p className="text-gray-400 text-xs text-center">
-              Belum termasuk pajak dan ongkos kirim
-            </p>
-
-            {/* Checkout Button */}
-            <button className="w-full py-3 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg font-bold hover:from-pink-600 hover:to-pink-700 transition-all">
+            <button
+              type="button"
+              onClick={handleCheckout}
+              disabled={isProcessing}
+              className="bg-primary-blue hover:bg-secondary-blue inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-4 py-3 font-bold text-white shadow-[5px_5px_0_#1086d5] transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <MdShoppingBag className="size-5" />
               Checkout ({items.length})
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm("Hapus semua item dari keranjang?")) {
+                  clearCart();
+                }
+              }}
+              className="text-tertier-netral w-full cursor-pointer text-center text-xs font-semibold transition hover:text-red-400"
+            >
+              Kosongkan Keranjang
             </button>
           </div>
         )}
-      </div>
+      </aside>
+
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => !isProcessing && setShowCheckout(false)}
+        onSubmit={handleSubmitCheckout}
+        isLoading={isProcessing}
+        items={items}
+      />
     </>
   );
 }

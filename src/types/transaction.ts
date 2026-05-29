@@ -60,6 +60,8 @@ export interface CreateTransactionPayload {
   name: string;
   email: string;
   items: string[]; // Array of productId
+  /** ID iklan yang men-trigger pembelian, untuk tracking konversi PPC. */
+  adsIds?: string[];
 }
 
 export interface CreateTransactionResponse {

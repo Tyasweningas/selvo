@@ -1,11 +1,13 @@
 "use client";
 
+import { useCartStore } from "@/store/cart-store";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { IoChevronDownSharp, IoClose, IoMenu, IoSearch } from "react-icons/io5";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
+import CartPopup from "./cart-popup";
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -13,6 +15,17 @@ export default function Navbar() {
   const [selectedCategory, setSelectedCategory] = useState("Semua Kategori");
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Cart store
+  const isCartOpen = useCartStore((s) => s.isOpen);
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const closeCart = useCartStore((s) => s.closeCart);
+  const totalItems = useCartStore((s) => s.items.length);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const categories = [
     {
@@ -65,7 +78,11 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="relative mt-4 hidden h-[50px] w-full items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4 transition-all sm:mt-0 sm:flex sm:w-[350px] lg:w-[650px] lg:px-6">
+        <form
+          action="/search"
+          method="GET"
+          className="relative mt-4 hidden h-[50px] w-full items-center rounded-full border border-[#1F2C33] bg-[#0B1418] px-4 transition-all sm:mt-0 sm:flex sm:w-[350px] lg:w-[650px] lg:px-6"
+        >
           <div className="relative">
             <button
               type="button"
@@ -102,14 +119,19 @@ export default function Navbar() {
 
           <input
             type="search"
+            name="q"
             placeholder="Cari item digital..."
             className="flex-1 bg-transparent text-sm text-gray-300 placeholder-gray-500 focus:outline-none lg:text-base"
           />
 
-          <button className="absolute right-6 text-gray-400 transition hover:text-white">
+          <button
+            type="submit"
+            aria-label="Cari"
+            className="absolute right-6 text-gray-400 transition hover:text-white"
+          >
             <IoSearch size={20} />
           </button>
-        </div>
+        </form>
 
         <div className="hidden items-center gap-6 sm:flex">
           <button className="flex items-center gap-2 text-green-400 hover:text-green-300">
@@ -125,11 +147,18 @@ export default function Navbar() {
             </p>
           </button>
 
-          <button className="bg-primary-blue relative rounded-full p-3 hover:bg-[#256ca3]">
+          <button
+            type="button"
+            onClick={toggleCart}
+            aria-label="Buka keranjang"
+            className="bg-primary-blue relative rounded-full p-3 transition hover:bg-[#256ca3]"
+          >
             <FaShoppingCart size={18} className="text-white" />
-            <span className="text-primary-blue absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-medium">
-              2
-            </span>
+            {mounted && totalItems > 0 && (
+              <span className="text-primary-blue absolute -top-1 -right-1 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-white text-[10px] font-bold">
+                {totalItems}
+              </span>
+            )}
           </button>
         </div>
       </div>
@@ -233,6 +262,9 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Cart Popup */}
+      <CartPopup isOpen={isCartOpen} onClose={closeCart} />
     </nav>
   );
 }

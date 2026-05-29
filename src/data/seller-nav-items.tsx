@@ -46,8 +46,8 @@ export const sellerNavItems: ISellerMenuNav[] = [
     name: "Promosi dan Iklan",
     icon: <MdArrowCircleUp size={24} />,
     dropdownItems: [
-      { name: "Voucher", path: "/dashboard/promotion/voucher" },
-      { name: "Flash Sale", path: "/dashboard/promotion/flash-sale" },
+      { name: "Iklan Saya", path: "/dashboard/ads" },
+      { name: "Buat Iklan", path: "/dashboard/ads/new" },
     ],
   },
 ];

@@ -1,103 +1,123 @@
+import { getCategoryIcon } from "@/lib/category-icon";
 import { Product } from "@/types/product";
 import { ProductCardType } from "@/types/product-card";
 import Image from "next/image";
 import Link from "next/link";
 import { IoStar } from "react-icons/io5";
-
-const categoryNames: Record<number, string> = {
-  1: "UI-UX",
-  2: "File Figma",
-  3: "Illustrasi",
-  4: "AI",
-  5: "Fotografi",
-  6: "Tipografi",
-};
+import { MdImageNotSupported } from "react-icons/md";
 
 interface Props {
   item: ProductCardType | Product;
 }
 
-// Type guard to check if item is Product from API
 function isProductAPI(item: ProductCardType | Product): item is Product {
   return "productId" in item;
 }
 
+const integerFormatter = new Intl.NumberFormat("id-ID");
+
+/**
+ * Kartu landing — versi besar, cocok untuk hero/landing grid (1–2 kolom)
+ * atau showcase. Untuk grid padat seperti /search dengan ≥3 kolom,
+ * pakai `ProductCardCompact`.
+ */
 export default function CardLanding({ item }: Props) {
-  // Extract data depending on type
+  const isApi = isProductAPI(item);
+
   const name = item.name;
   const price = item.price;
-  const thumbnail = isProductAPI(item)
-    ? item.images?.[0]?.imageUrl || "/placeholder-product.png"
-    : item.thumbnail;
-  const categoryId = isProductAPI(item)
-    ? parseInt(item.categoryId || "1")
-    : item.categoryId;
-  const creator = isProductAPI(item)
-    ? item.seller?.name || "Seller"
-    : (item as ProductCardType).creator;
-  const rate = isProductAPI(item) ? 4.5 : (item as ProductCardType).rate;
-  const slug = isProductAPI(item) ? item.slug : `product-${item.id}`;
+  const slug = isApi ? item.slug : `product-${item.id}`;
 
-  // Mock formats since they're not in ProductCardType yet
-  const formats = [".Png", ".Jpg", ".Raw"];
+  const thumbnail = isApi
+    ? (item.images?.[0]?.imageUrl ?? null)
+    : (item as ProductCardType).thumbnail;
+
+  const creator = isApi
+    ? (item.seller?.name ?? "Seller")
+    : (item as ProductCardType).creator;
+
+  const categoryName = isApi ? (item.category?.name ?? null) : null;
+
+  const categoryIcon = isApi
+    ? getCategoryIcon({
+        categoryId: item.categoryId,
+        categoryName,
+      })
+    : null;
+
+  const rate = isApi ? 4.5 : (item as ProductCardType).rate;
 
   return (
-    <Link href={`/products/${slug}`}>
-      <div className="group w-full cursor-pointer overflow-hidden rounded-2xl bg-[#1A252B] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
-        {/* Product Image Container */}
-        <div className="relative aspect-4/3 overflow-hidden bg-gray-800">
-          <Image
-            src={thumbnail}
-            alt={name}
-            width={400}
-            height={300}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            unoptimized={isProductAPI(item)}
-          />
+    <Link
+      href={`/products/${slug}`}
+      aria-label={name}
+      className="group block h-full"
+    >
+      <article className="border-bg-light bg-bg-div hover:border-primary-blue/60 flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
+        <div className="bg-bg-light relative aspect-4/3 w-full shrink-0 overflow-hidden">
+          {thumbnail ? (
+            <Image
+              src={thumbnail}
+              alt={name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              unoptimized={isApi}
+            />
+          ) : (
+            <div className="text-tertier-netral grid h-full w-full place-items-center">
+              <MdImageNotSupported className="size-10" />
+            </div>
+          )}
+
+          {(categoryName || categoryIcon) && (
+            <span className="bg-bg-nav/90 absolute top-3 left-3 inline-flex max-w-[calc(100%-1.5rem)] items-center gap-1.5 rounded-full border border-white/10 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur-md">
+              {categoryIcon && (
+                <Image
+                  src={categoryIcon}
+                  alt=""
+                  width={14}
+                  height={14}
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0"
+                />
+              )}
+              <span className="truncate">{categoryName ?? "Kategori"}</span>
+            </span>
+          )}
         </div>
 
-        {/* Product Details */}
-        <div className="space-y-3 p-4">
-          {/* Category and Format Badges - Above product name */}
-          <div className="flex flex-wrap gap-2">
-            <span className="rounded-md border border-gray-700 bg-[#0F1922] px-3 py-1.5 text-xs font-medium text-gray-300">
-              {categoryNames[categoryId] || "Kategori"}
-            </span>
-            {formats.map((format, index) => (
-              <span
-                key={index}
-                className="rounded-md border border-gray-700 bg-[#0F1922] px-2 py-1.5 text-xs font-medium text-gray-300"
-              >
-                {format}
-              </span>
-            ))}
-          </div>
-
-          {/* Product Name */}
-          <h3 className="line-clamp-2 text-base leading-tight font-semibold text-white">
+        <div className="flex min-w-0 flex-1 flex-col p-4">
+          <h3
+            title={name}
+            className="line-clamp-2 min-h-[2.6em] text-[15px] leading-snug font-bold text-white"
+          >
             {name}
           </h3>
-
-          {/* Price and Rating Row */}
-          <div className="flex items-center justify-between">
-            <p className="text-lg font-bold text-[#FFD700]">
-              IDR {price.toLocaleString("id-ID")}
-            </p>
-            <div className="flex items-center gap-1.5">
-              <IoStar className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-semibold text-white">
-                {rate.toFixed(1)}
-              </span>
-              <span className="text-sm text-gray-400">
-                ({Math.floor(rate * 24)})
-              </span>
-            </div>
+          <p
+            title={creator}
+            className="text-tertier-netral mt-1.5 truncate text-xs"
+          >
+            oleh {creator}
+          </p>
+          <div className="text-tertier-netral mt-2 flex items-center gap-1.5 text-xs">
+            <IoStar className="size-3.5 fill-yellow-400 text-yellow-400" />
+            <span className="font-semibold text-white">{rate.toFixed(1)}</span>
+            <span>·</span>
+            <span>Penilaian</span>
           </div>
-
-          {/* Creator */}
-          <p className="text-sm text-gray-400">{creator}</p>
+          <div className="flex-1" />
+          <div className="border-bg-light mt-3 border-t pt-3">
+            <p className="text-tertier-netral text-[10px] tracking-wide uppercase">
+              Harga
+            </p>
+            <p className="text-primary-yellow truncate text-lg leading-tight font-extrabold">
+              <span className="mr-1 text-sm">IDR</span>
+              {integerFormatter.format(price)}
+            </p>
+          </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }

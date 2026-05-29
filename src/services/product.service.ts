@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api-client";
-import { BaseResponse } from "@/types/api";
+import { BaseResponse, PaginatedResponse, PaginationMeta } from "@/types/api";
 import { CreateProductPayload, Product } from "@/types/product";
 
 /**
@@ -10,6 +10,45 @@ import { CreateProductPayload, Product } from "@/types/product";
 interface CreateProductResponse extends BaseResponse {
   data: Product;
 }
+
+/** Filter & pagination options for `getProducts`. */
+export interface GetProductsParams {
+  page?: number;
+  limit?: number;
+  /** Cari berdasarkan judul produk (single keyword). */
+  search?: string;
+  /** Filter kategori. Boleh single id atau array untuk multi-kategori. */
+  categoryId?: string | string[];
+  sellerId?: string;
+  status?: string;
+}
+
+export interface GetProductsResult {
+  data: Product[];
+  meta: PaginationMeta & { totalPages: number };
+}
+
+/**
+ * Serialize array params jadi comma-separated supaya konsisten dengan
+ * parser backend (`?categoryId=a,b,c`).
+ */
+const serializeParams = (params: Record<string, unknown>): string => {
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null || value === "") continue;
+    if (Array.isArray(value)) {
+      const filtered = value
+        .map((v) => (v == null ? "" : String(v).trim()))
+        .filter(Boolean);
+      if (filtered.length > 0) {
+        sp.append(key, filtered.join(","));
+      }
+    } else {
+      sp.append(key, String(value));
+    }
+  }
+  return sp.toString();
+};
 
 /**
  * Create a new product
@@ -23,13 +62,11 @@ export const createProduct = async (
     // Prepare FormData for file upload
     const formData = new FormData();
 
-    // Add basic fields
     formData.append("name", payload.name);
     formData.append("description", payload.description);
     formData.append("price", payload.price.toString());
     formData.append("categoryId", payload.categoryId);
 
-    // Add product details as JSON
     if (payload.details && payload.details.length > 0) {
       const details = payload.details.map(({ key, value }) => ({
         key,
@@ -38,17 +75,10 @@ export const createProduct = async (
       formData.append("details", JSON.stringify(details));
     }
 
-    // Add keywords as JSON (if backend supports it)
-    // if (payload.keywords && payload.keywords.length > 0) {
-    //   formData.append("keywords", JSON.stringify(payload.keywords));
-    // }
-
-    // Add product link (can be stored as a detail)
     if (payload.productLink) {
       formData.append("productLink", payload.productLink);
     }
 
-    // Add images
     if (payload.images && payload.images.length > 0) {
       payload.images.forEach((image) => {
         if (image instanceof File) {
@@ -56,24 +86,6 @@ export const createProduct = async (
         }
       });
     }
-    console.log("INI FORMDATA NAME", formData.get("name"));
-
-    // Log FormData contents before sending
-    console.log("📦 Creating Product with FormData:");
-    console.log({
-      // name: formData.get("name"),
-      description: formData.get("description"),
-      price: formData.get("price"),
-      categoryId: formData.get("categoryId"),
-      details: formData.get("details"),
-      productLink: formData.get("productLink"),
-      imageCount: payload.images?.length || 0,
-      images: payload.images?.map((img) => ({
-        name: img.name,
-        size: `${(img.size / 1024).toFixed(2)} KB`,
-        type: img.type,
-      })),
-    });
 
     const response = await apiClient.post<CreateProductResponse>(
       "/products",
@@ -86,66 +98,53 @@ export const createProduct = async (
     );
 
     return response.data.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Create Product Error:", error);
     throw error;
   }
 };
 
 /**
- * Alternative: Create product with JSON (if backend doesn't accept FormData)
- * Images would need to be uploaded separately or converted to base64
+ * Get products with filter & pagination.
+ *
+ * Mengembalikan `{ data, meta }` lengkap dari backend.
  */
-export const createProductJSON = async (
-  payload: CreateProductPayload,
-): Promise<Product> => {
-  try {
-    // First upload images if any
-    const imageUrls: string[] = [];
-    if (payload.images && payload.images.length > 0) {
-      // You'll need to implement uploadImages service
-      // imageUrls = await uploadImages(payload.images);
-    }
+export const getProductsPaginated = async (
+  params: GetProductsParams = {},
+): Promise<GetProductsResult> => {
+  const queryString = serializeParams({
+    page: params.page,
+    limit: params.limit,
+    search: params.search,
+    categoryId: params.categoryId,
+    sellerId: params.sellerId,
+    status: params.status,
+  });
 
-    // Prepare JSON payload
-    const jsonPayload = {
-      name: payload.name,
-      description: payload.description,
-      price: payload.price,
-      categoryId: payload.categoryId,
-      details: payload.details.map(({ key, value }) => ({ key, value })),
-      keywords: payload.keywords || [],
-      productLink: payload.productLink || null,
-      imageUrls: imageUrls,
-    };
+  const url = queryString ? `/products?${queryString}` : "/products";
+  const response = await apiClient.get<PaginatedResponse<Product>>(url);
 
-    const response = await apiClient.post<CreateProductResponse>(
-      "/products",
-      jsonPayload,
-    );
+  const meta = response.data.meta;
+  const totalPages = meta.limit > 0 ? Math.ceil(meta.total / meta.limit) : 1;
 
-    return response.data.data;
-  } catch (error: any) {
-    console.error("❌ Create Product Error:", error);
-    throw error;
-  }
+  return {
+    data: response.data.data ?? [],
+    meta: {
+      ...meta,
+      totalPages: Math.max(totalPages, 1),
+    },
+  };
 };
 
 /**
- * Get all products for the seller (client-side)
- * @returns List of products
+ * Convenience: get only the data array (backward-compatible dengan
+ * pemanggil lama yang cuma butuh list produk).
  */
-export const getProducts = async (): Promise<Product[]> => {
-  try {
-    const response = await apiClient.get<BaseResponse & { data: Product[] }>(
-      "/products",
-    );
-
-    return response.data.data;
-  } catch (error: any) {
-    console.error("❌ Get Products Error:", error);
-    throw error;
-  }
+export const getProducts = async (
+  params: GetProductsParams = {},
+): Promise<Product[]> => {
+  const result = await getProductsPaginated(params);
+  return result.data;
 };
 
 /**
@@ -165,17 +164,20 @@ export const getMyProducts = async (params?: {
 
 /**
  * Get product by slug
- * @param slug - Product slug
- * @returns Product detail
  */
-export const getProductBySlug = async (slug: string): Promise<Product> => {
+export const getProductBySlug = async (
+  slug: string,
+  options: { adsId?: string } = {},
+): Promise<Product> => {
   try {
     const response = await apiClient.get<
       BaseResponse & { data: { product: Product } }
-    >(`/products/slug/${slug}`);
+    >(`/products/slug/${slug}`, {
+      params: options.adsId ? { adsId: options.adsId } : undefined,
+    });
 
     return response.data.data.product;
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Get Product By Slug Error:", error);
     throw error;
   }
@@ -183,8 +185,8 @@ export const getProductBySlug = async (slug: string): Promise<Product> => {
 
 const productService = {
   createProduct,
-  createProductJSON,
   getProducts,
+  getProductsPaginated,
   getMyProducts,
   getProductBySlug,
 };
