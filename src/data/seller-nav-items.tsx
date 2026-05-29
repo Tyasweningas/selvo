@@ -33,18 +33,13 @@ export const sellerNavItems: ISellerMenuNav[] = [
     path: "/dashboard/sales",
     name: "Penjualan",
     icon: <MdOutlineStickyNote2 size={24} />,
-    dropdownItems: [
-      { name: "Semua Pesanan", path: "/dashboard/sales" },
-      { name: "Pesanan Baru", path: "/dashboard/sales/baru" },
-      { name: "Dalam Proses", path: "/dashboard/sales/proses" },
-      { name: "Selesai", path: "/dashboard/sales/selesai" },
-    ],
+    dropdownItems: [{ name: "Semua Pesanan", path: "/dashboard/sales" }],
   },
   {
     path: "/dashboard/reviews",
     name: "Ulasan Toko",
     icon: <MdOutlineStars size={24} />,
-    dropdownItems: [],
+    dropdownItems: [{ name: "Daftar Ulasan", path: "/dashboard/reviews" }],
   },
   {
     path: "/dashboard/promotion",

@@ -10,8 +10,8 @@ export interface Admin {
 export interface PlatformStats {
   totalRevenue: number;
   platformProfit: number;
-  totalTransactions?: number;
-  totalSellers?: number;
+  withdrawalPending: number;
+  productRequestPending: number;
 }
 
 export type WithdrawalStatus = "PENDING" | "APPROVED" | "REJECTED";

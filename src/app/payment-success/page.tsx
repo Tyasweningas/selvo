@@ -4,14 +4,35 @@ import Button from "@/components/global/button";
 import Footer from "@/components/global/footer";
 import Input from "@/components/global/input";
 import Navbar from "@/components/global/navbar";
+import ReviewModal from "@/components/payment/review-modal";
 import { getTransactionByOrderId } from "@/services/transaction.service";
-import { Transaction } from "@/types/transaction";
+import { Review, Transaction, TransactionItem } from "@/types/transaction";
+import clsx from "clsx";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { HiOutlineMail } from "react-icons/hi";
-import { MdOutlineDescription } from "react-icons/md";
+import {
+  MdOutlineDescription,
+  MdRateReview,
+  MdStar,
+  MdStarBorder,
+} from "react-icons/md";
+
+function ReviewStars({ star }: { star: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((value) =>
+        star >= value ? (
+          <MdStar key={value} className="text-primary-yellow size-4" />
+        ) : (
+          <MdStarBorder key={value} className="text-primary-yellow size-4" />
+        ),
+      )}
+    </div>
+  );
+}
 
 function PaymentSuccessContent() {
   const router = useRouter();
@@ -20,6 +41,9 @@ function PaymentSuccessContent() {
 
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reviewingItem, setReviewingItem] = useState<TransactionItem | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!orderId) {
@@ -33,11 +57,10 @@ function PaymentSuccessContent() {
         const data = await getTransactionByOrderId(orderId);
         setTransaction(data);
 
-        // If not paid yet, redirect back to transaction page
         if (data.status !== "SUCCESS" && !data.isPaid) {
           router.push(`/transactions/${orderId}`);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("❌ Failed to load transaction:", err);
         router.push("/");
       } finally {
@@ -47,6 +70,20 @@ function PaymentSuccessContent() {
 
     fetchTransaction();
   }, [orderId, router]);
+
+  const handleReviewSubmitted = (review: Review) => {
+    setTransaction((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        transactionItems: prev.transactionItems.map((item) =>
+          item.transactionItemId === review.transactionItemId
+            ? { ...item, review }
+            : item,
+        ),
+      };
+    });
+  };
 
   if (loading || !transaction) {
     return (
@@ -94,38 +131,83 @@ function PaymentSuccessContent() {
           </div>
 
           <p className="text-sec-netral mb-4 text-sm">
-            Berikut adalah tautan item keranjangmu
+            Berikut adalah tautan item keranjangmu. Setelah mencoba, jangan lupa
+            beri ulasan agar penjual dan pembeli lain terbantu.
           </p>
 
           <div className="flex flex-col gap-4">
-            {transaction.transactionItems.map((item) => (
-              <div
-                key={item.transactionItemId}
-                className="flex flex-col gap-4 rounded-xl border border-[#1b2436] bg-[#0F1624] p-4 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="flex-1">
-                  <h3 className="mb-1 font-semibold text-white">
-                    {item.product?.name}
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    {item.product?.description?.substring(0, 100)}...
-                  </p>
-                  <p className="mt-2 font-semibold text-yellow-400">
-                    IDR {item.price.toLocaleString("id-ID")}
-                  </p>
+            {transaction.transactionItems.map((item) => {
+              const review = item.review ?? null;
+              const hasReview = Boolean(review);
+
+              return (
+                <div
+                  key={item.transactionItemId}
+                  className="flex flex-col gap-4 rounded-xl border border-[#1b2436] bg-[#0F1624] p-4"
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex-1">
+                      <h3 className="mb-1 font-semibold text-white">
+                        {item.product?.name}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {item.product?.description?.substring(0, 100)}...
+                      </p>
+                      <p className="mt-2 font-semibold text-yellow-400">
+                        IDR {item.price.toLocaleString("id-ID")}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 sm:items-end">
+                      {item.product?.productLink && (
+                        <a
+                          href={item.product.productLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-xl bg-sky-500 px-6 py-2 text-center font-semibold text-white transition hover:bg-sky-600"
+                        >
+                          Download
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => !hasReview && setReviewingItem(item)}
+                        disabled={hasReview}
+                        className={clsx(
+                          "inline-flex items-center justify-center gap-2 rounded-xl border-2 px-6 py-2 text-sm font-semibold transition",
+                          hasReview
+                            ? "border-primary-green/40 bg-primary-green/15 text-primary-green cursor-default"
+                            : "border-primary-yellow text-primary-yellow hover:bg-primary-yellow cursor-pointer hover:text-black",
+                        )}
+                      >
+                        <MdRateReview className="size-4" />
+                        {hasReview ? "Sudah Direview" : "Beri Ulasan"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {hasReview && review && (
+                    <div className="border-bg-light bg-bg-nav rounded-xl border-2 p-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                          <ReviewStars star={review.star} />
+                          <span className="text-sm font-semibold text-white">
+                            {review.star}/5
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-400">
+                          oleh {review.name}
+                        </span>
+                      </div>
+                      {review.message && (
+                        <p className="text-sec-netral mt-3 text-sm whitespace-pre-wrap">
+                          {review.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
-                {item.product?.productLink && (
-                  <a
-                    href={item.product.productLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-xl bg-sky-500 px-6 py-2 text-center font-semibold text-white transition hover:bg-sky-600"
-                  >
-                    Download
-                  </a>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -148,7 +230,7 @@ function PaymentSuccessContent() {
           <Input
             value={transaction.email}
             readOnly
-            className="text-sec-netral w-full !py-3"
+            className="text-sec-netral w-full py-3!"
           />
         </div>
 
@@ -200,6 +282,14 @@ function PaymentSuccessContent() {
           </Button>
         </Link>
       </div>
+
+      <ReviewModal
+        open={!!reviewingItem}
+        item={reviewingItem}
+        onClose={() => setReviewingItem(null)}
+        onSubmitted={handleReviewSubmitted}
+      />
+
       <Footer />
     </div>
   );

@@ -1,7 +1,5 @@
 import SellerAppBar from "@/components/global/seller-app-bar";
 import DashboardMenu from "@/components/seller/dashboard/menu";
-import DashboardTab from "@/components/seller/dashboard/tab";
-import { dashboardTabItems } from "@/data/seller-tab-items";
 
 const SellerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -9,10 +7,7 @@ const SellerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <SellerAppBar />
       <div className="container mx-auto flex gap-5 py-10">
         <DashboardMenu />
-        <div className="min-w-0 grow">
-          <DashboardTab sellerTabs={dashboardTabItems} />
-          {children}
-        </div>
+        <div className="min-w-0 grow">{children}</div>
       </div>
     </main>
   );

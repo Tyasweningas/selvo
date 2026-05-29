@@ -149,6 +149,21 @@ export const getProducts = async (): Promise<Product[]> => {
 };
 
 /**
+ * Get authenticated seller's own products (client-side)
+ * Includes all statuses (APPROVED / SUBMISSION / REJECTED).
+ */
+export const getMyProducts = async (params?: {
+  page?: number;
+  limit?: number;
+}): Promise<Product[]> => {
+  const response = await apiClient.get<BaseResponse & { data: Product[] }>(
+    "/products/me/products",
+    { params: { limit: 100, ...params } },
+  );
+  return response.data.data ?? [];
+};
+
+/**
  * Get product by slug
  * @param slug - Product slug
  * @returns Product detail
@@ -170,6 +185,7 @@ const productService = {
   createProduct,
   createProductJSON,
   getProducts,
+  getMyProducts,
   getProductBySlug,
 };
 

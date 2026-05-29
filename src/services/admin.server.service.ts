@@ -10,15 +10,16 @@ import type { Product } from "@/types/product";
  */
 
 export const getPlatformStats = async (): Promise<PlatformStats> => {
-  const response =
-    await serverApiClient.get<BaseResponse<PlatformStats>>("/api/admin/stats");
+  const response = await serverApiClient.get<BaseResponse<PlatformStats>>(
+    "/api/admin/dashboard",
+  );
   return response.data;
 };
 
 export const getAllProducts = async (): Promise<Product[]> => {
   const response = await serverApiClient.get<
     PaginatedResponse<Product> & { data: Product[] }
-  >("/api/admin/products");
+  >("/api/products/admin/all");
   return response.data || [];
 };
 

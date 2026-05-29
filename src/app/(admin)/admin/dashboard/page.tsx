@@ -1,18 +1,25 @@
 import PlatformStatCard from "@/components/admin/dashboard/platform-stat-card";
 import adminServerService from "@/services/admin.server.service";
 import type { PlatformStats } from "@/types/admin";
-import { MdAccountBalance, MdTrendingUp } from "react-icons/md";
+import Link from "next/link";
+import {
+  MdAccountBalance,
+  MdAccountBalanceWallet,
+  MdInventory2,
+  MdTrendingUp,
+} from "react-icons/md";
 
 export const dynamic = "force-dynamic";
 
 const currencyFormatter = new Intl.NumberFormat("id-ID");
+const integerFormatter = new Intl.NumberFormat("id-ID");
 
 const AdminDashboardPage = async () => {
   let stats: PlatformStats = {
     totalRevenue: 0,
     platformProfit: 0,
-    totalTransactions: 0,
-    totalSellers: 0,
+    withdrawalPending: 0,
+    productRequestPending: 0,
   };
   let fetchError: string | null = null;
 
@@ -29,7 +36,7 @@ const AdminDashboardPage = async () => {
       <div className="border-bg-div bg-bg-nav rounded-xl border-2 p-6">
         <p className="text-3xl font-bold text-white">Dashboard Admin</p>
         <p className="mt-1 text-sm text-[#D9D9D9]">
-          Ringkasan performa platform Selvo secara keseluruhan.
+          Ringkasan performa platform Selvo dari endpoint /api/admin/dashboard.
         </p>
       </div>
 
@@ -57,18 +64,41 @@ const AdminDashboardPage = async () => {
       </div>
 
       <div className="grid grid-cols-2 gap-6">
-        <div className="border-bg-div bg-bg-nav rounded-xl border-2 p-6">
-          <p className="text-sm text-[#D9D9D9]">Total Transaksi</p>
-          <p className="mt-2 text-3xl font-semibold text-white">
-            {(stats.totalTransactions ?? 0).toLocaleString("id-ID")}
+        <Link
+          href="/admin/withdrawals"
+          className="border-bg-div bg-bg-nav hover:border-primary-blue group rounded-xl border-2 p-6 transition"
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-bg-blue rounded-xl p-2">
+              <MdAccountBalanceWallet className="text-primary-blue size-6" />
+            </div>
+            <p className="text-sm text-[#D9D9D9]">Withdrawal Pending</p>
+          </div>
+          <p className="mt-4 text-4xl font-semibold text-white">
+            {integerFormatter.format(stats.withdrawalPending ?? 0)}
           </p>
-        </div>
-        <div className="border-bg-div bg-bg-nav rounded-xl border-2 p-6">
-          <p className="text-sm text-[#D9D9D9]">Total Seller</p>
-          <p className="mt-2 text-3xl font-semibold text-white">
-            {(stats.totalSellers ?? 0).toLocaleString("id-ID")}
+          <p className="text-primary-blue mt-3 text-sm font-semibold opacity-80 group-hover:opacity-100">
+            Lihat daftar withdrawal &rarr;
           </p>
-        </div>
+        </Link>
+
+        <Link
+          href="/admin/products"
+          className="border-bg-div bg-bg-nav hover:border-primary-blue group rounded-xl border-2 p-6 transition"
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-bg-yellow/40 rounded-xl p-2">
+              <MdInventory2 className="text-primary-yellow size-6" />
+            </div>
+            <p className="text-sm text-[#D9D9D9]">Product Request Pending</p>
+          </div>
+          <p className="mt-4 text-4xl font-semibold text-white">
+            {integerFormatter.format(stats.productRequestPending ?? 0)}
+          </p>
+          <p className="text-primary-blue mt-3 text-sm font-semibold opacity-80 group-hover:opacity-100">
+            Review produk submission &rarr;
+          </p>
+        </Link>
       </div>
     </div>
   );

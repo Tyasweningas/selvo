@@ -5,11 +5,23 @@ export enum TransactionStatus {
   EXPIRED = "EXPIRED",
 }
 
+export interface Review {
+  reviewId: string;
+  transactionItemId: string;
+  productId: string;
+  name: string;
+  star: number;
+  message: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface TransactionItem {
   transactionItemId: string;
   productId: string;
   price: number;
   createdAt: string;
+  review?: Review | null;
   product?: {
     productId: string;
     sellerId: string;
