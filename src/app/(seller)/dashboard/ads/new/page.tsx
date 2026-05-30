@@ -4,6 +4,9 @@ import { useMyProducts } from "@/hooks/use-my-products";
 import { useSellerDashboard } from "@/hooks/use-seller-dashboard";
 import { formatErrorForDisplay, logError } from "@/lib/error-handler";
 import adsService from "@/services/ads.service";
+import purchasePredictService, {
+  PredictPurchaseResponse,
+} from "@/services/purchase-predict.service";
 import { ProductStatus } from "@/types/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +22,8 @@ import {
   MdAutoAwesome,
   MdImage,
   MdInfoOutline,
+  MdShoppingBag,
+  MdTrendingUp,
   MdUpload,
 } from "react-icons/md";
 import { toast } from "sonner";
@@ -43,6 +48,10 @@ export default function CreateAdsPage() {
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [predicting, setPredicting] = useState(false);
+  const [prediction, setPrediction] = useState<PredictPurchaseResponse | null>(
+    null,
+  );
+  const [predictionError, setPredictionError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Hanya produk APPROVED yang boleh diiklankan (sesuai aturan backend).
@@ -64,6 +73,17 @@ export default function CreateAdsPage() {
 
   const balance = summary?.balance ?? 0;
   const insufficientBalance = cost > 0 && cost > balance;
+
+  // Reset prediksi kalau target klik berubah supaya admin tidak misleading.
+  useEffect(() => {
+    if (
+      prediction &&
+      Number.parseInt(targetClick, 10) !== prediction.target_clicks
+    ) {
+      setPrediction(null);
+      setPredictionError(null);
+    }
+  }, [targetClick, prediction]);
 
   const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
@@ -88,17 +108,27 @@ export default function CreateAdsPage() {
     setBannerPreview(URL.createObjectURL(file));
   };
 
-  const handlePredict = () => {
-    // Tombol prediksi sengaja placeholder. Endpoint Python
-    // akan dihubungkan saat workspace prediksi siap.
+  const handlePredict = async () => {
+    if (!targetClickValid) {
+      toast.error("Target klik harus angka lebih dari 0");
+      return;
+    }
+
     setPredicting(true);
-    setTimeout(() => {
+    setPredictionError(null);
+    try {
+      const result =
+        await purchasePredictService.predictPurchases(targetClickNumber);
+      setPrediction(result);
+    } catch (err) {
+      logError(err, "CreateAdsPage:predict");
+      const message = formatErrorForDisplay(err);
+      setPredictionError(message);
+      setPrediction(null);
+      toast.error(message);
+    } finally {
       setPredicting(false);
-      toast.message("Fitur prediksi belum aktif", {
-        description:
-          "Backend prediksi sedang disiapkan, sementara hasil belum tersedia.",
-      });
-    }, 600);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -131,7 +161,6 @@ export default function CreateAdsPage() {
         banner,
       });
       toast.success("Iklan berhasil dibuat. Saldo telah dipotong.");
-      // Update saldo terbaru di dashboard, lalu kembali ke list.
       void refetchSummary();
       router.push("/dashboard/ads");
     } catch (err) {
@@ -205,8 +234,8 @@ export default function CreateAdsPage() {
               <button
                 type="button"
                 onClick={handlePredict}
-                disabled={predicting}
-                className="border-primary-blue text-primary-blue hover:bg-bg-blue inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition disabled:opacity-50"
+                disabled={predicting || !targetClickValid}
+                className="border-primary-blue text-primary-blue hover:bg-bg-blue inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <MdAutoAwesome size={18} />
                 {predicting ? "Memprediksi…" : "Prediksi Target Pembelian"}
@@ -217,6 +246,53 @@ export default function CreateAdsPage() {
               Tarif: Rp {currencyFormatter.format(COST_PER_CLICK)} per klik
               (setara Rp 5.000 / 100 klik).
             </p>
+
+            {predictionError && (
+              <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+                {predictionError}
+              </div>
+            )}
+
+            {prediction && (
+              <div className="border-primary-blue/40 from-primary-blue/15 to-bg-nav/60 mt-4 grid grid-cols-1 gap-3 rounded-xl border-2 bg-linear-to-b p-4 sm:grid-cols-3">
+                <div className="bg-bg-div rounded-xl p-3">
+                  <div className="flex items-center gap-2">
+                    <MdAutoAwesome className="text-primary-blue size-4" />
+                    <p className="text-tertier-netral text-xs">Target klik</p>
+                  </div>
+                  <p className="mt-1 text-xl font-bold text-white">
+                    {integerFormatter.format(prediction.target_clicks)}
+                  </p>
+                </div>
+                <div className="bg-bg-div rounded-xl p-3">
+                  <div className="flex items-center gap-2">
+                    <MdShoppingBag className="text-primary-yellow size-4" />
+                    <p className="text-tertier-netral text-xs">
+                      Estimasi pembelian
+                    </p>
+                  </div>
+                  <p className="mt-1 text-xl font-bold text-white">
+                    {integerFormatter.format(prediction.estimated_purchases)}
+                  </p>
+                </div>
+                <div className="bg-bg-div rounded-xl p-3">
+                  <div className="flex items-center gap-2">
+                    <MdTrendingUp className="text-primary-green size-4" />
+                    <p className="text-tertier-netral text-xs">
+                      Conversion rate
+                    </p>
+                  </div>
+                  <p className="mt-1 text-xl font-bold text-white">
+                    {prediction.conversion_rate}
+                  </p>
+                </div>
+                <p className="text-tertier-netral text-xs sm:col-span-3">
+                  Estimasi dihitung lewat model regresi linear berdasarkan
+                  histori klik vs pembelian. Anggap angka ini sebagai panduan,
+                  bukan jaminan hasil.
+                </p>
+              </div>
+            )}
           </section>
 
           <section className="border-bg-light bg-bg-nav rounded-2xl border p-5">
@@ -277,6 +353,14 @@ export default function CreateAdsPage() {
                 <dd className="font-semibold text-white">
                   {targetClickValid
                     ? integerFormatter.format(targetClickNumber)
+                    : "—"}
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt>Estimasi pembelian</dt>
+                <dd className="font-semibold text-white">
+                  {prediction
+                    ? integerFormatter.format(prediction.estimated_purchases)
                     : "—"}
                 </dd>
               </div>
