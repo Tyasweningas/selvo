@@ -87,32 +87,32 @@ export default function CardLanding({ item }: Props) {
           )}
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col p-4">
+        <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
           <h3
             title={name}
-            className="line-clamp-2 min-h-[2.6em] text-[15px] leading-snug font-bold text-white"
+            className="line-clamp-2 min-h-[2.6em] text-sm sm:text-[15px] leading-snug font-bold text-white"
           >
             {name}
           </h3>
           <p
             title={creator}
-            className="text-tertier-netral mt-1.5 truncate text-xs"
+            className="text-tertier-netral mt-1.5 truncate text-[10px] sm:text-xs"
           >
             oleh {creator}
           </p>
-          <div className="text-tertier-netral mt-2 flex items-center gap-1.5 text-xs">
-            <IoStar className="size-3.5 fill-yellow-400 text-yellow-400" />
+          <div className="text-tertier-netral mt-1.5 flex items-center gap-1 text-[10px] sm:text-xs">
+            <IoStar className="size-3 fill-yellow-400 text-yellow-400 sm:size-3.5" />
             <span className="font-semibold text-white">{rate.toFixed(1)}</span>
             <span>·</span>
             <span>Penilaian</span>
           </div>
           <div className="flex-1" />
-          <div className="border-bg-light mt-3 border-t pt-3">
-            <p className="text-tertier-netral text-[10px] tracking-wide uppercase">
+          <div className="border-bg-light mt-2.5 border-t pt-2.5 sm:mt-3 sm:pt-3">
+            <p className="text-tertier-netral text-[9px] sm:text-[10px] tracking-wide uppercase">
               Harga
             </p>
-            <p className="text-primary-yellow truncate text-lg leading-tight font-extrabold">
-              <span className="mr-1 text-sm">IDR</span>
+            <p className="text-primary-yellow truncate text-sm sm:text-lg leading-tight font-extrabold">
+              <span className="mr-0.5 text-xs sm:mr-1">IDR</span>
               {integerFormatter.format(price)}
             </p>
           </div>

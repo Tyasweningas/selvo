@@ -70,12 +70,30 @@ export default function Navbar() {
             SELVO
           </Link>
 
-          <button
-            className="text-3xl text-gray-300 transition hover:text-white sm:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <IoClose /> : <IoMenu />}
-          </button>
+          {/* Mobile Actions (Cart + Hamburger) */}
+          <div className="flex items-center gap-3 sm:hidden">
+            <button
+              onClick={toggleCart}
+              className="bg-primary-blue relative rounded-full p-2.5 transition hover:bg-[#256ca3]"
+              aria-label="Keranjang belanja"
+            >
+              <FaShoppingCart size={18} className="text-white" />
+              {mounted && totalItems > 0 && (
+                <span className="text-primary-blue absolute -top-1 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-full bg-white text-[9px] font-bold">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
+            {/* Hamburger */}
+            <button
+              className="text-3xl text-gray-300 transition hover:text-white"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Tutup menu" : "Buka menu"}
+            >
+              {mobileMenuOpen ? <IoClose /> : <IoMenu />}
+            </button>
+          </div>
         </div>
 
         <form
@@ -134,18 +152,32 @@ export default function Navbar() {
         </form>
 
         <div className="hidden items-center gap-6 sm:flex">
-          <button className="flex items-center gap-2 text-green-400 hover:text-green-300">
+          <Link
+            href="/about"
+            className="hover:text-primary-blue text-sm font-semibold text-gray-300 transition"
+          >
+            Tentang
+          </Link>
+
+          <Link
+            href="/panduan-penjual"
+            className="flex items-center gap-2 text-green-400 hover:text-green-300"
+          >
             <PiBookOpenTextDuotone size={20} />
             <span className="hidden text-sm font-medium lg:block">
               Panduan Penjual
             </span>
-          </button>
+          </Link>
 
-          <button className="bg-primary-blue h-10 w-35 rounded-full px-2 transition hover:bg-[#3ea066]">
-            <p className="hidden text-xs font-medium text-white lg:block">
+          <Link
+            href="/auth"
+            className="bg-primary-blue hover:bg-primary-blue/80 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition"
+          >
+            <FaRegCircleUser size={22} className="text-white" />
+            <p className="hidden font-semibold text-white lg:block">
               Yuk Mulai Menjual
             </p>
-          </button>
+          </Link>
 
           <button
             type="button"
@@ -163,47 +195,55 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="hidden gap-6 border-t border-[#0F191E] bg-[#0F191E]/95 px-6 py-3 text-base font-semibold text-gray-300 lg:flex lg:px-12">
-        {categories.map((cat) => (
-          <div
-            key={cat.name}
-            className="relative"
-            onClick={(e) => e.stopPropagation()} // cegah nutup saat klik di dalam
-          >
-            {/* Tombol kategori */}
-            <button
-              onClick={() =>
-                setOpenDropdown(openDropdown === cat.name ? null : cat.name)
-              }
-              className="hover:text-primary-blue flex items-center gap-2 transition"
+      {/* 
+      <div className="hidden items-center justify-between border-t border-[#0F191E] bg-[#0F191E]/95 px-6 py-3 text-base font-semibold text-gray-300 lg:flex lg:px-12">
+        <div className="flex gap-6">
+          {categories.map((cat) => (
+            <div
+              key={cat.name}
+              className="relative"
+              onClick={(e) => e.stopPropagation()}
             >
-              {cat.name}
-              <IoChevronDownSharp
-                className={`text-sm transition-transform ${
-                  openDropdown === cat.name
-                    ? "text-primary-blue rotate-180"
-                    : ""
-                }`}
-              />
-            </button>
+              <button
+                onClick={() =>
+                  setOpenDropdown(openDropdown === cat.name ? null : cat.name)
+                }
+                className="hover:text-primary-blue flex items-center gap-2 transition"
+              >
+                {cat.name}
+                <IoChevronDownSharp
+                  className={`text-sm transition-transform ${
+                    openDropdown === cat.name
+                      ? "text-primary-blue rotate-180"
+                      : ""
+                  }`}
+                />
+              </button>
 
-            {/* Dropdown menu */}
-            {openDropdown === cat.name && (
-              <div className="absolute top-[45px] left-0 z-50 w-[200px] rounded-md border border-[#263238] bg-[#1A252B] px-3 py-2 shadow-lg">
-                {cat.items.map((sub) => (
-                  <Link
-                    key={sub}
-                    href="#"
-                    className="hover:text-primary-blue block rounded px-3 py-2 text-gray-300 transition hover:bg-[#222F35]"
-                  >
-                    {sub}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+              {openDropdown === cat.name && (
+                <div className="absolute top-[45px] left-0 z-50 w-[200px] rounded-md border border-[#263238] bg-[#1A252B] px-3 py-2 shadow-lg">
+                  {cat.items.map((sub) => (
+                    <Link
+                      key={sub}
+                      href="#"
+                      className="hover:text-primary-blue block rounded px-3 py-2 text-gray-300 transition hover:bg-[#222F35]"
+                    >
+                      {sub}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <Link
+          href="/about"
+          className="hover:text-primary-blue text-base font-semibold text-gray-300 transition"
+        >
+          Tentang Selvo
+        </Link>
       </div>
+      */}
 
       {mobileMenuOpen && (
         <div className="animate-fadeIn space-y-3 border-t border-[#1E2A30] bg-[#0D171C]/95 px-4 py-4 sm:hidden">
@@ -251,14 +291,29 @@ export default function Navbar() {
           ))}
 
           <div className="flex flex-col gap-3 border-t border-[#1E2A30] pt-3">
-            <button className="flex items-center gap-2 text-green-400 hover:text-green-300">
+            <Link
+              href="/about"
+              className="flex items-center gap-2 text-gray-300 hover:text-white"
+            >
+              <PiBookOpenTextDuotone size={20} />
+              Tentang
+            </Link>
+
+            <Link
+              href="/panduan-penjual"
+              className="flex items-center gap-2 text-green-400 hover:text-green-300"
+            >
               <PiBookOpenTextDuotone size={20} />
               Panduan Penjual
-            </button>
+            </Link>
 
-            <button className="bg-primary-blue hover:bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white">
-              <FaRegCircleUser size={20} /> Yuk Mulai Menjual
-            </button>
+            <Link
+              href="/auth"
+              className="bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]"
+            >
+              <FaRegCircleUser size={20} />
+              Yuk Mulai Menjual
+            </Link>
           </div>
         </div>
       )}

@@ -1,7 +1,5 @@
 import LogoInstagram from "@/assets/logo/logo-instagram.png";
-import LogoPolibatam from "@/assets/logo/logo-polibatam.png";
 import LogoTiktok from "@/assets/logo/logo-tiktok.png";
-import LogoTRPL from "@/assets/logo/logo-trpl.png";
 import LogoTwitter from "@/assets/logo/logo-twitter.png";
 import Image from "next/image";
 
@@ -66,13 +64,11 @@ export default function Footer() {
           </div>
 
           <div className="mt-8 w-full border-t border-white/10 pt-6 text-center text-xs text-gray-300 sm:text-sm">
-            <p>Copyright © 2025 Selvo. Hak Cipta Dilindungi Undang-Undang.</p>
-            <p className="mt-1">
-              Dikembangkan oleh PBL-TRPL502 Politeknik Negeri Batam
-            </p>
+            <p>Copyright © 2026 Selvo. Hak Cipta Dilindungi Undang-Undang.</p>
+            <p className="mt-1">Dikembangkan oleh Selvo Founders di Batam</p>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+          {/* <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
             <Image
               src={LogoPolibatam}
               alt="Logo Polibatam"
@@ -87,7 +83,7 @@ export default function Footer() {
               height={150}
               className="h-14 w-auto sm:h-16"
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

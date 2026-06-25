@@ -5,7 +5,7 @@ import AdsPopup from "@/components/customer/landing-page/ads-popup";
 import CardLanding from "@/components/customer/landing-page/card-landing";
 import BannerCarousel from "@/components/customer/landing-page/carousel/banner-carousel";
 import Footer from "@/components/global/footer";
-import NavbarLanding from "@/components/global/navbar-landing";
+import Navbar from "@/components/global/navbar";
 import { products as mockProducts } from "@/data/mock/product-card-mock";
 import { product_categories } from "@/data/product-categories";
 import { categoryService } from "@/services/category.service";
@@ -89,10 +89,10 @@ export default function Home() {
     <div className="relative min-h-screen">
       <AdsPopup />
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
-      <NavbarLanding />
+      <Navbar />
 
       <section className="relative flex min-h-screen flex-col items-center text-white">
-        <div className="absolute top-[110px] left-1/2 -z-10 h-full w-full -translate-x-1/2">
+        <div className="absolute top-10 left-1/2 -z-10 h-full w-full -translate-x-1/2">
           <Image
             src={GlowCircle}
             alt="Glow background"
@@ -263,7 +263,7 @@ export default function Home() {
           alt="Glow Carousel"
           width={1800}
           height={5}
-          className="pointer-events-none absolute -z-20 w-full max-w-[1400px] translate-y-20 object-contain select-none sm:translate-y-32 md:translate-y-45"
+          className="pointer-events-none absolute -z-20 w-full translate-y-20 object-contain select-none sm:translate-y-32 md:translate-y-45"
         />
         <div className="relative z-10">
           <BannerCarousel />
@@ -310,14 +310,14 @@ export default function Home() {
           {!loading && products.length > 0 && (
             <div className="space-y-6">
               {/* Top Row: 2 Medium-Large Cards */}
-              <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
+              <div className="mx-auto grid max-w-[900px] grid-cols-2 gap-3 sm:gap-6 md:grid-cols-2">
                 {products.slice(0, 2).map((product) => (
                   <CardLanding key={product.productId} item={product} />
                 ))}
               </div>
 
               {/* Bottom Row: 3 Smaller Cards */}
-              <div className="mx-auto grid max-w-[890px] grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+              <div className="mx-auto grid max-w-[890px] grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
                 {products.slice(2, 5).map((product) => (
                   <CardLanding key={product.productId} item={product} />
                 ))}
