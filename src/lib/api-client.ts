@@ -109,10 +109,10 @@ apiClient.interceptors.response.use(
             console.warn("🔒 Unauthorized - Redirecting to login...");
             useAuthStore.getState().clearAuthState();
 
-            // Redirect to login (only if not already on auth page)
+            // Redirect to logout api route to clear next-auth cookies first (only if not already on auth page)
             if (!window.location.pathname.includes("/auth")) {
               window.location.href =
-                "/auth?redirect=" +
+                "/api/auth/logout?redirect=" +
                 encodeURIComponent(window.location.pathname);
             }
           }

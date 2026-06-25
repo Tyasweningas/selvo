@@ -76,8 +76,8 @@ export class ServerApiClient {
 
       // Handle 401 Unauthorized
       if (response.status === 401) {
-        // Redirect to login
-        redirect("/auth");
+        // Redirect to logout api route to clear session cookies first
+        redirect("/api/auth/logout");
       }
 
       // Handle other errors
