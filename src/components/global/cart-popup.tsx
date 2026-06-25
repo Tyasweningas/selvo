@@ -5,6 +5,7 @@ import { createTransaction } from "@/services/transaction.service";
 import { useCartStore } from "@/store/cart-store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { MdShoppingBag, MdShoppingCart } from "react-icons/md";
 import { toast } from "sonner";
@@ -24,6 +25,12 @@ export default function CartPopup({ isOpen, onClose }: Props) {
 
   const [showCheckout, setShowCheckout] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Set mounted flag to guarantee document object is available on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock body scroll saat drawer terbuka.
   useEffect(() => {
@@ -45,7 +52,7 @@ export default function CartPopup({ isOpen, onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleCheckout = () => {
     if (items.length === 0) return;
@@ -81,11 +88,11 @@ export default function CartPopup({ isOpen, onClose }: Props) {
     }
   };
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div
-        className="animate-fadeIn fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+        className="animate-fadeIn fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -95,10 +102,13 @@ export default function CartPopup({ isOpen, onClose }: Props) {
         role="dialog"
         aria-label="Keranjang Belanja"
         aria-modal="true"
-        className="bg-bg-nav border-bg-light animate-slideInRight fixed top-0 right-0 z-50 flex h-full w-full max-w-[400px] flex-col border-l shadow-2xl"
+        className="bg-bg-nav border-bg-light animate-cart-drawer fixed bottom-0 left-0 right-0 z-[51] flex h-[82vh] w-full flex-col rounded-t-[24px] border-t shadow-2xl sm:top-0 sm:right-0 sm:bottom-auto sm:left-auto sm:h-full sm:max-w-[400px] sm:rounded-none sm:border-t-0 sm:border-l"
       >
+        {/* Mobile Drag Indicator Bar */}
+        <div className="mx-auto mt-3 h-1.5 w-12 shrink-0 rounded-full bg-bg-light sm:hidden" />
+
         {/* Header */}
-        <div className="border-bg-light flex items-center justify-between border-b px-5 py-4">
+        <div className="border-bg-light flex items-center justify-between border-b px-5 pt-3 pb-4 sm:pt-4">
           <div className="flex items-center gap-2">
             <div className="bg-bg-blue text-primary-blue grid size-9 place-items-center rounded-xl">
               <MdShoppingCart className="size-5" />
@@ -205,6 +215,7 @@ export default function CartPopup({ isOpen, onClose }: Props) {
         isLoading={isProcessing}
         items={items}
       />
-    </>
+    </>,
+    document.body
   );
 }

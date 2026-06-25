@@ -72,12 +72,31 @@ body {
   }
 }
 
+@keyframes selvoSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 .animate-fadeIn {
   animation: selvoFadeIn 0.18s ease-out;
 }
 
 .animate-slideInRight {
   animation: selvoSlideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-cart-drawer {
+  animation: selvoSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .animate-cart-drawer {
+    animation: selvoSlideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 .input {
