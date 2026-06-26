@@ -52,7 +52,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
 
   return (
     <>
-      <div className="mx-auto flex w-[551px] flex-col items-center justify-center">
+      <div className="mx-auto flex w-full flex-col items-center justify-center">
         <AuthToggle curform={curform} setForm={setForm} />
         <h2 className="text-primary-blue my-[30px] text-[32px] font-[600]">
           Buat Akun Gratis
@@ -70,7 +70,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
         </div>
 
         {error && (
-          <div className="mb-4 w-[551px] rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
+          <div className="mb-4 w-full rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
             {error}
           </div>
         )}
@@ -79,37 +79,37 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
           onSubmit={handleSubmit}
           className="flex w-full flex-col items-center"
         >
-          <div className="mb-[10px] h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#3f494e] bg-[#29373D] text-[#9CA3A7]">
+          <div className="mb-[10px] h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D] text-[#9CA3A7]">
             <input
               type="text"
               name="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Masukan Nama Anda (Opsional)"
-              className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
             />
           </div>
-          <div className="mb-[10px] h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#3f494e] bg-[#29373D] text-[#9CA3A7]">
+          <div className="mb-[10px] h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D] text-[#9CA3A7]">
             <input
               type="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Masukan Alamat Email Anda"
-              className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               required
             />
           </div>
-          <div className="mb-[10px] h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#3f494e] bg-[#29373D] text-[#9CA3A7]">
+          <div className="mb-[10px] h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D] text-[#9CA3A7]">
             <input
               type="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Masukan Kata Sandi (Min. 6 karakter)"
-              className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               required
               minLength={6}
@@ -118,7 +118,7 @@ export default function RegisterForm({ curform, setForm }: AuthFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary-blue hover:bg-primary-blue/80 mt-[10px] flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary-blue hover:bg-primary-blue/80 mt-[10px] flex h-[47px] w-full items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>

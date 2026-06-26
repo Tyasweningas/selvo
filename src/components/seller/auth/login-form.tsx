@@ -45,7 +45,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
 
   return (
     <>
-      <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
+      <div className="mx-auto flex w-full flex-col items-center justify-center rounded-2xl text-white">
         <AuthToggle curform={curform} setForm={setForm} />
         <h2 className="text-primary-blue my-[30px] text-[32px] font-semibold">
           Masuk Ke Akun Kamu
@@ -55,7 +55,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
         </p>
 
         {error && (
-          <div className="mb-4 w-[551px] rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
+          <div className="mb-4 w-full rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
             {error}
           </div>
         )}
@@ -64,26 +64,26 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
           onSubmit={handleSubmit}
           className="flex w-full flex-col items-center"
         >
-          <div className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D]">
+          <div className="mb-2.5 h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D]">
             <input
               type="email"
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Masukan Alamat Email Anda"
-              className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               required
             />
           </div>
-          <div className="h-[47px] w-[551px] rounded-[25px] border-[#363f42] bg-[#29373D]">
+          <div className="mb-2.5 h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D]">
             <input
               type="password"
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Masukan Kata Sandi Anda"
-              className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={isLoading}
               required
               minLength={6}
@@ -95,7 +95,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-primary-blue hover:bg-primary-blue/80 flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary-blue hover:bg-primary-blue/80 flex h-[47px] w-full items-center justify-center gap-2 rounded-[25px] font-[600] text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <>
@@ -132,7 +132,7 @@ function LoginFormContent({ curform, setForm }: AuthFormProps) {
           <span className="mx-4 shrink text-[#525155]">Masuk dengan?</span>
           <div className="grow border-t border-[#48464C]"></div>
         </div>
-        <button className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D] font-semibold text-[#ffffff] hover:bg-[#3FA866]">
+        <button className="mb-2.5 h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D] font-semibold text-[#ffffff] hover:bg-[#3FA866]">
           Masuk dengan Akun Google
         </button> */}
         <p className="mt-5">
@@ -153,8 +153,8 @@ export default function LoginForm({ curform, setForm }: AuthFormProps) {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
-          <div className="flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] bg-[#29373D]">
+        <div className="mx-auto flex w-full flex-col items-center justify-center rounded-2xl text-white">
+          <div className="flex h-[47px] w-full items-center justify-center gap-2 rounded-[25px] bg-[#29373D]">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-[#4EBD77]"></div>
             <span className="text-gray-400">Memuat...</span>
           </div>

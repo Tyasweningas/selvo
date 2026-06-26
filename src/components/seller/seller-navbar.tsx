@@ -65,22 +65,19 @@ export default function SellerNavbar() {
       </div>
 
       {/* 🔻 Main bar */}
-      <div className="bg-gradient-to-b from-[#111D22] via-[#111D22] to-[#16291e] text-white flex justify-between items-center px-8 py-4 transition-all">
+      <div className="bg-gradient-to-b from-[#111D22] via-[#111D22] to-[#16291e] text-white flex flex-col md:flex-row gap-4 md:gap-2 justify-between items-center px-6 md:px-8 py-4 transition-all">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <span className="text-[#4EBD77] font-[700]" style={{ fontSize: "40px" }}>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[#4EBD77] font-[700] text-[32px] md:text-[40px] leading-none">
             SELVO
           </span>
-          <span
-            className="text-[#4EBD77] font-[300]"
-            style={{ fontSize: "24px" }}
-          >
+          <span className="text-[#4EBD77] font-[300] text-[20px] md:text-[24px] leading-none">
             Seller<span className="text-[#4EBD77]">.</span>
           </span>
         </div>
 
         {/* Search bar */}
-        <div className="relative w-[500px]">
+        <div className="relative w-full md:w-[350px] lg:w-[500px]">
           <input
             type="text"
             placeholder="Cari sesuatu..."
@@ -90,20 +87,20 @@ export default function SellerNavbar() {
         </div>
 
         {/* Icons & Profile */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4 md:gap-5 shrink-0 max-w-full">
           {/* Transparent Cards for icons */}
           <div className="p-2 bg-white/10 backdrop-blur-md rounded-lg hover:bg-white/20 transition cursor-pointer">
-            <FaBell className="text-xl text-gray-200" />
+            <FaBell className="text-lg md:text-xl text-gray-200" />
           </div>
           <div className="p-2 bg-white/10 backdrop-blur-md rounded-lg hover:bg-white/20 transition cursor-pointer">
-            <FaEnvelope className="text-xl text-gray-200" />
+            <FaEnvelope className="text-lg md:text-xl text-gray-200" />
           </div>
 
-          <div className="w-px h-10 bg-gray-600 mx-1" />
+          <div className="w-px h-10 bg-gray-600 mx-1 shrink-0" />
 
-          <button className="flex items-center gap-2 border border-[#4EBD77] rounded-full px-4 py-1 hover:bg-[#4EBD77]/20 transition">
-            <FaUser className="text-[#4EBD77]" />
-            <span className="text-[#4EBD77] font-medium">Jane Doee</span>
+          <button className="flex items-center gap-2 border border-[#4EBD77] rounded-full px-4 py-1 hover:bg-[#4EBD77]/20 transition shrink-0 max-w-[150px] md:max-w-[200px]">
+            <FaUser className="text-[#4EBD77] shrink-0" />
+            <span className="text-[#4EBD77] font-medium truncate min-w-0">Jane Doee</span>
           </button> 
         </div>
       </div>

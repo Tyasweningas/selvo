@@ -43,7 +43,7 @@ function AdminLoginFormContent() {
   };
 
   return (
-    <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
+    <div className="mx-auto flex w-full flex-col items-center justify-center rounded-2xl text-white">
       <div className="border-primary-blue bg-bg-blue mb-6 flex items-center gap-3 rounded-full border-2 px-5 py-2">
         <MdAdminPanelSettings className="text-primary-blue size-6" />
         <span className="text-primary-blue text-sm font-semibold">
@@ -58,7 +58,7 @@ function AdminLoginFormContent() {
       </p>
 
       {error && (
-        <div className="mb-4 w-[551px] rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
+        <div className="mb-4 w-full rounded-lg border border-red-500 bg-red-500/20 p-3 text-sm text-red-200">
           {error}
         </div>
       )}
@@ -67,26 +67,26 @@ function AdminLoginFormContent() {
         onSubmit={handleSubmit}
         className="flex w-full flex-col items-center"
       >
-        <div className="mb-2.5 h-[47px] w-[551px] rounded-[25px] border border-[#363f42] bg-[#29373D]">
+        <div className="mb-2.5 h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D]">
           <input
             type="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Masukan Alamat Email Admin"
-            className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isLoading}
             required
           />
         </div>
-        <div className="h-[47px] w-[551px] rounded-[25px] border-[#363f42] bg-[#29373D]">
+        <div className="mb-2.5 h-[47px] w-full rounded-[25px] border border-[#363f42] bg-[#29373D]">
           <input
             type="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Masukan Kata Sandi Anda"
-            className="h-[47px] w-[551px] rounded-[25px] border-none bg-transparent pl-10 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-[47px] w-full rounded-[25px] border-none bg-transparent pl-10 pr-4 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isLoading}
             required
             minLength={6}
@@ -98,7 +98,7 @@ function AdminLoginFormContent() {
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-primary-blue hover:bg-primary-blue/80 flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] font-semibold text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-primary-blue hover:bg-primary-blue/80 flex h-[47px] w-full items-center justify-center gap-2 rounded-[25px] font-semibold text-[#ffffff] transition-all disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? (
             <>
@@ -137,8 +137,8 @@ export default function AdminLoginForm() {
   return (
     <Suspense
       fallback={
-        <div className="mx-auto flex w-[551px] flex-col items-center justify-center rounded-2xl text-white">
-          <div className="flex h-[47px] w-[551px] items-center justify-center gap-2 rounded-[25px] bg-[#29373D]">
+        <div className="mx-auto flex w-full flex-col items-center justify-center rounded-2xl text-white">
+          <div className="flex h-[47px] w-full items-center justify-center gap-2 rounded-[25px] bg-[#29373D]">
             <div className="border-primary-blue h-5 w-5 animate-spin rounded-full border-2 border-t-transparent"></div>
             <span className="text-gray-400">Memuat...</span>
           </div>
