@@ -1,10 +1,10 @@
-import { Product, ProductCategory } from "@/types/product";
-import { product_categories } from "@/data/product-categories";
 import { products as mockProducts } from "@/data/mock/product-card-mock";
+import { product_categories } from "@/data/product-categories";
 import { categoryService } from "@/services/category.service";
 import { getProducts } from "@/services/product.service";
-import HomeClient from "./home-client";
+import { Product, ProductCategory } from "@/types/product";
 import { Metadata } from "next";
+import HomeClient from "./home-client";
 
 export const metadata: Metadata = {
   title: "Selvo - Marketplace Digital Produk Kreatif",
@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 300; // Revalidate homepage cache every 5 minutes (300 seconds)
+
 export default async function HomePage() {
   let products: Product[] = [];
   let categories: ProductCategory[] = [];
@@ -23,7 +25,10 @@ export default async function HomePage() {
   try {
     products = await getProducts();
   } catch (err) {
-    console.error("⚠️ Failed to fetch products on server, falling back to mock data:", err);
+    console.error(
+      "⚠️ Failed to fetch products on server, falling back to mock data:",
+      err,
+    );
     products = mockProducts as any;
   }
 
@@ -38,13 +43,13 @@ export default async function HomePage() {
       };
     });
   } catch (err) {
-    console.error("⚠️ Failed to fetch categories on server, falling back to empty list:", err);
+    console.error(
+      "⚠️ Failed to fetch categories on server, falling back to empty list:",
+      err,
+    );
   }
 
   return (
-    <HomeClient
-      initialProducts={products}
-      initialCategories={categories}
-    />
+    <HomeClient initialProducts={products} initialCategories={categories} />
   );
 }
