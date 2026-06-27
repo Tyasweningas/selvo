@@ -104,7 +104,7 @@ function PaymentSuccessContent() {
     <div className="relative min-h-screen">
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#1C4763_0%,#111D29_80%,#0F191E_100%)]" />
       <Navbar />
-      <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-4 pt-40 pb-10 md:px-20">
+      <div className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-4 pt-32 pb-10 md:px-20">
         {/* Header Section */}
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-500 shadow-[0_0_20px_rgba(34,197,94,0.4)]">

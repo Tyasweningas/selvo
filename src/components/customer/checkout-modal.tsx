@@ -173,7 +173,7 @@ export default function CheckoutModal({
               disabled={isLoading}
               className="bg-primary-blue hover:bg-secondary-blue flex-1 cursor-pointer rounded-full py-2.5 text-sm font-bold text-white shadow-[5px_5px_0_#1086d5] transition-all duration-200 hover:translate-x-1 hover:translate-y-1 hover:shadow-none active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[5px_5px_0_#1086d5]"
             >
-              {isLoading ? "Memproses..." : "Lanjutkan Pembayaran"}
+              {isLoading ? "Memproses..." : "Lanjutkan"}
             </button>
           </div>
         </form>

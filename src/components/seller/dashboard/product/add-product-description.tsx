@@ -28,9 +28,11 @@ const AddProductDescription = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <MdDescription className="text-primary-blue size-7" />
+            <MdDescription className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">Deskripsi Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Deskripsi Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Jelaskan Fitur, Manfaat, atau Detail penting produk digitalmu.
@@ -48,9 +50,9 @@ const AddProductDescription = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <IoSearch className="text-primary-blue size-7" />
+            <IoSearch className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">
+          <p className="text-xl font-bold text-white sm:text-3xl">
             Kata Kunci Pencarian Produk
           </p>
         </div>
@@ -70,9 +72,11 @@ const AddProductDescription = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <MdPayments className="text-primary-blue size-7" />
+            <MdPayments className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">Harga Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Harga Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Tentukan harga jual untuk satu produk digital.

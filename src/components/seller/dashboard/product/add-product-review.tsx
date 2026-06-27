@@ -48,14 +48,14 @@ const AddProductReview = () => {
               imagePreviews.map((preview, index) => (
                 <div
                   key={index}
-                  className="aspect-12/10 flex-none shrink-0 grow-0 basis-96 overflow-hidden rounded-lg pr-4"
+                  className="aspect-12/10 flex-none shrink-0 grow-0 basis-56 overflow-hidden rounded-lg pr-4 sm:basis-96"
                 >
                   <Image
                     src={preview}
                     alt={`Product image ${index + 1}`}
                     width={20}
                     height={20}
-                    className="size-full object-cover"
+                    className="size-full rounded-lg object-cover"
                   />
                 </div>
               ))
@@ -68,13 +68,13 @@ const AddProductReview = () => {
         </div>
         {/* Description */}
         <div className="border-bg-div bg-bg-nav space-y-5 rounded-xl border-2 p-5">
-          <p className="bg-bg-light w-fit rounded-xl p-3 font-semibold text-gray-100">
+          <p className="bg-bg-light w-fit rounded-xl p-3 text-sm font-semibold text-gray-100 sm:text-base">
             {categoryName}
           </p>
-          <p className="text-4xl font-semibold text-gray-100">
+          <p className="text-xl font-semibold text-gray-100 sm:text-2xl lg:text-4xl">
             {formData.name}
           </p>
-          <p className="text-3xl font-semibold text-gray-100">
+          <p className="text-2xl font-semibold text-gray-100 sm:text-3xl">
             <span className="text-primary-yellow mr-3">IDR</span>
             {(formData.price ?? 0).toLocaleString("id-ID")}
           </p>
@@ -117,7 +117,7 @@ const AddProductReview = () => {
 
         {/* Keywords */}
         <div className="border-bg-div bg-bg-nav space-y-5 rounded-xl border-2 p-5">
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-xl font-bold text-white sm:text-2xl">
             Kata Kunci Pencarian Produk
           </h2>
           <div className="border-bg-light bg-bg-div flex flex-wrap gap-2 rounded-xl border-2 p-4">
@@ -140,7 +140,9 @@ const AddProductReview = () => {
 
         {/* Product Link */}
         <div className="border-bg-div bg-bg-nav space-y-5 rounded-xl border-2 p-5">
-          <h2 className="text-2xl font-bold text-white">Tautan Produk</h2>
+          <h2 className="text-xl font-bold text-white sm:text-2xl">
+            Tautan Produk
+          </h2>
           <div className="border-bg-light bg-bg-div text-tertier-netral flex h-10 flex-1 items-center rounded-full border-2 px-5 text-sm">
             {formData.productLink || "Belum ada link produk"}
           </div>

@@ -56,9 +56,11 @@ const AddProductSpesification = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <MdCamera className="text-primary-blue size-7" />
+            <MdCamera className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">Foto Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Foto Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Unggah {REQUIRED_PRODUCT_IMAGE_COUNT} gambar pratinjau produk
@@ -67,7 +69,10 @@ const AddProductSpesification = () => {
         {imagesError && <p className="text-sm text-red-500">{imagesError}</p>}
         <div className="no-scrollbar flex gap-5 overflow-x-auto">
           {photoSlots.map((slot, index) => (
-            <div key={slot.label} className="aspect-16/10 w-80 shrink-0">
+            <div
+              key={slot.label}
+              className="aspect-16/10 w-40 shrink-0 sm:w-80"
+            >
               <ProductPhotoUpload
                 label={slot.label}
                 value={images[index] ?? null}
@@ -81,16 +86,18 @@ const AddProductSpesification = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <MdModeEdit className="text-primary-blue size-7" />
+            <MdModeEdit className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">Tautan Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Tautan Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Masukkan link produk yang akan diterima pembeli
         </p>
         <Input
           placeholder="Masukkan link produk"
-          className="w-full"
+          className="w-full text-sm sm:text-base"
           {...register("productLink")}
         />
         {errors.productLink && (

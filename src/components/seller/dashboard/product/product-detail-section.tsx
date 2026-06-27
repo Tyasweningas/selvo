@@ -51,16 +51,18 @@ const ProductDetailSection = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-3">
-            <MdListAlt className="text-primary-blue size-7" />
+            <MdListAlt className="text-primary-blue size-5 sm:size-7" />
           </div>
-          <p className="text-3xl font-bold text-white">Detail Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Detail Produk
+          </p>
         </div>
         <button
           type="button"
           onClick={handleAddDetail}
           className="border-primary-blue text-primary-blue hover:bg-primary-blue rounded-full border-2 px-6 py-2 text-sm font-medium transition-colors hover:text-white"
         >
-          Tambah label baru
+          Tambah label
         </button>
       </div>
       <p className="text-sec-netral text-sm">

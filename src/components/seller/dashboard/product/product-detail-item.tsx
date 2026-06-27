@@ -35,14 +35,14 @@ const ProductDetailItem = ({
         onChange={handleKeyChange}
         placeholder="Ketikkan sesuatu"
         variant="colored"
-        className="w-48 flex-shrink-0"
+        className="w-48 shrink-0 text-sm sm:text-base"
       />
       <div className="flex flex-1 items-center gap-3">
         <Input
           value={detailValue}
           onChange={handleValueChange}
           placeholder="Ketikkan alamat emailmu..."
-          className="w-full pr-12"
+          className="w-full pr-12 text-sm sm:text-base"
         />
         {showRemove && (
           <button

@@ -1,10 +1,15 @@
 "use client";
+
 import { useUser } from "@/hooks/use-user";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { MdMail, MdNotifications, MdPerson } from "react-icons/md";
+import { MdMail, MdNotifications, MdPerson, MdMenu } from "react-icons/md";
 
-const SellerAppBar = () => {
+interface SellerAppBarProps {
+  onMenuClick?: () => void;
+}
+
+const SellerAppBar = ({ onMenuClick }: SellerAppBarProps) => {
   const router = useRouter();
   const { user, loading } = useUser();
 
@@ -23,10 +28,21 @@ const SellerAppBar = () => {
       {/* <TopBanner variant="green" /> */}
       <nav className="bg-[linear-gradient(to_bottom,#111D22_0%,#111D22_40%,rgba(17,29,34,0.7)_100%)] py-4 md:py-8 px-4 md:px-6">
         <div className="container mx-auto flex flex-row items-center justify-between gap-4">
-          {/* Logo */}
-          <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
-            <p className="text-primary-blue text-3xl md:text-5xl font-extrabold">SELVO</p>
-            <p className="text-primary-blue text-sm md:text-lg">Seller.</p>
+          {/* Logo & Menu toggle */}
+          <div className="flex items-center gap-2 shrink-0">
+            {onMenuClick && (
+              <button
+                onClick={onMenuClick}
+                className="lg:hidden p-2 text-white hover:bg-[#29373D] rounded-xl transition cursor-pointer"
+                aria-label="Open menu"
+              >
+                <MdMenu size={24} />
+              </button>
+            )}
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <p className="text-primary-blue text-3xl md:text-5xl font-extrabold">SELVO</p>
+              <p className="text-primary-blue text-sm md:text-lg">Seller.</p>
+            </div>
           </div>
 
           {/* Search bar (desktop only) */}

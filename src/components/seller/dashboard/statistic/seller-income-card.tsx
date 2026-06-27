@@ -15,18 +15,18 @@ const SellerIncomeCard = () => {
   const balance = summary?.balance ?? user?.balance ?? 0;
 
   return (
-    <div className="border-bg-blue from-primary-blue/35 to-bg-nav/70 grow space-y-5 rounded-xl border-2 bg-linear-to-b p-10">
+    <div className="border-bg-blue from-primary-blue/35 to-bg-nav/70 grow space-y-5 rounded-xl border-2 bg-linear-to-b p-6 sm:p-10">
       <div className="flex items-center gap-3">
         <div className="bg-bg-nav rounded-xl p-3">
           <MdAccountBalance className="text-primary-yellow" size={28} />
         </div>
-        <p className="text-2xl font-bold text-white">
+        <p className="text-xl sm:text-2xl font-bold text-white">
           Tabungan Pendapatan Akun
         </p>
       </div>
       <div>
-        <p className="text-5xl font-bold text-white">
-          <span className="text-primary-yellow mr-5">IDR</span>
+        <p className="text-3xl sm:text-5xl font-bold text-white">
+          <span className="text-primary-yellow mr-3 sm:mr-5">IDR</span>
           {loading ? "..." : currencyFormatter.format(balance)}
         </p>
       </div>
@@ -35,13 +35,13 @@ const SellerIncomeCard = () => {
           ? "Mengambil saldo dari /sellers/dashboard"
           : "Saldo terkini dari endpoint /sellers/dashboard"}
       </p>
-      <div className="mt-10! flex gap-5">
+      <div className="mt-10! flex flex-col sm:flex-row gap-3 sm:gap-5">
         <Link href={"/dashboard/withdraw"} className="grow">
           <Button size="lg" className="w-full">
             Tarik Saldo
           </Button>
         </Link>
-        <Link href={"/dashboard/withdraw"} className="basis-1/3">
+        <Link href={"/dashboard/withdraw"} className="grow sm:basis-1/3">
           <Button variant="outline" size="lg" className="w-full">
             Hubungkan Bank
           </Button>

@@ -101,22 +101,22 @@ const ProductReviewModal = ({
         </div>
 
         <div className="mt-5 space-y-5">
-          <div className="grid grid-cols-[120px_1fr] gap-4">
-            <div className="bg-bg-div flex items-center gap-3 rounded-xl p-3">
+          <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-4">
+            <div className="bg-bg-div flex items-center gap-3 rounded-xl p-3 min-w-0">
               {categoryIcon ? (
                 <Image
                   src={categoryIcon}
                   alt={category?.name || "Category"}
                   width={40}
                   height={40}
-                  className="size-10"
+                  className="size-10 shrink-0"
                 />
               ) : (
-                <div className="bg-bg-blue grid size-10 place-items-center rounded-xl">
+                <div className="bg-bg-blue grid size-10 place-items-center rounded-xl shrink-0">
                   <MdCategory className="text-primary-blue size-6" />
                 </div>
               )}
-              <p className="truncate text-sm text-white">
+              <p className="truncate text-sm text-white font-semibold">
                 {category?.name || "Tanpa Kategori"}
               </p>
             </div>
@@ -144,7 +144,7 @@ const ProductReviewModal = ({
               <p className="mb-2 text-sm font-semibold text-white">
                 Foto Produk
               </p>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {images.map((img) => (
                   <div
                     key={img.productImageId}
@@ -155,7 +155,7 @@ const ProductReviewModal = ({
                       alt={product.name}
                       fill
                       className="object-cover"
-                      sizes="200px"
+                      sizes="(max-width: 640px) 50vw, 200px"
                     />
                   </div>
                 ))}
@@ -179,12 +179,12 @@ const ProductReviewModal = ({
                 {product.details.map((detail) => (
                   <div
                     key={detail.productDetailId}
-                    className="bg-bg-div flex items-center gap-3 rounded-xl p-3"
+                    className="bg-bg-div flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl p-3"
                   >
-                    <p className="bg-bg-light text-tertier-netral w-48 shrink-0 rounded-full px-4 py-1.5 text-center text-xs font-bold">
+                    <p className="bg-bg-light text-tertier-netral w-full sm:w-48 shrink-0 rounded-full px-4 py-1.5 text-center text-xs font-bold">
                       {detail.key}
                     </p>
-                    <p className="text-sec-netral truncate text-sm">
+                    <p className="text-sec-netral truncate text-sm text-center sm:text-left grow px-2">
                       {detail.value}
                     </p>
                   </div>

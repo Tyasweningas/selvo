@@ -11,7 +11,7 @@ import { Transaction } from "@/types/transaction";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IoCheckmarkCircle, IoCopy } from "react-icons/io5";
+import { IoCopy } from "react-icons/io5";
 import { toast } from "sonner";
 
 export default function TransactionPage() {
@@ -119,9 +119,9 @@ export default function TransactionPage() {
     <div className="min-h-screen bg-[linear-gradient(180deg,#1A2B32_20%,#111D22_80%,#0F191E_100%)] text-white">
       <Navbar />
 
-      <main className="mx-auto max-w-4xl px-4 py-8">
+      <main className="mx-auto max-w-4xl px-4 py-8 pt-24">
         {/* Success Header */}
-        <div className="mb-8 text-center">
+        {/* <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/20">
             <IoCheckmarkCircle className="h-12 w-12 text-green-500" />
           </div>
@@ -129,7 +129,7 @@ export default function TransactionPage() {
           <p className="text-gray-400">
             Silakan scan QR code untuk melakukan pembayaran
           </p>
-        </div>
+        </div> */}
 
         {/* Transaction Info */}
         <div className="mb-6 rounded-xl border border-[#1b2436] bg-[#0F1624] p-6">

@@ -9,7 +9,7 @@ interface props {
 
 const TabItem = ({ tab, currentPath }: props) => {
   return (
-    <div className="group grow">
+    <div className="group grow shrink-0 min-w-[125px] sm:min-w-0">
       <Link
         href={tab.path}
         className={clsx(

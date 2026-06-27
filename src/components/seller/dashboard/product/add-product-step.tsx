@@ -8,9 +8,9 @@ interface props {
 
 const AddProductStep = ({ currentStep }: props) => {
   return (
-    <div className="border-bg-div bg-bg-nav mt-5 flex gap-5 rounded-xl border-2 p-5">
+    <div className="border-bg-div bg-bg-nav mt-5 flex gap-5 overflow-x-auto rounded-xl border-2 p-5">
       {add_product_steps.map((step, index) => (
-        <div key={index} className="flex items-center gap-7">
+        <div key={index} className="flex items-center gap-3 sm:gap-7">
           <div className="flex items-center gap-3">
             <div
               className={clsx(
@@ -20,7 +20,7 @@ const AddProductStep = ({ currentStep }: props) => {
             >
               <p
                 className={clsx(
-                  "text-center text-xl leading-9 font-bold",
+                  "aspect-square text-center text-xl leading-9 font-bold",
                   currentStep >= index ? "text-white" : "text-bg-light",
                 )}
               >
@@ -29,7 +29,7 @@ const AddProductStep = ({ currentStep }: props) => {
             </div>
             <p
               className={clsx(
-                "font-semibold",
+                "text-xs font-semibold text-nowrap sm:text-base",
                 currentStep >= index ? "text-white" : "text-tertier-netral",
               )}
             >

@@ -28,7 +28,7 @@ const DashboardStatisticPage = () => {
 
   return (
     <div className="mt-5 space-y-5">
-      <div className="flex items-stretch gap-10">
+      <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-10">
         <SellerIncomeCard />
         <UploadProductCard />
       </div>
@@ -39,7 +39,7 @@ const DashboardStatisticPage = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <SellerMetricCard
           icon={<MdInventory2 className="text-primary-blue size-6" />}
           title="Total Produk"

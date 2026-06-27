@@ -59,9 +59,11 @@ const AddProductGeneral = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-2">
-            <MdEdit className="text-primary-blue size-8" />
+            <MdEdit className="text-primary-blue size-5 sm:size-8" />
           </div>
-          <p className="text-3xl font-bold text-white">Nama Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Nama Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Masukkan judul produk yang jelas dan mudah dikenali
@@ -69,7 +71,7 @@ const AddProductGeneral = () => {
         <Input
           type="text"
           placeholder="Masukkan Nama Produk..."
-          className="mb-3 w-full"
+          className="mb-3 w-full text-sm sm:text-base"
           {...register("name")}
         />
         {errors.name && (
@@ -80,9 +82,11 @@ const AddProductGeneral = () => {
       <div className="border-bg-div bg-bg-nav mt-5 space-y-5 rounded-xl border-2 p-5">
         <div className="flex items-center gap-5">
           <div className="bg-bg-blue rounded-xl p-2">
-            <MdCategory className="text-primary-blue size-8" />
+            <MdCategory className="text-primary-blue size-5 sm:size-8" />
           </div>
-          <p className="text-3xl font-bold text-white">Kategori Produk</p>
+          <p className="text-xl font-bold text-white sm:text-3xl">
+            Kategori Produk
+          </p>
         </div>
         <p className="text-sec-netral text-sm">
           Pilih kategori yang sesuai agar produkmu mudah ditemukan.
@@ -106,7 +110,7 @@ const AddProductGeneral = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
             {categories.map((category) => (
               <button
                 type="button"
@@ -129,6 +133,7 @@ const AddProductGeneral = () => {
                     alt={category.name}
                     width={48}
                     height={48}
+                    className="size-8 sm:size-12"
                   />
                 ) : (
                   <div className="bg-bg-blue rounded-xl p-2">
@@ -136,8 +141,10 @@ const AddProductGeneral = () => {
                   </div>
                 )}
                 <div>
-                  <p className="font-bold text-white">{category.name}</p>
-                  <p className="text-sm text-white">
+                  <p className="text-sm font-bold text-white sm:text-base">
+                    {category.name}
+                  </p>
+                  <p className="text-xs text-white sm:text-sm">
                     {category.description || "No description"}
                   </p>
                 </div>

@@ -24,7 +24,7 @@ const PlatformStatCard = ({
         <div className="bg-bg-nav rounded-xl p-3">{icon}</div>
         <p className="text-2xl font-bold text-white">{title}</p>
       </div>
-      <p className="text-5xl font-bold text-white">
+      <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
         <span className={`mr-3 ${accentClass}`}>IDR</span>
         {value}
       </p>

@@ -46,7 +46,7 @@ const AdminDashboardPage = async () => {
         </div>
       )}
 
-      <div className="flex items-stretch gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <PlatformStatCard
           icon={<MdAccountBalance className="text-primary-yellow" size={28} />}
           title="Platform Total Revenue"
@@ -63,7 +63,7 @@ const AdminDashboardPage = async () => {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Link
           href="/admin/withdrawals"
           className="border-bg-div bg-bg-nav hover:border-primary-blue group rounded-xl border-2 p-6 transition"

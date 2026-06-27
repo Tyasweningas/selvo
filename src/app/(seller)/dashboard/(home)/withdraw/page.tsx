@@ -160,7 +160,7 @@ const DashboardWithdrawPage = () => {
           <span className="text-primary-yellow mr-3">IDR</span>
           {isLoadingProfile ? "..." : currencyFormatter.format(displayBalance)}
         </p>
-        <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-bg-div rounded-xl p-4">
             <div className="mb-2 flex items-center gap-2">
               <MdPerson className="text-primary-blue" size={20} />
@@ -180,7 +180,7 @@ const DashboardWithdrawPage = () => {
             </p>
           </div>
         </div>
-        <div className="mt-6 flex gap-4">
+        <div className="mt-6 flex flex-col sm:flex-row gap-4">
           <Button
             onClick={() => setWithdrawModalOpen(true)}
             disabled={isLoadingProfile || !hasBank || displayBalance <= 0}
@@ -212,7 +212,7 @@ const DashboardWithdrawPage = () => {
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-4">
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-bg-div rounded-xl p-4">
             <p className="text-sm text-[#D9D9D9]">Bank</p>
             <p className="mt-1 truncate font-semibold text-white">
@@ -285,36 +285,36 @@ const DashboardWithdrawPage = () => {
       )}
 
       {historyMeta.total > 0 && !isLoadingHistory && (
-        <div className="border-bg-div bg-bg-nav flex items-center justify-between rounded-xl border-2 px-5 py-3 text-sm text-[#D9D9D9]">
-          <p>
-            Menampilkan{" "}
-            <span className="text-white">
-              {startIndex}-{endIndex}
-            </span>{" "}
-            dari <span className="text-white">{historyMeta.total}</span> riwayat
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={goToPrevPage}
-              disabled={historyPage <= 1 || isLoadingHistory}
-              className="border-bg-light bg-bg-div text-primary-blue hover:bg-bg-blue/30 rounded-full border-2 px-4 py-1.5 font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Sebelumnya
-            </button>
-            <span className="text-white">
-              Halaman {historyMeta.page} / {totalPages}
-            </span>
-            <button
-              type="button"
-              onClick={goToNextPage}
-              disabled={historyPage >= totalPages || isLoadingHistory}
-              className="border-bg-light bg-bg-div text-primary-blue hover:bg-bg-blue/30 rounded-full border-2 px-4 py-1.5 font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              Berikutnya
-            </button>
-          </div>
+        <div className="border-bg-div bg-bg-nav flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border-2 px-5 py-3 text-sm text-[#D9D9D9]">
+        <p>
+          Menampilkan{" "}
+          <span className="text-white">
+            {startIndex}-{endIndex}
+          </span>{" "}
+          dari <span className="text-white">{historyMeta.total}</span> riwayat
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={goToPrevPage}
+            disabled={historyPage <= 1 || isLoadingHistory}
+            className="border-bg-light bg-bg-div text-primary-blue hover:bg-bg-blue/30 rounded-full border-2 px-4 py-1.5 font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+          >
+            Sebelumnya
+          </button>
+          <span className="text-white text-xs sm:text-sm">
+            Halaman {historyMeta.page} / {totalPages}
+          </span>
+          <button
+            type="button"
+            onClick={goToNextPage}
+            disabled={historyPage >= totalPages || isLoadingHistory}
+            className="border-bg-light bg-bg-div text-primary-blue hover:bg-bg-blue/30 rounded-full border-2 px-4 py-1.5 font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+          >
+            Berikutnya
+          </button>
         </div>
+      </div>
       )}
 
       <BankUpdateModal
