@@ -39,33 +39,33 @@ const DashboardStatisticPage = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         <SellerMetricCard
-          icon={<MdInventory2 className="text-primary-blue size-6" />}
+          icon={<MdInventory2 className="text-primary-blue size-5 sm:size-6" />}
           title="Total Produk"
           footerText="Jumlah produk aktif di toko kamu"
         >
-          <p className="text-3xl font-semibold text-white">
+          <p className="text-2xl sm:text-3xl font-semibold text-white">
             {loading ? "..." : integerFormatter.format(totalProducts)}
           </p>
         </SellerMetricCard>
 
         <SellerMetricCard
-          icon={<MdShoppingCart className="text-primary-blue size-6" />}
+          icon={<MdShoppingCart className="text-primary-blue size-5 sm:size-6" />}
           title="Total Terjual"
           footerText="Akumulasi penjualan dari semua produk"
         >
-          <p className="text-3xl font-semibold text-white">
+          <p className="text-2xl sm:text-3xl font-semibold text-white">
             {loading ? "..." : integerFormatter.format(totalSold)}
           </p>
         </SellerMetricCard>
 
         <SellerMetricCard
-          icon={<MdStar className="text-primary-yellow size-6" />}
+          icon={<MdStar className="text-primary-yellow size-5 sm:size-6" />}
           title="Rating Rata-rata"
           footerText="Rata-rata penilaian dari pembeli"
         >
-          <p className="text-3xl font-semibold text-white">
+          <p className="text-2xl sm:text-3xl font-semibold text-white">
             {loading
               ? "..."
               : averageRating > 0
@@ -75,11 +75,11 @@ const DashboardStatisticPage = () => {
         </SellerMetricCard>
 
         <SellerMetricCard
-          icon={<MdRateReview className="text-primary-blue size-6" />}
+          icon={<MdRateReview className="text-primary-blue size-5 sm:size-6" />}
           title="Total Ulasan"
           footerText="Jumlah ulasan yang masuk ke toko"
         >
-          <p className="text-3xl font-semibold text-white">
+          <p className="text-2xl sm:text-3xl font-semibold text-white">
             {loading ? "..." : integerFormatter.format(totalReviews)}
           </p>
         </SellerMetricCard>

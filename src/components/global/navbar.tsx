@@ -8,20 +8,37 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { IoChevronDownSharp, IoClose, IoMenu, IoSearch } from "react-icons/io5";
 import { PiBookOpenTextDuotone } from "react-icons/pi";
 import CartPopup from "./cart-popup";
+import { useUser } from "@/hooks/use-user";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
+  const { user } = useUser();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [categoryDropdown, setCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("Semua Kategori");
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   // Cart store
   const isCartOpen = useCartStore((s) => s.isOpen);
   const toggleCart = useCartStore((s) => s.toggleCart);
   const closeCart = useCartStore((s) => s.closeCart);
   const totalItems = useCartStore((s) => s.items.length);
+
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false });
+      setProfileDropdownOpen(false);
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -72,6 +89,36 @@ export default function Navbar() {
 
           {/* Mobile Actions (Cart + Hamburger) */}
           <div className="flex items-center gap-3 sm:hidden">
+            {mounted && user && (
+              <div className="relative">
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex items-center justify-center rounded-full border border-[#1E2A30] bg-[#0B1418] p-2.5 transition hover:bg-[#152228]"
+                  aria-label="Menu profil"
+                >
+                  <FaRegCircleUser size={18} className="text-[#37A2EA]" />
+                </button>
+
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 z-50 w-40 rounded-md border border-[#1E2A30] bg-[#0D171C] shadow-xl py-1">
+                    <Link
+                      href="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#1E2A30] hover:text-white"
+                      onClick={() => setProfileDropdownOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-[#1E2A30] hover:text-red-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             <button
               onClick={toggleCart}
               className="bg-primary-blue relative rounded-full p-2.5 transition hover:bg-[#256ca3]"
@@ -169,15 +216,54 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <Link
-            href="/auth"
-            className="bg-primary-blue hover:bg-primary-blue/80 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition"
-          >
-            <FaRegCircleUser size={22} className="text-white" />
-            <p className="hidden font-semibold text-white lg:block">
-              Yuk Mulai Menjual
-            </p>
-          </Link>
+          {mounted && (
+            user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                  className="flex cursor-pointer items-center gap-2 rounded-full border border-[#1E2A30] bg-[#0B1418] px-4 py-2 transition hover:bg-[#152228]"
+                >
+                  <FaRegCircleUser size={22} className="text-[#37A2EA]" />
+                  <span className="hidden font-semibold text-white lg:block">
+                    {user.name}
+                  </span>
+                  <IoChevronDownSharp
+                    className={`text-gray-400 hidden lg:block transition-transform ${
+                      profileDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {profileDropdownOpen && (
+                  <div className="absolute right-0 mt-2 z-50 w-48 rounded-md border border-[#1E2A30] bg-[#0D171C] shadow-xl py-1">
+                    <Link
+                      href="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-[#1E2A30] hover:text-white"
+                      onClick={() => setProfileDropdownOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-[#1E2A30] hover:text-red-300"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/auth"
+                className="bg-primary-blue hover:bg-primary-blue/80 flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition"
+              >
+                <FaRegCircleUser size={22} className="text-white" />
+                <p className="hidden font-semibold text-white lg:block">
+                  Yuk Mulai Menjual
+                </p>
+              </Link>
+            )
+          )}
 
           <button
             type="button"
@@ -307,13 +393,34 @@ export default function Navbar() {
               Panduan Penjual
             </Link>
 
-            <Link
-              href="/auth"
-              className="bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]"
-            >
-              <FaRegCircleUser size={20} />
-              Yuk Mulai Menjual
-            </Link>
+            {mounted && (
+              user ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="bg-[#1E2A30] flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white hover:bg-[#29373D]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Dashboard Penjual
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="border border-red-500/30 bg-red-500/10 flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-red-400 hover:bg-red-500/20"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="bg-primary-blue flex items-center justify-center gap-2 rounded-full py-2 font-semibold text-white hover:bg-[#3ea066]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <FaRegCircleUser size={20} />
+                  Yuk Mulai Menjual
+                </Link>
+              )
+            )}
           </div>
         </div>
       )}

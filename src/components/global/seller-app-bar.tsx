@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { useUser } from "@/hooks/use-user";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MdMail, MdNotifications, MdPerson, MdMenu } from "react-icons/md";
+import { IoChevronDownSharp } from "react-icons/io5";
 
 interface SellerAppBarProps {
   onMenuClick?: () => void;
@@ -12,10 +14,12 @@ interface SellerAppBarProps {
 const SellerAppBar = ({ onMenuClick }: SellerAppBarProps) => {
   const router = useRouter();
   const { user, loading } = useUser();
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
+      setProfileDropdownOpen(false);
       router.push("/");
       router.refresh();
     } catch (error) {
@@ -68,21 +72,37 @@ const SellerAppBar = ({ onMenuClick }: SellerAppBarProps) => {
             {/* Separator */}
             <div className="hidden sm:block h-8 w-0.5 bg-[#29373D]"></div>
 
-            <div className="">
+            <div className="relative">
               <button
-                onClick={handleLogout}
-                className="border-primary-blue flex items-center gap-2 md:gap-3 rounded-full border-2 bg-[#1A2B32] p-1 pr-3 md:px-3 md:py-1.5 transition hover:bg-[#29373D] shrink-0 max-w-[150px] md:max-w-[220px]"
+                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                className="border-primary-blue flex items-center gap-2 md:gap-3 rounded-full border-2 bg-[#1A2B32] p-1 sm:pr-3 md:px-3 md:py-1.5 transition hover:bg-[#29373D] shrink-0"
               >
                 <div className="rounded-full bg-[#204E31] p-1 md:p-1.5 shrink-0">
                   <MdPerson size={20} className="text-primary-blue md:size-[24px]" />
                 </div>
-                <div className="text-left min-w-0">
+                <div className="hidden sm:block text-left min-w-0">
                   <p className="text-primary-blue truncate text-xs md:text-sm font-semibold">
                     {loading ? "Memuat..." : (user?.name ?? "Seller")}
                   </p>
-                  <p className="text-primary-blue text-[10px] md:text-xs font-medium">Logout</p>
                 </div>
+                <IoChevronDownSharp
+                  className={`text-primary-blue hidden sm:block transition-transform ${
+                    profileDropdownOpen ? "rotate-180" : ""
+                  }`}
+                  size={16}
+                />
               </button>
+
+              {profileDropdownOpen && (
+                <div className="absolute right-0 mt-2 z-50 w-44 rounded-md border border-[#29373D] bg-[#1A2B32] shadow-xl py-1">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-[#29373D] hover:text-red-300 transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

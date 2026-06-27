@@ -7,11 +7,28 @@ export interface Admin {
   createdAt: string;
 }
 
+export interface RecentTransaction {
+  transactionId: string;
+  orderId: string;
+  grandTotal: number;
+  email: string;
+  name: string;
+  createdAt: string;
+  status: string;
+}
+
 export interface PlatformStats {
   totalRevenue: number;
   platformProfit: number;
   withdrawalPending: number;
   productRequestPending: number;
+  totalSellers: number;
+  totalProducts: number;
+  totalApprovedProducts: number;
+  totalTransactionsCount: number;
+  totalAdRevenue: number;
+  totalAdsCount: number;
+  recentTransactions: RecentTransaction[];
 }
 
 export type WithdrawalStatus = "PENDING" | "APPROVED" | "REJECTED";
