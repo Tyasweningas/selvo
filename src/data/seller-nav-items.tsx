@@ -17,6 +17,7 @@ export const sellerNavItems: ISellerMenuNav[] = [
     icon: <MdOutlineHome size={24} />,
     dropdownItems: [
       { name: "Statistik Umum", path: "/dashboard/statistic" },
+      { name: "Analisis Detail", path: "/dashboard/analytics" },
       { name: "Penarikan Saldo", path: "/dashboard/withdraw" },
     ],
   },

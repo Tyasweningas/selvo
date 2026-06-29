@@ -21,12 +21,26 @@ export interface UpdateBankPayload {
   bankNumber: string;
 }
 
+export interface SellerDashboardProductItem {
+  productId: string;
+  name: string;
+  totalSold: number;
+  viewCount: number;
+  price: number;
+}
+
 export interface SellerDashboardSummary {
   totalProducts: number;
   totalSold: number;
   averageRating: number;
   totalReviews: number;
   balance: number;
+  totalViews: number;
+  totalRevenue: number;
+  transactionCount: number;
+  totalAdCost: number;
+  adRevenue: number;
+  topProducts: SellerDashboardProductItem[];
 }
 
 /**
@@ -111,12 +125,55 @@ export const listMyReviews = async (
   return response.data;
 };
 
+export interface SellerAnalyticsChartPoint {
+  label: string;
+  revenue: number;
+  volume: number;
+}
+
+export interface SellerProductContributionItem {
+  name: string;
+  revenue: number;
+  percentage: number;
+  soldCount: number;
+}
+
+export interface SellerAnalyticsFunnel {
+  views: number;
+  clicks: number;
+  purchases: number;
+}
+
+export interface SellerAnalyticsCustomerLoyalty {
+  uniqueBuyers: number;
+  repeatBuyers: number;
+  repeatPurchaseRate: number;
+}
+
+export interface SellerAnalyticsResponse {
+  chartData: SellerAnalyticsChartPoint[];
+  productContribution: SellerProductContributionItem[];
+  funnel: SellerAnalyticsFunnel;
+  customerLoyalty: SellerAnalyticsCustomerLoyalty;
+}
+
+export const getDashboardAnalytics = async (
+  filter: string = "day"
+): Promise<SellerAnalyticsResponse> => {
+  const response = await apiClient.get<BaseResponse<SellerAnalyticsResponse>>(
+    "/sellers/dashboard/analytics",
+    { params: { filter } }
+  );
+  return response.data.data;
+};
+
 const sellerService = {
   getDashboardSummary,
   updateBank,
   listMyTransactions,
   getMyTransactionDetail,
   listMyReviews,
+  getDashboardAnalytics,
 };
 
 export default sellerService;

@@ -1,5 +1,8 @@
 import PlatformStatCard from "@/components/admin/dashboard/platform-stat-card";
 import AdminCharts from "@/components/admin/dashboard/admin-charts";
+import AdminLeaderboard from "@/components/admin/dashboard/admin-leaderboard";
+import AdminCategoryContribution from "@/components/admin/dashboard/admin-category-contrib";
+import AdminLiquidityChart from "@/components/admin/dashboard/admin-liquidity-chart";
 import adminServerService from "@/services/admin.server.service";
 import type { PlatformStats } from "@/types/admin";
 import Link from "next/link";
@@ -31,6 +34,12 @@ const AdminDashboardPage = async () => {
     totalAdRevenue: 0,
     totalAdsCount: 0,
     recentTransactions: [],
+    newSellers30Days: 0,
+    newProducts30Days: 0,
+    totalWithdrawn: 0,
+    totalSellerBalance: 0,
+    sellerLeaderboard: [],
+    categoryContribution: [],
   };
   let fetchError: string | null = null;
 
@@ -41,6 +50,8 @@ const AdminDashboardPage = async () => {
     fetchError =
       "Tidak bisa mengambil statistik platform. Menampilkan data kosong.";
   }
+
+  const nettRevenue = (stats.platformProfit ?? 0) + (stats.totalAdRevenue ?? 0);
 
   return (
     <div className="mt-5 space-y-6">
@@ -66,13 +77,15 @@ const AdminDashboardPage = async () => {
           value={currencyFormatter.format(stats.totalRevenue ?? 0)}
           helper="Akumulasi seluruh transaksi sukses di platform (GMV)."
           accent="yellow"
+          showCurrency={true}
         />
         <PlatformStatCard
-          icon={<MdTrendingUp className="text-primary-blue" size={28} />}
-          title="Platform Profit"
-          value={currencyFormatter.format(stats.platformProfit ?? 0)}
-          helper="Keuntungan bersih platform setelah dikurangi bagian seller."
+          icon={<MdTrendingUp className="text-teal-400" size={28} />}
+          title="Nett Revenue Platform"
+          value={currencyFormatter.format(nettRevenue)}
+          helper="Total keuntungan platform (Komisi Platform + Pendapatan Iklan)."
           accent="blue"
+          showCurrency={true}
         />
         <PlatformStatCard
           icon={<MdAdUnits className="text-green-400" size={28} />}
@@ -80,11 +93,24 @@ const AdminDashboardPage = async () => {
           value={currencyFormatter.format(stats.totalAdRevenue ?? 0)}
           helper="Total pendapatan tambahan platform dari biaya iklan seller."
           accent="blue"
+          showCurrency={true}
         />
       </div>
 
       {/* Chart Section */}
       <AdminCharts />
+
+      {/* Analytics Sub-Charts: Category Contribution & Liquidity */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <AdminCategoryContribution categories={stats.categoryContribution ?? []} />
+        <AdminLiquidityChart
+          totalWithdrawn={stats.totalWithdrawn ?? 0}
+          totalSellerBalance={stats.totalSellerBalance ?? 0}
+        />
+      </div>
+
+      {/* Leaderboard Seller */}
+      <AdminLeaderboard sellers={stats.sellerLeaderboard ?? []} />
 
       {/* Core Activity & Catalog Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -98,7 +124,9 @@ const AdminDashboardPage = async () => {
             <p className="text-2xl sm:text-3xl font-bold text-white">
               {integerFormatter.format(stats.totalSellers ?? 0)}
             </p>
-            <p className="text-[11px] text-gray-400 mt-1">Sellers terverifikasi</p>
+            <p className="text-[11px] text-gray-400 mt-1">
+              +{integerFormatter.format(stats.newSellers30Days ?? 0)} seller baru (30 hari terakhir)
+            </p>
           </div>
         </div>
 
@@ -113,7 +141,9 @@ const AdminDashboardPage = async () => {
               {integerFormatter.format(stats.totalApprovedProducts ?? 0)}
               <span className="text-sm font-normal text-gray-400"> / {integerFormatter.format(stats.totalProducts ?? 0)}</span>
             </p>
-            <p className="text-[11px] text-gray-400 mt-1">Disetujui / Total submissions</p>
+            <p className="text-[11px] text-gray-400 mt-1">
+              +{integerFormatter.format(stats.newProducts30Days ?? 0)} produk baru (30 hari terakhir)
+            </p>
           </div>
         </div>
 
@@ -216,7 +246,9 @@ const AdminDashboardPage = async () => {
                         minute: "2-digit",
                       })}
                     </td>
-                    <td className="py-3 px-4 font-mono text-xs text-primary-blue">{tx.orderId}</td>
+                    <td className="py-3 px-4 font-mono text-xs text-primary-blue whitespace-nowrap">
+                      {tx.orderId}
+                    </td>
                     <td className="py-3 px-4 whitespace-nowrap font-medium text-white">{tx.name}</td>
                     <td className="py-3 px-4 whitespace-nowrap text-gray-400">{tx.email}</td>
                     <td className="py-3 px-4 text-right whitespace-nowrap font-semibold">

@@ -17,6 +17,20 @@ export interface RecentTransaction {
   status: string;
 }
 
+export interface SellerLeaderboardItem {
+  sellerId: string;
+  name: string;
+  email: string;
+  gmv: number;
+}
+
+export interface CategoryContributionItem {
+  categoryId: string;
+  name: string;
+  sales: number;
+  percentage: number;
+}
+
 export interface PlatformStats {
   totalRevenue: number;
   platformProfit: number;
@@ -29,6 +43,13 @@ export interface PlatformStats {
   totalAdRevenue: number;
   totalAdsCount: number;
   recentTransactions: RecentTransaction[];
+  // New Analytics fields
+  newSellers30Days: number;
+  newProducts30Days: number;
+  totalWithdrawn: number;
+  totalSellerBalance: number;
+  sellerLeaderboard: SellerLeaderboardItem[];
+  categoryContribution: CategoryContributionItem[];
 }
 
 export type WithdrawalStatus = "PENDING" | "APPROVED" | "REJECTED";

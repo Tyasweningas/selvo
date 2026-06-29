@@ -6,6 +6,7 @@ interface PlatformStatCardProps {
   value: string;
   helper?: string;
   accent?: "blue" | "yellow";
+  showCurrency?: boolean;
 }
 
 const PlatformStatCard = ({
@@ -14,6 +15,7 @@ const PlatformStatCard = ({
   value,
   helper,
   accent = "blue",
+  showCurrency = true,
 }: PlatformStatCardProps) => {
   const accentClass =
     accent === "yellow" ? "text-primary-yellow" : "text-primary-blue";
@@ -25,7 +27,7 @@ const PlatformStatCard = ({
         <p className="text-2xl font-bold text-white">{title}</p>
       </div>
       <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-        <span className={`mr-3 ${accentClass}`}>IDR</span>
+        {showCurrency && <span className={`mr-3 ${accentClass}`}>IDR</span>}
         {value}
       </p>
       {helper && <p className="text-sm text-[#D9D9D9]">{helper}</p>}

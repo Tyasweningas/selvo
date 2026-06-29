@@ -6,6 +6,10 @@ export const dashboardTabItems: ISellerTab[] = [
     name: "Statistik Umum",
   },
   {
+    path: "/dashboard/analytics",
+    name: "Analisis Detail",
+  },
+  {
     path: "/dashboard/withdraw",
     name: "Penarikan Saldo",
   },
