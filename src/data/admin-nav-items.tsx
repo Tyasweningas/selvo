@@ -3,6 +3,7 @@ import {
   MdAccountBalanceWallet,
   MdOutlineHome,
   MdWorkOutline,
+  MdOutlineReceiptLong,
 } from "react-icons/md";
 
 export const adminNavItems: ISellerMenuNav[] = [
@@ -16,6 +17,12 @@ export const adminNavItems: ISellerMenuNav[] = [
     path: "/admin/products",
     name: "Daftar Produk",
     icon: <MdWorkOutline size={24} />,
+    dropdownItems: [],
+  },
+  {
+    path: "/admin/transactions",
+    name: "Daftar Transaksi",
+    icon: <MdOutlineReceiptLong size={24} />,
     dropdownItems: [],
   },
   {

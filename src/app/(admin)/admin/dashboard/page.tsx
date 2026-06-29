@@ -1,4 +1,5 @@
 import PlatformStatCard from "@/components/admin/dashboard/platform-stat-card";
+import AdminCharts from "@/components/admin/dashboard/admin-charts";
 import adminServerService from "@/services/admin.server.service";
 import type { PlatformStats } from "@/types/admin";
 import Link from "next/link";
@@ -81,6 +82,9 @@ const AdminDashboardPage = async () => {
           accent="blue"
         />
       </div>
+
+      {/* Chart Section */}
+      <AdminCharts />
 
       {/* Core Activity & Catalog Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -234,6 +238,14 @@ const AdminDashboardPage = async () => {
               )}
             </tbody>
           </table>
+        </div>
+        <div className="mt-6 text-right">
+          <Link
+            href="/admin/transactions"
+            className="text-primary-blue hover:text-primary-blue/85 text-sm font-semibold inline-flex items-center gap-1 transition"
+          >
+            Lihat semua transaksi (Pending & Success) &rarr;
+          </Link>
         </div>
       </div>
     </div>

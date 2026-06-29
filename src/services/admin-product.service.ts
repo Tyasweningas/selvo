@@ -2,21 +2,28 @@ import apiClient from "@/lib/api-client";
 import { BaseResponse, PaginatedResponse } from "@/types/api";
 import type { Product } from "@/types/product";
 
+export interface GetAdminProductsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  categoryId?: string;
+  status?: "APPROVED" | "SUBMISSION" | "REJECTED";
+}
+
 /**
  * Admin Product Service (client-side)
  * Handles admin actions on products (review, approve, reject).
  */
 
-export const getAllProducts = async (params?: {
-  page?: number;
-  limit?: number;
-}): Promise<Product[]> => {
+export const getAllProducts = async (
+  params: GetAdminProductsParams = {}
+): Promise<PaginatedResponse<Product> & { data: Product[] }> => {
   const response = await apiClient.get<
     PaginatedResponse<Product> & { data: Product[] }
   >("/products/admin/all", {
     params,
   });
-  return response.data.data || [];
+  return response.data;
 };
 
 /**
